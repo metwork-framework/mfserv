@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -eu
+
+TMPFILE="${MODULE_RUNTIME_HOME}/tmp/nginx_conf.$$"
+
+UUID=$(cat "${MODULE_RUNTIME_HOME}/var/uuid" 2>/dev/null)
+if test "${UUID}" = ""; then
+    UUID="unknown"
+fi
+export UUID
+
+__make_nginx_conf >"${TMPFILE}"
+nginxfmt.py "${TMPFILE}"
+cat -s "${TMPFILE}"
+
+rm -f "${TMPFILE}"

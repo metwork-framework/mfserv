@@ -1,0 +1,4 @@
+{% extends "profile" %}
+{% block custom %}
+field_prepend METWORK_LAYERS_PATH {{MODULE_HOME}}/var/plugins
+{% endblock %}

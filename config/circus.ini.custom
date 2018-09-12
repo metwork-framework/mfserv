@@ -1,0 +1,36 @@
+{% extends "circus.ini" %}
+
+{% block custom %}
+{% raw %}
+[plugin:autorestart]                                                            
+use = circus_autorestart.CircusAutorestart          
+
+[watcher:nginx]
+cmd={{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx                               
+args=-p {{MODULE_RUNTIME_HOME}}/tmp/nginx_tmp_prefix -c {{MODULE_RUNTIME_HOME}}/tmp/config_auto/nginx.conf
+numprocesses = 1                                                                
+stdout_stream.class = FileStream                                                
+stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/nginx.log                  
+stderr_stream.class = FileStream                                                
+stderr_stream.filename = {{MODULE_RUNTIME_HOME}}/log/nginx.log                  
+copy_env = True                                                                 
+autostart = True                                                                
+respawn = True                                                                  
+hooks.before_start=circus_hooks.before_start_shell                              
+hooks.after_stop=circus_hooks.after_stop_shell          
+working_dir = {{MODULE_RUNTIME_HOME}}/tmp
+
+[watcher:conf_monitor]                                                          
+cmd={{MODULE_HOME}}/bin/conf_monitor.sh                                         
+args=                                                                           
+numprocesses = 1                                                                
+stdout_stream.class = FileStream                                                
+stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/conf_monitor.stdout        
+stderr_stream.class = FileStream                                                
+stderr_stream.filename = {{MODULE_RUNTIME_HOME}}/log/conf_monitor.stderr        
+copy_env = True                                                                 
+autostart = True                                                                
+respawn = True           
+working_dir = {{MODULE_RUNTIME_HOME}}/tmp
+{% endraw %}
+{% endblock %}

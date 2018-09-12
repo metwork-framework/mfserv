@@ -1,0 +1,12 @@
+{
+    "name": "name_of_your_plugin",
+    "version": "0.0.1",
+    "one_line_summary": "one line summary",
+    "crontab_support": ["no", "yes"],
+    "license": ["Proprietary", "BSD", "MIT", "GPL", "Specific"],
+    "url": "http://yourpluginhomepage",
+    "maintainer": "Firstname FAMILYNAME <email>",
+    "vendor": "MetWork",
+    "type": ["gunicorn3_sync", "gunicorn2_sync", "gunicorn3_asyncio"],
+    "workers": "{% raw %}{{MFCOM_HARDWARE_NUMBER_OF_CPU_CORES_MULTIPLIED_BY_2}}{% endraw %}"
+}
