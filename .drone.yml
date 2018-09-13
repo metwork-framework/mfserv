@@ -2,7 +2,7 @@ bootstrap_common: &bootstrap_common
   pull: true
   commands:
     - mkdir -p /opt/metwork-mfserv-${DRONE_BRANCH}
-    - ./bootstrap.sh /opt/metwork-mfserv-${DRONE_BRANCH} /opt/metwork-mfcom-$${MFEXT_BRANCH}
+    - ./bootstrap.sh /opt/metwork-mfserv-${DRONE_BRANCH} /opt/metwork-mfcom-$${MFCOM_BRANCH}
     - cat adm/root.mk
 
 build_common: &build_common
@@ -14,8 +14,8 @@ build_common: &build_common
     - cp -Rf /opt/metwork-mfserv-${DRONE_BRANCH}/html_doc .
     - make test
     - make RELEASE_BUILD=${DRONE_BUILD_NUMBER} rpm
-    - mv /opt/metwork-mfserv-${DRONE_BRANCH}/*.rpm .  
-    
+    - mv /opt/metwork-mfserv-${DRONE_BRANCH}/*.rpm .
+
 publish_ci_common: &publish_ci_common
   commands:
     - mkdir -p /pub/metwork/continuous_integration/rpms/${DRONE_BRANCH}/${OS_VERSION}/
@@ -25,12 +25,12 @@ publish_ci_common: &publish_ci_common
     - if test "${OS_VERSION}" = "centos6"; then rm -Rf /pub/metwork/continuous_integration/docs/${DRONE_BRANCH}/mfserv; mkdir -p /pub/metwork/continuous_integration/docs/${DRONE_BRANCH}/mfserv ; cp -Rf html_doc/* /pub/metwork/continuous_integration/docs/${DRONE_BRANCH}/mfserv/ ; fi
   volumes:
     - /pub:/pub
-  
+
 pipeline:
   bootstrap_integration:
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
     environment:
-      - MFEXT_BRANCH=integration
+      - MFCOM_BRANCH=integration
     <<: *bootstrap_common
     when:
       event: [push, pull_request]
@@ -38,12 +38,12 @@ pipeline:
   bootstrap:
     image: metwork/mfxxx-${OS_VERSION}-buildimage:master
     environment:
-      - MFEXT_BRANCH=master
+      - MFCOM_BRANCH=master
     <<: *bootstrap_common
     when:
       event: [push, pull_request]
       branch:
-        exclude: [ integration ]  
+        exclude: [ integration ]
   build_integration:
     <<: *build_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
@@ -56,7 +56,7 @@ pipeline:
     when:
       event: [push, pull_request]
       branch:
-        exclude: [ integration ]  
+        exclude: [ integration ]
   publish_ci_integration:
     <<: *publish_ci_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
