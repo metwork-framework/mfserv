@@ -96,22 +96,10 @@ export SRC_DIR
 rm -f adm/root.mk
 touch adm/root.mk
 
-mkdir -p "${MODULE_HOME}/share"
-
-echo "Bootstrapping root layers..."
-"${MFEXT_HOME}/bin/bootstrap_layer.sh" "root@${MODULE_LOWERCASE}" "${MODULE_HOME}"
-
-
-echo "Building profile..."
-cd adm && make "${MODULE_HOME}/share/profile" && cd ..
-
-set +eu # FIXME
-export METWORK_BOOTSTRAP_MODE=1
-echo "Loading profile..."
-# shellcheck disable=SC1090
-source "${MODULE_HOME}/share/profile"
-unset METWORK_BOOTSTRAP_MODE
-set -eu # FIXME
+ROOT_PATH=${MODULE_HOME}/bin:${MFCOM_HOME}/bin:${MFEXT_HOME}/bin:${PATH:-}
+ROOT_LD_LIBRARY_PATH=${MODULE_HOME}/lib:${MFCOM_HOME}/lib:${MFEXT_HOME}/lib
+ROOT_PKG_CONFIG_PATH=${MODULE_HOME}/lib/pkgconfig:${MFCOM_HOME}/lib/pkgconfig:${MFEXT_HOME}/lib/pkgconfig
+ROOT_METWORK_LAYERS_PATH=${MODULE_HOME}/opt:${MODULE_HOME}:${MFCOM_HOME}/opt:${MFCOM_HOME}:${MFEXT_HOME}/opt:${MFEXT_HOME}
 
 echo "Making adm/root.mk..."
 rm -f adm/root.mk
@@ -120,38 +108,37 @@ touch adm/root.mk
 echo "unexport MODULE_RUNTIME_HOME" >>adm/root.mk
 echo "unexport MODULE_RUNTIME_SUFFIX" >>adm/root.mk
 echo "unexport MODULE_RUNTIME_USER" >>adm/root.mk
+
 echo "export MODULE := ${MODULE}" >>adm/root.mk
 echo "export MODULE_LOWERCASE := $(echo ${MODULE} | tr '[:upper:]' '[:lower:]')" >>adm/root.mk
-echo "export PATH := ${PATH}" >>adm/root.mk
-echo "export LD_LIBRARY_PATH := ${LD_LIBRARY_PATH}" >>adm/root.mk
-echo "export PKG_CONFIG_PATH := ${PKG_CONFIG_PATH}" >>adm/root.mk
-echo "export METWORK_LAYERS_PATH := ${METWORK_LAYERS_PATH}" >>adm/root.mk
+echo "export METWORK_LAYERS_PATH := ${ROOT_METWORK_LAYERS_PATH}" >>adm/root.mk
 echo "export MFEXT_HOME := ${MFEXT_HOME}" >>adm/root.mk
 echo "export MFEXT_VERSION := ${MFEXT_VERSION}" >>adm/root.mk
 echo "export MODULE_HOME := ${MODULE_HOME}" >>adm/root.mk
 echo "export MODULE_VERSION := ${MFSERV_VERSION}" >>adm/root.mk
-echo "unexport PYTHON" >>adm/root.mk
-echo "unexport PYTHONPATH" >>adm/root.mk
+echo "export SRC_DIR := ${SRC_DIR}" >>adm/root.mk
+echo "ifeq (\$(FORCED_PATHS),)" >>adm/root.mk
+echo "  export PATH := ${ROOT_PATH}" >>adm/root.mk
+echo "  export LD_LIBRARY_PATH := ${ROOT_LD_LIBRARY_PATH}" >>adm/root.mk
+echo "  export PKG_CONFIG_PATH := ${ROOT_PKG_CONFIG_PATH}/lib/pkgconfig" >>adm/root.mk
+echo "  LAYER_ENVS:=\$(shell env |grep '^METWORK_LAYER_.*_LOADED=1\$\$' |awk -F '=' '{print \$\$1;}')" >>adm/root.mk
+echo "  \$(foreach LAYER_ENV, \$(LAYER_ENVS), \$(eval unexport \$(LAYER_ENV)))" >>adm/root.mk
+echo "endif" >>adm/root.mk
 
         echo "export MFCOM_HOME := ${MFCOM_HOME}" >>adm/root.mk
         echo "export MFCOM_VERSION := ${MFCOM_VERSION}" >>adm/root.mk
-        
-            echo "export ${MODULE}_HOME := ${MODULE_HOME}" >>adm/root.mk
-            echo "export ${MODULE}_VERSION := ${MFSERV_VERSION}" >>adm/root.mk
-        
-    if test "${MODULE_HAS_HOME_DIR:-}" = "1"; then
-    echo "export MODULE_HAS_HOME_DIR := 1" >>adm/root.mk
-    fi
-    echo "export PREFIX := ${MODULE_HOME}" >>adm/root.mk
+             echo "export ${MODULE}_HOME := ${MODULE_HOME}" >>adm/root.mk
+             echo "export ${MODULE}_VERSION := ${MFSERV_VERSION}" >>adm/root.mk
 
-echo "export PYTHON2_SHORT_VERSION := ${PYTHON2_SHORT_VERSION}" >>adm/root.mk
-echo "export PYTHON3_SHORT_VERSION := ${PYTHON3_SHORT_VERSION}" >>adm/root.mk
-echo "export SRC_DIR := ${SRC_DIR}" >>adm/root.mk
+     if test "${MODULE_HAS_HOME_DIR:-}" = "1"; then
+     echo "export MODULE_HAS_HOME_DIR := 1" >>adm/root.mk
+     fi
+     #echo "export PREFIX := ${MODULE_HOME}" >>adm/root.mk
 
-echo "LAYER_ENVS:=\$(shell env |grep '^METWORK_LAYER_.*_LOADED=1\$\$' |awk -F '=' '{print \$\$1;}')" >>adm/root.mk
-echo "\$(foreach LAYER_ENV, \$(LAYER_ENVS), \$(eval unexport \$(LAYER_ENV)))" >>adm/root.mk
-
-
+# FIXME: do not hardcode this
+# FIXME: move to layer root extra_env ?
+echo "export PYTHON2_SHORT_VERSION := 2.7" >>adm/root.mk
+echo "export PYTHON3_SHORT_VERSION := 3.5" >>adm/root.mk
 
 echo "BOOTSTRAP DONE !"
 echo "MFEXT_HOME=${MFEXT_HOME}"

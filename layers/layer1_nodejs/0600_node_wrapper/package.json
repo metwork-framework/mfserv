@@ -1,0 +1,27 @@
+{
+  "name": "metwork",
+  "version": "1.0.0",
+  "description": "Metwork Layer Node",
+  "main": "metwork_cluster.js",
+  "scripts": {
+  },
+  "files": [
+    "metwork_cluster.js",
+    "merwork_server.js"
+  ],
+  "repository": {
+  },
+  "keywords": [
+    "metwork",
+    "metwork_cluster",
+    "metwork_server"
+  ],
+  "author": "MetWork Organization",
+  "license": "BSD",
+  "bugs": {
+  },
+  "homepage": "",
+  "_resolved": "",
+  "_integrity": "",
+  "_from": ""
+}
