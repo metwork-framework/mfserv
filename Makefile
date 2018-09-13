@@ -9,15 +9,15 @@ all:: directories
 	echo "openresty@mfext" >>$(MFSERV_HOME)/.layerapi2_dependencies
 	cd adm && $(MAKE)
 	cd config && $(MAKE)
-	cd extra_layers && $(MAKE)
+	cd layers && $(MAKE)
 
 clean::
 	cd config && $(MAKE) clean
 	cd adm && $(MAKE) clean
-	cd extra_layers && $(MAKE) clean
+	cd layers && $(MAKE) clean
 
 directories:
-	@for DIR in config bin; do mkdir -p $(PREFIX)/$$DIR; done
+	@for DIR in config bin opt/python2/lib/python$(PYTHON2_SHORT_VERSION)/site-packages opt/python3/lib/python$(PYTHON3_SHORT_VERSION)/site-packages; do mkdir -p $(MFSERV_HOME)/$$DIR; done
 
 test::
 	cd config && $(MAKE) test
