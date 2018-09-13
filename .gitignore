@@ -1,8 +1,10 @@
 adm/root.mk
 doc/_build
 doc/utilities.md
-extra_layers/layer1_nodejs/0500_extra_packages/node_modules
-extra_layers/layer1_python2/0500_extra_python_packages/src
-extra_layers/layer1_python3/0500_extra_python_packages/src
+layers/layer1_nodejs/0500_extra_packages/node_modules
+layers/layer1_python2/0500_extra_python_packages/src
+layers/layer1_python2/0500_extra_python_packages/tempolayer*
+layers/layer1_python3/0500_extra_python_packages/src
+layers/layer1_python3/0500_extra_python_packages/tempolayer*
 doc/layer_*.md
 doc/layer_*.rst
