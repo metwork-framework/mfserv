@@ -96,10 +96,12 @@ export SRC_DIR
 rm -f adm/root.mk
 touch adm/root.mk
 
+
 ROOT_PATH=${MODULE_HOME}/bin:${MFCOM_HOME}/bin:${MFEXT_HOME}/bin:${PATH:-}
 ROOT_LD_LIBRARY_PATH=${MODULE_HOME}/lib:${MFCOM_HOME}/lib:${MFEXT_HOME}/lib
 ROOT_PKG_CONFIG_PATH=${MODULE_HOME}/lib/pkgconfig:${MFCOM_HOME}/lib/pkgconfig:${MFEXT_HOME}/lib/pkgconfig
 ROOT_METWORK_LAYERS_PATH=${MODULE_HOME}/opt:${MODULE_HOME}:${MFCOM_HOME}/opt:${MFCOM_HOME}:${MFEXT_HOME}/opt:${MFEXT_HOME}
+
 
 echo "Making adm/root.mk..."
 rm -f adm/root.mk
@@ -127,13 +129,15 @@ echo "endif" >>adm/root.mk
 
         echo "export MFCOM_HOME := ${MFCOM_HOME}" >>adm/root.mk
         echo "export MFCOM_VERSION := ${MFCOM_VERSION}" >>adm/root.mk
-             echo "export ${MODULE}_HOME := ${MODULE_HOME}" >>adm/root.mk
-             echo "export ${MODULE}_VERSION := ${MFSERV_VERSION}" >>adm/root.mk
+        
+            echo "export ${MODULE}_HOME := ${MODULE_HOME}" >>adm/root.mk
+            echo "export ${MODULE}_VERSION := ${MFSERV_VERSION}" >>adm/root.mk
+        
+    if test "${MODULE_HAS_HOME_DIR:-}" = "1"; then
+    echo "export MODULE_HAS_HOME_DIR := 1" >>adm/root.mk
+    fi
+    #echo "export PREFIX := ${MODULE_HOME}" >>adm/root.mk
 
-     if test "${MODULE_HAS_HOME_DIR:-}" = "1"; then
-     echo "export MODULE_HAS_HOME_DIR := 1" >>adm/root.mk
-     fi
-     #echo "export PREFIX := ${MODULE_HOME}" >>adm/root.mk
 
 # FIXME: do not hardcode this
 # FIXME: move to layer root extra_env ?
