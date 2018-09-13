@@ -1,2 +1,2 @@
 # mfserv
-do not use (work in progress)
+mfserv ci test repository (do not use)
