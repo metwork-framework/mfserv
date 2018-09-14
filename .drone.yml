@@ -1,14 +1,14 @@
 bootstrap_common: &bootstrap_common
   pull: true
   commands:
-      - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
+    - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
     - mkdir -p /opt/metwork-mfserv-${DRONE_BRANCH}
     - ./bootstrap.sh /opt/metwork-mfserv-${DRONE_BRANCH} /opt/metwork-mfcom-$${MFCOM_BRANCH}
     - cat adm/root.mk
 
 build_common: &build_common
   commands:
-      - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
+    - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
     - mkdir -p /opt/metwork-mfserv-${DRONE_BRANCH}
     - make
     - make doc
@@ -20,7 +20,7 @@ build_common: &build_common
 
 publish_ci_common: &publish_ci_common
   commands:
-      - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
+    - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
     - mkdir -p /pub/metwork/continuous_integration/rpms/${DRONE_BRANCH}/${OS_VERSION}/
     - cp *.rpm /pub/metwork/continuous_integration/rpms/${DRONE_BRANCH}/${OS_VERSION}/
     - yum -y install createrepo
