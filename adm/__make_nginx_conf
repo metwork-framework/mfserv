@@ -42,6 +42,18 @@ def get_conf(plugin_configuration_file):
     parser.read(plugin_configuration_file)
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
+
+    extra_root_nginx_conf_string = ""
+    if parser.has_option("root", "extra_nginx_conf_filename"):
+        extra_root_nginx_conf_filename = \
+            parser.get("root", "extra_nginx_conf_filename")
+        if extra_root_nginx_conf_filename != "null":
+            extra_root_nginx_conf_filepath = \
+                os.path.join(os.path.dirname(plugin_configuration_file),
+                             extra_root_nginx_conf_filename)
+            with open(extra_root_nginx_conf_filepath, "r") as f:
+                extra_root_nginx_conf_string = f.read()
+
     extra_general_nginx_conf_string = ""
     if parser.has_option("general", "extra_nginx_conf_filename"):
         extra_general_nginx_conf_filename = \
@@ -52,7 +64,11 @@ def get_conf(plugin_configuration_file):
                              extra_general_nginx_conf_filename)
             with open(extra_general_nginx_conf_filepath, "r") as f:
                 extra_general_nginx_conf_string = f.read()
+
     plugin_conf["name"] = plugin_name
+    plugin_conf["extra_root_nginx_conf_string"] = \
+        envtpl.render_string(extra_root_nginx_conf_string,
+                             extra_variables={"PLUGIN": plugin_conf})
     plugin_conf["extra_general_nginx_conf_string"] = \
         envtpl.render_string(extra_general_nginx_conf_string,
                              extra_variables={"PLUGIN": plugin_conf})
