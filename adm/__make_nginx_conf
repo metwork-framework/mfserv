@@ -38,21 +38,39 @@ def get_conf(plugin_configuration_file):
     plugin_conf = {}
     parser = ExtendedConfigParser(config=CONFIG, strict=False,
                                   inheritance='im', interpolation=None)
-    plugin_name = os.path.basename(os.path.dirname(plugin_configuration_file))
+
+    plugin_directory = os.path.dirname(plugin_configuration_file)
+    plugin_name = os.path.basename(plugin_directory)
+
     parser.read(plugin_configuration_file)
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
 
+    '''
+    if init_worker_by_lua.lua file exists in plugin_directory
+    then this specific lua configuration will be added to
+    init_by_worker_by part after stats (see templates)
+
+    extra_lua_nginx_conf will be added to plugin_conf[...]
+    '''
+    extra_lua_nginx_conf_string = "" 
+    extra_lua_filepath = os.path.join(plugin_directory, 'init_worker_by_lua.lua')
+    if os.path.exists(extra_lua_filepath):
+        with open(extra_lua_filepath, 'r') as f:
+            extra_lua_nginx_conf_string = f.read()
+            f.close()
+    
     extra_root_nginx_conf_string = ""
     if parser.has_option("root", "extra_nginx_conf_filename"):
         extra_root_nginx_conf_filename = \
             parser.get("root", "extra_nginx_conf_filename")
         if extra_root_nginx_conf_filename != "null":
             extra_root_nginx_conf_filepath = \
-                os.path.join(os.path.dirname(plugin_configuration_file),
+                os.path.join(plugin_directory,
                              extra_root_nginx_conf_filename)
             with open(extra_root_nginx_conf_filepath, "r") as f:
                 extra_root_nginx_conf_string = f.read()
+                f.close()
 
     extra_general_nginx_conf_string = ""
     if parser.has_option("general", "extra_nginx_conf_filename"):
@@ -60,12 +78,16 @@ def get_conf(plugin_configuration_file):
             parser.get("general", "extra_nginx_conf_filename")
         if extra_general_nginx_conf_filename != "null":
             extra_general_nginx_conf_filepath = \
-                os.path.join(os.path.dirname(plugin_configuration_file),
+                os.path.join(plugin_directory,
                              extra_general_nginx_conf_filename)
             with open(extra_general_nginx_conf_filepath, "r") as f:
                 extra_general_nginx_conf_string = f.read()
+                f.close()
 
     plugin_conf["name"] = plugin_name
+    plugin_conf["extra_lua_nginx_conf_string"] = \
+        envtpl.render_string(extra_lua_nginx_conf_string,
+                             extra_variables={"PLUGIN": plugin_conf})
     plugin_conf["extra_root_nginx_conf_string"] = \
         envtpl.render_string(extra_root_nginx_conf_string,
                              extra_variables={"PLUGIN": plugin_conf})
@@ -83,20 +105,22 @@ def get_conf(plugin_configuration_file):
                                                    "extra_nginx_conf_filename")
             if extra_nginx_conf_filename != "null":
                 extra_nginx_conf_filepath = \
-                    os.path.join(os.path.dirname(plugin_configuration_file),
+                    os.path.join(plugin_directory,
                                  extra_nginx_conf_filename)
                 with open(extra_nginx_conf_filepath, "r") as f:
                     extra_nginx_conf_string = f.read()
+                    f.close()
         extra_nginx_conf_static_string = ""
         if parser.has_option(section, "extra_nginx_conf_static_filename"):
             extra_nginx_conf_static_filename = \
                 parser.get(section, "extra_nginx_conf_static_filename")
             if extra_nginx_conf_static_filename != "null":
                 extra_nginx_conf_static_filepath = \
-                    os.path.join(os.path.dirname(plugin_configuration_file),
+                    os.path.join(plugin_directory,
                                  extra_nginx_conf_static_filename)
                 with open(extra_nginx_conf_static_filepath, "r") as f:
                     extra_nginx_conf_static_string = f.read()
+                    f.close()
         static_routing = True
         if parser.has_option(section, "static_routing"):
             static_routing = parser.getboolean(section, "static_routing")
