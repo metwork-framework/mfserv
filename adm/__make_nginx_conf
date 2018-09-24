@@ -58,7 +58,6 @@ def get_conf(plugin_configuration_file):
     if os.path.exists(extra_lua_filepath):
         with open(extra_lua_filepath, 'r') as f:
             extra_lua_nginx_conf_string = f.read()
-            f.close()
     
     extra_root_nginx_conf_string = ""
     if parser.has_option("root", "extra_nginx_conf_filename"):
@@ -70,7 +69,6 @@ def get_conf(plugin_configuration_file):
                              extra_root_nginx_conf_filename)
             with open(extra_root_nginx_conf_filepath, "r") as f:
                 extra_root_nginx_conf_string = f.read()
-                f.close()
 
     extra_general_nginx_conf_string = ""
     if parser.has_option("general", "extra_nginx_conf_filename"):
@@ -82,7 +80,6 @@ def get_conf(plugin_configuration_file):
                              extra_general_nginx_conf_filename)
             with open(extra_general_nginx_conf_filepath, "r") as f:
                 extra_general_nginx_conf_string = f.read()
-                f.close()
 
     plugin_conf["name"] = plugin_name
     plugin_conf["extra_lua_nginx_conf_string"] = \
@@ -109,7 +106,6 @@ def get_conf(plugin_configuration_file):
                                  extra_nginx_conf_filename)
                 with open(extra_nginx_conf_filepath, "r") as f:
                     extra_nginx_conf_string = f.read()
-                    f.close()
         extra_nginx_conf_static_string = ""
         if parser.has_option(section, "extra_nginx_conf_static_filename"):
             extra_nginx_conf_static_filename = \
@@ -120,7 +116,6 @@ def get_conf(plugin_configuration_file):
                                  extra_nginx_conf_static_filename)
                 with open(extra_nginx_conf_static_filepath, "r") as f:
                     extra_nginx_conf_static_string = f.read()
-                    f.close()
         static_routing = True
         if parser.has_option(section, "static_routing"):
             static_routing = parser.getboolean(section, "static_routing")
