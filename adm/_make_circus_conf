@@ -9,6 +9,8 @@ MFSERV_PLUGINS_HOME = os.path.join(os.environ["MODULE_RUNTIME_HOME"],
                                    "var", "plugins")
 LOG_LEVEL = os.environ.get('MFSERV_LOG_DEFAULT_LEVEL', 'INFO')
 CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
+MODULE_RUNTIME_HOME = os.environ["MODULE_RUNTIME_HOME"]
+MODULE_HOME = os.environ["MODULE_HOME"]
 
 '''
 Below are defined process types depending on the code language
@@ -43,6 +45,10 @@ def make_watcher_conf(plugin_configuration_file):
             if x.startswith("app_")]
     os.environ["MFSERV_CURRENT_PLUGIN_DIR"] = \
         "%s/%s" % (MFSERV_PLUGINS_HOME, plugin_name)
+
+    redis_service = False
+    if parser.has_option("general", "redis_service"):
+        redis_service = parser.getboolean("general", "redis_service")
 
     # gunicorn_log_level
     gunicorn_log_level = LOG_LEVEL.lower()
@@ -188,6 +194,31 @@ def make_watcher_conf(plugin_configuration_file):
         output.append("stderr_stream.filename = "
                       "{{MODULE_RUNTIME_HOME}}/log/"
                       "app_%s_%s.stderr" % (plugin_name, app))
+    if redis_service:
+        output.append("")
+        output.append("[watcher:redis_service_for_plugin_%s]" % plugin_name)
+        output.append("cmd = redis-server")
+        output.append("args = {{MODULE_RUNTIME_HOME}}/tmp/config_auto/"
+                      "redis_plugin_%s.conf" % plugin_name)
+        output.append("numprocesses = 1")
+        output.append("stdout_stream.class = FileStream")
+        output.append("stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/"
+                      "redis_plugin_%s.log" % plugin_name)
+        output.append("stderr.class = FileStream")
+        output.append("stderr.filename = {{MODULE_RUNTIME_HOME}}/log/"
+                      "redis_plugin_%s.log" % plugin_name)
+        output.append("copy_env = True")
+        output.append("autostart = True")
+        output.append("respawn = True")
+        with open("%s/tmp/config_auto/redis_plugin_%s.conf" %
+                  (MODULE_RUNTIME_HOME, plugin_name), "w+") as f:
+            with open("%s/config/redis_plugin_xxx.conf" % MODULE_HOME,
+                      "r") as f2:
+                content = f2.read()
+            new_content = envtpl.render_string(content,
+                                               {"PLUGIN_NAME": plugin_name})
+            f.write(new_content)
+
     return envtpl.render_string("\n".join(output))
 
 

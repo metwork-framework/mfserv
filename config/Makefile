@@ -1,4 +1,4 @@
-CONFIGS=config.ini nginx.conf
+CONFIGS=config.ini nginx.conf redis_plugin_xxx.conf
 
 include ../adm/root.mk
 include $(MFEXT_HOME)/share/subdir_root.mk
