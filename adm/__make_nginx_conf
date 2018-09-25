@@ -38,36 +38,47 @@ def get_conf(plugin_configuration_file):
     plugin_conf = {}
     parser = ExtendedConfigParser(config=CONFIG, strict=False,
                                   inheritance='im', interpolation=None)
-    plugin_name = os.path.basename(os.path.dirname(plugin_configuration_file))
+
+    plugin_directory = os.path.dirname(plugin_configuration_file)
+    plugin_name = os.path.basename(plugin_directory)
+
     parser.read(plugin_configuration_file)
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
+
     extra_general_nginx_conf_string = ""
     if parser.has_option("general", "extra_nginx_conf_filename"):
         extra_general_nginx_conf_filename = \
             parser.get("general", "extra_nginx_conf_filename")
         if extra_general_nginx_conf_filename != "null":
             extra_general_nginx_conf_filepath = \
-                os.path.join(os.path.dirname(plugin_configuration_file),
+                os.path.join(plugin_directory,
                              extra_general_nginx_conf_filename)
             with open(extra_general_nginx_conf_filepath, "r") as f:
                 extra_general_nginx_conf_string = f.read()
+
     plugin_conf["name"] = plugin_name
     plugin_conf["extra_general_nginx_conf_string"] = \
         envtpl.render_string(extra_general_nginx_conf_string,
                              extra_variables={"PLUGIN": plugin_conf})
+
+    lua_package_paths = []
+
     for app in apps:
         section = "app_%s" % app
         typ = parser.get(section, "type")
         if typ not in ALL_TYP_LIST:
             continue
+        if len(glob.glob(os.path.join(plugin_directory, app, '*.lua'))) > 0:
+            lua_package_paths.append(os.path.join(plugin_directory, app,
+                                                  '?.lua'))
         extra_nginx_conf_string = ""
         if parser.has_option(section, "extra_nginx_conf_filename"):
             extra_nginx_conf_filename = parser.get(section,
                                                    "extra_nginx_conf_filename")
             if extra_nginx_conf_filename != "null":
                 extra_nginx_conf_filepath = \
-                    os.path.join(os.path.dirname(plugin_configuration_file),
+                    os.path.join(plugin_directory,
                                  extra_nginx_conf_filename)
                 with open(extra_nginx_conf_filepath, "r") as f:
                     extra_nginx_conf_string = f.read()
@@ -77,7 +88,7 @@ def get_conf(plugin_configuration_file):
                 parser.get(section, "extra_nginx_conf_static_filename")
             if extra_nginx_conf_static_filename != "null":
                 extra_nginx_conf_static_filepath = \
-                    os.path.join(os.path.dirname(plugin_configuration_file),
+                    os.path.join(plugin_directory,
                                  extra_nginx_conf_static_filename)
                 with open(extra_nginx_conf_static_filepath, "r") as f:
                     extra_nginx_conf_static_string = f.read()
@@ -127,19 +138,28 @@ def get_conf(plugin_configuration_file):
                                  extra_variables={"APP": app_conf})
         if "apps" not in plugin_conf:
             plugin_conf["apps"] = []
+        plugin_conf["lua_package_paths"] = lua_package_paths
         plugin_conf["apps"].append(app_conf)
     return plugin_conf
 
 
 plugins = []
+lua_package_paths = []
 for config_file in glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini"):
     plugin_conf = get_conf(config_file)
+    lua_package_paths = lua_package_paths + plugin_conf['lua_package_paths']
     plugins.append(plugin_conf)
+lua_package_paths = \
+    lua_package_paths + ["%s/config/?.lua" % os.environ['MFSERV_HOME'],
+                         "%s/config/?.lua" % os.environ['MFCOM_HOME']]
 
 nginx_conf_file = os.path.join(os.environ['MODULE_HOME'], 'config',
                                'nginx.conf')
 with open(nginx_conf_file, "r") as f:
-    content = envtpl.render_string(f.read(),
-                                   extra_variables={"PLUGINS": plugins})
+    extra_variables = {
+        "PLUGINS": plugins,
+        "LUA_PACKAGE_PATH": ";".join(lua_package_paths) + ";;"
+    }
+    content = envtpl.render_string(f.read(), extra_variables=extra_variables)
 
 print(content)
