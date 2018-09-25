@@ -154,12 +154,10 @@ for config_file in glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini"):
 nginx_conf_file = os.path.join(os.environ['MODULE_HOME'], 'config',
                                'nginx.conf')
 with open(nginx_conf_file, "r") as f:
-    kwargs = {
-        "extra_variables": {
-            "PLUGINS": plugins,
-            "LUA_PACKAGE_PATH": ";".join(lua_packages_paths) + ";;"
-        }
+    extra_variables = {
+        "PLUGINS": plugins,
+        "LUA_PACKAGE_PATH": ";".join(lua_packages_paths) + ";;"
     }
-    content = envtpl.render_string(f.read(), **kwargs)
+    content = envtpl.render_string(f.read(), extra_variables=extra_variables)
 
 print(content)
