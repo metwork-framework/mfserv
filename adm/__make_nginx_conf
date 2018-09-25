@@ -67,13 +67,11 @@ def get_conf(plugin_configuration_file):
                 extra_general_nginx_conf_string = f.read()
 
     plugin_conf["name"] = plugin_name
-    plugin_conf["lua_package_path_conf_string"] = \
-        envtpl.render_string(lua_package_path_conf_string,
-                             extra_variables={"PLUGIN": plugin_conf})
+    plugin_conf["lua_package_path_conf_string"] = lua_package_path_conf_string
     plugin_conf["extra_general_nginx_conf_string"] = \
         envtpl.render_string(extra_general_nginx_conf_string,
                              extra_variables={"PLUGIN": plugin_conf})
-    
+
     for app in apps:
         section = "app_%s" % app
         typ = parser.get(section, "type")
