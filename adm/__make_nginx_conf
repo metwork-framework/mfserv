@@ -62,7 +62,8 @@ def get_conf(plugin_configuration_file):
         envtpl.render_string(extra_general_nginx_conf_string,
                              extra_variables={"PLUGIN": plugin_conf})
 
-    lua_package_paths = []
+    plugin_conf['lua_package_paths'] = []
+    plugin_conf["apps"] = []
 
     for app in apps:
         section = "app_%s" % app
@@ -70,8 +71,8 @@ def get_conf(plugin_configuration_file):
         if typ not in ALL_TYP_LIST:
             continue
         if len(glob.glob(os.path.join(plugin_directory, app, '*.lua'))) > 0:
-            lua_package_paths.append(os.path.join(plugin_directory, app,
-                                                  '?.lua'))
+            lua_package_path = os.path.join(plugin_directory, app, '?.lua')
+            plugin_conf['lua_package_paths'].append(lua_package_path)
         extra_nginx_conf_string = ""
         if parser.has_option(section, "extra_nginx_conf_filename"):
             extra_nginx_conf_filename = parser.get(section,
@@ -125,20 +126,20 @@ def get_conf(plugin_configuration_file):
                     "virtualdomains": sorted(list(virtualdomains)),
                     "workdir": workdir,
                     "static_routing": static_routing,
-                    "socket": "%s/var/default_%s.socket" % (MODULE_RUNTIME_HOME, name)}
+                    "socket": "%s/var/default_%s.socket" %
+                    (MODULE_RUNTIME_HOME, name)}
         if typ in PYTHON_TYP_LIST:
-            app_conf["socket"] = "%s/var/gunicorn_%s.socket" % (MODULE_RUNTIME_HOME, name)
+            app_conf["socket"] = "%s/var/gunicorn_%s.socket" % \
+                (MODULE_RUNTIME_HOME, name)
         elif typ in JS_TYP_LIST:
-            app_conf["socket"] = "%s/var/node_%s.socket" % (MODULE_RUNTIME_HOME, name)
+            app_conf["socket"] = "%s/var/node_%s.socket" % \
+                (MODULE_RUNTIME_HOME, name)
         app_conf['extra_nginx_conf_string'] = \
             envtpl.render_string(extra_nginx_conf_string,
                                  extra_variables={"APP": app_conf})
         app_conf['extra_nginx_conf_static_string'] = \
             envtpl.render_string(extra_nginx_conf_static_string,
                                  extra_variables={"APP": app_conf})
-        if "apps" not in plugin_conf:
-            plugin_conf["apps"] = []
-        plugin_conf["lua_package_paths"] = lua_package_paths
         plugin_conf["apps"].append(app_conf)
     return plugin_conf
 

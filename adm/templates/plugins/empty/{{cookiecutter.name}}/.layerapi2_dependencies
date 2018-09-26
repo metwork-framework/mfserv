@@ -1,0 +1,2 @@
+root@mfserv
+{% if cookiecutter.type == "python2" %}python2@mfserv{% elif cookiecutter.type == 'python3' %}python3@mfserv{% elif cookiecutter.type == 'node' %}nodejs@mfext{% endif %}
