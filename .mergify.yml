@@ -1,0 +1,29 @@
+rules:
+  default: null
+  branches:
+    integration:
+      merge_strategy:
+        method: rebase
+        rebase_fallback: none
+      protection:
+        required_status_checks:
+          strict: true
+          contexts:
+          - license/cla
+          - continuous-integration/drone/pr
+        required_pull_request_reviews:
+          required_approving_review_count: 1
+          require_code_owner_reviews: true
+          dismiss_stale_reviews: true
+        enforce_admins: true
+    master:
+      merge_strategy:
+        method: rebase
+        rebase_fallback: none
+      protection:
+        required_status_checks:
+          strict: true
+          contexts:
+          - no pullrequest on master
+        required_pull_request_reviews: null
+        enforce_admins: true
