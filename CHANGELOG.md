@@ -9,6 +9,7 @@
 * change default configuration ([2b2044d](https://github.com/metwork-framework/mfserv/commit/2b2044d))
 * delete "blank only" files during bootstrap ([572fe38](https://github.com/metwork-framework/mfserv/commit/572fe38))
 * introduce an empty plugin type ([1ad9762](https://github.com/metwork-framework/mfserv/commit/1ad9762)), closes [#10](https://github.com/metwork-framework/mfserv/issues/10)
+* provide a better plugin crontab bootstrap ([0509e1b](https://github.com/metwork-framework/mfserv/commit/0509e1b))
 
 
 ### BREAKING CHANGES
