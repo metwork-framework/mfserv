@@ -2,6 +2,11 @@
 # (unreleased)
 
 
+### Bug Fixes
+
+* better plugin routing ([2f831d0](https://github.com/metwork-framework/mfserv/commit/2f831d0))
+
+
 ### Features
 
 * add a redis_service option ([3a7db68](https://github.com/metwork-framework/mfserv/commit/3a7db68)), closes [#5](https://github.com/metwork-framework/mfserv/issues/5)
