@@ -6,12 +6,5 @@
 [[inputs.nginx]]
   urls = ["http://127.0.0.1:{{MFSERV_NGINX_PORT}}/status"]
 
-# tmp fix before 1.7.1 version
-
-[[processors.converter]]
-  namepass = ["nginx"]
-  [processors.converter.fields]
-    float = ["*"]
-
 {% endraw %}
 {% endblock %}
