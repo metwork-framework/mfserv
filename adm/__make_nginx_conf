@@ -152,7 +152,9 @@ for config_file in glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini"):
     plugins.append(plugin_conf)
 lua_package_paths = \
     lua_package_paths + ["%s/config/?.lua" % os.environ['MFSERV_HOME'],
-                         "%s/config/?.lua" % os.environ['MFCOM_HOME']]
+                         "%s/lib/?.lua" % os.environ['MFSERV_HOME'],
+                         "%s/config/?.lua" % os.environ['MFCOM_HOME'],
+                         "%s/lib/?.lua" % os.environ['MFCOM_HOME']]
 
 nginx_conf_file = os.path.join(os.environ['MODULE_HOME'], 'config',
                                'nginx.conf')
