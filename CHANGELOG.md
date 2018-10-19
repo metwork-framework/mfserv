@@ -5,6 +5,7 @@
 ### Bug Fixes
 
 * better plugin routing ([2f831d0](https://github.com/metwork-framework/mfserv/commit/2f831d0))
+* fix lua lib paths ([048af60](https://github.com/metwork-framework/mfserv/commit/048af60)), closes [#34](https://github.com/metwork-framework/mfserv/issues/34)
 
 
 ### Features
