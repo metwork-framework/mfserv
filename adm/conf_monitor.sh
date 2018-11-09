@@ -61,7 +61,7 @@ while test "${RUN}" -eq 1; do
             test_status_or_exit
             log INFO "circus conf changed => reload"
             mv -f "${NEW_CIRCUS_CONF}" "${OLD_CIRCUS_CONF}" >/dev/null 2>&1
-            layer_wrapper --layers=python3_circus@mfext -- circusctl --endpoint "${MFSERV_CIRCUS_ENDPOINT}" --timeout=30 restart  || echo foo >/dev/null
+            timeout 30s layer_wrapper --layers=python3_circus@mfext -- circusctl --endpoint "${MFSERV_CIRCUS_ENDPOINT}" restart || true
             sleep 3
             log INFO "exiting"
             exit 0
@@ -82,7 +82,7 @@ while test "${RUN}" -eq 1; do
             test_status_or_exit
             log INFO "nginx conf changed => reload"
             mv -f "${NEW_NGINX_CONF}" "${OLD_NGINX_CONF}" >/dev/null 2>&1
-            layer_wrapper --layers=python3_circus@mfext -- circusctl --endpoint "${MFSERV_CIRCUS_ENDPOINT}" --timeout=30 signal nginx SIGHUP || echo foo >/dev/null
+            timeout 10s layer_wrapper --layers=python3_circus@mfext -- circusctl --endpoint "${MFSERV_CIRCUS_ENDPOINT}" signal nginx SIGHUP || true
         fi
         rm -f "${NEW_NGINX_CONF}"
     fi
