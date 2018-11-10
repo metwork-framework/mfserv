@@ -6,6 +6,7 @@
 
 * better plugin routing ([2f831d0](https://github.com/metwork-framework/mfserv/commit/2f831d0))
 * fix lua lib paths ([048af60](https://github.com/metwork-framework/mfserv/commit/048af60)), closes [#34](https://github.com/metwork-framework/mfserv/issues/34)
+* fix timeout issues around conf_monitor restarts ([d4e21bc](https://github.com/metwork-framework/mfserv/commit/d4e21bc)), closes [#46](https://github.com/metwork-framework/mfserv/issues/46)
 
 
 ### Features
