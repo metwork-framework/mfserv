@@ -1,3 +1,5 @@
+# automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/.drone.yml template
+
 bootstrap_common: &bootstrap_common
   pull: true
   commands:
@@ -5,8 +7,8 @@ bootstrap_common: &bootstrap_common
     - mkdir -p /opt/metwork-mfserv-${DRONE_BRANCH}
     - ./bootstrap.sh /opt/metwork-mfserv-${DRONE_BRANCH} /opt/metwork-mfcom-$${MFCOM_BRANCH}
     - cat adm/root.mk
-    - CACHE_HASH=`/opt/metwork-mfext-$${MFCOM_BRANCH}/bin/_build_cache_hash.sh .`
-    - if ! test -f /buildcache/build_mfserv_${DRONE_BRANCH}_$${CACHE_HASH}; then echo $${CACHE_HASH} >.drone_cache; fi
+    - CACHE_HASH=`/opt/metwork-mfext/bin/_build_cache_hash.sh .`
+    - if ! test -f /buildcache/build_mfserv_${DRONE_BRANCH}_$${CACHE_HASH}; then echo $${CACHE_HASH} >.drone_cache; fi 
 
 build_common: &build_common
   commands:
