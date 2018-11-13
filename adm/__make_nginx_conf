@@ -28,10 +28,16 @@ JS_TYP_LIST = [
     "node"
 ]
 
+# Static type plugin
+STATIC_TYP_LIST = [
+    "static"
+]
+
 # All types
 ALL_TYP_LIST = \
     PYTHON_TYP_LIST + \
-    JS_TYP_LIST
+    JS_TYP_LIST + \
+    STATIC_TYP_LIST
 
 
 def get_conf(plugin_configuration_file):
@@ -127,13 +133,16 @@ def get_conf(plugin_configuration_file):
                     "workdir": workdir,
                     "static_routing": static_routing,
                     "socket": "%s/var/default_%s.socket" %
-                    (MODULE_RUNTIME_HOME, name)}
+                    (MODULE_RUNTIME_HOME, name),
+                    "type": typ}
         if typ in PYTHON_TYP_LIST:
             app_conf["socket"] = "%s/var/gunicorn_%s.socket" % \
                 (MODULE_RUNTIME_HOME, name)
         elif typ in JS_TYP_LIST:
             app_conf["socket"] = "%s/var/node_%s.socket" % \
                 (MODULE_RUNTIME_HOME, name)
+        elif typ in STATIC_TYP_LIST:
+            app_conf["socket"] = None
         app_conf['extra_nginx_conf_string'] = \
             envtpl.render_string(extra_nginx_conf_string,
                                  extra_variables={"APP": app_conf})
