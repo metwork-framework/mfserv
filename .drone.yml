@@ -90,6 +90,20 @@ pipeline:
       event: push
       branch: [ master, pci_*]
 
+  trigger_integration_tests:
+    image: metwork/drone-downstream-specific-image:latest
+    pull: true
+    repositories:
+      - metwork-framework/mfserv-integration-tests-runner@${DRONE_BRANCH}
+    params:
+      - FORCED_OS_VERSION=${OS_VERSION}
+    secrets: [ downstream_token, downstream_server ]
+    when:
+      status: [ success ]
+      event: push
+      branch: [ master, integration ]
+
+
 matrix:
   OS_VERSION:
     - centos6
