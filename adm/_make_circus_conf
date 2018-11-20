@@ -138,7 +138,9 @@ def make_watcher_conf(plugin_configuration_file):
                 " --extra-env-prefix=MFSERV_CURRENT_PLUGIN"
             output.append("args = %s -- "
                           "gunicorn --workers=%s "
-                          "--bind=%s --worker-class=%s --log-level=%s %s" %
+                          "--logger-class=gunicorn_custom_log.CustomLogger "
+                          "--access-logfile=- --bind=%s --worker-class=%s "
+                          "--log-level=%s %s" %
                           (layer_wrapper_extra_args, workers,
                            bind, worker_class, gunicorn_log_level,
                            gunicorn_arg))
