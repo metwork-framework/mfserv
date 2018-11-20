@@ -17,7 +17,3 @@ All these technologies are managed in a "production ready" with:
 - memory limits
 - autorestart features
 - logs and metrics
-
-## Installation
-
-See [this document](https://github.com/metwork-framework/resources/blob/master/documents/install_a_metwork_package.md).
