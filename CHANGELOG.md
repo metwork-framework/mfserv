@@ -7,6 +7,7 @@
 * better plugin routing ([2f831d0](https://github.com/metwork-framework/mfserv/commit/2f831d0))
 * fix lua lib paths ([048af60](https://github.com/metwork-framework/mfserv/commit/048af60)), closes [#34](https://github.com/metwork-framework/mfserv/issues/34)
 * fix timeout issues around conf_monitor restarts ([d4e21bc](https://github.com/metwork-framework/mfserv/commit/d4e21bc)), closes [#46](https://github.com/metwork-framework/mfserv/issues/46)
+* handle NOTSET logging level value in nginx configuration ([bd8c35e](https://github.com/metwork-framework/mfserv/commit/bd8c35e))
 
 
 ### Features
@@ -18,6 +19,7 @@
 * better plugin crontab example ([841f3a5](https://github.com/metwork-framework/mfserv/commit/841f3a5))
 * change default configuration ([2b2044d](https://github.com/metwork-framework/mfserv/commit/2b2044d))
 * delete "blank only" files during bootstrap ([572fe38](https://github.com/metwork-framework/mfserv/commit/572fe38))
+* filter gunicorn messages in stdout/stderr depending on their level ([5afcce0](https://github.com/metwork-framework/mfserv/commit/5afcce0)), closes [#47](https://github.com/metwork-framework/mfserv/issues/47)
 * introduce an empty plugin type ([1ad9762](https://github.com/metwork-framework/mfserv/commit/1ad9762)), closes [#10](https://github.com/metwork-framework/mfserv/issues/10)
 * provide a better plugin crontab bootstrap ([0509e1b](https://github.com/metwork-framework/mfserv/commit/0509e1b))
 
