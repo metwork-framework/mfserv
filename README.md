@@ -27,15 +27,15 @@ All these technologies are managed in a "production ready" with:
 - autorestart features
 - logs and metrics
 
-## Installation
-
-See [this document](https://github.com/metwork-framework/resources/blob/master/documents/install_a_metwork_package.md).
-
 
 
 ## Installation guide
 
 See [this document](https://github.com/metwork-framework/resources/blob/master/documents/install_a_metwork_package.md).
+
+## Configuration guide
+
+See [this document](https://github.com/metwork-framework/resources/blob/master/documents/configure_a_metwork_package.md).
 
 
 ## Contributing guide
