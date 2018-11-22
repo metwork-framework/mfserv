@@ -2,28 +2,19 @@ pull_request_rules:
 
 - name: integration branch
   actions:
-    label:
-      add:
-        - Merge Now
-  conditions:
-    - base=integration
-    - -merged
-    - -closed
-    - label!=no-mergify
-    - '#approved-reviews-by>=1'
-    - status-success=license/cla
-    - author!=metworkbot
-
-    - status-success=continuous-integration/drone/pr
-
-
-- name: merge action
-  actions:
     merge:
       method: rebase
       rebase_fallback: merge
       strict: false
     delete_head_branch: {}
   conditions:
+    - base=integration
+    - -merged
+    - -closed
     - label!=no-mergify
-    - label=Merge Now
+    - status-success=pr ready to merge
+    - status-success=license/cla
+
+    - status-success=continuous-integration/drone/pr
+
+
