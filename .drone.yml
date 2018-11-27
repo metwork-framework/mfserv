@@ -1,4 +1,4 @@
-# automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/.drone.yml template
+# automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/mfxxx_drone.yml template
 
 
     
@@ -51,10 +51,8 @@ pipeline:
   bootstrap_integration_push:
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
     environment:
-
-      - DEP_DIR=integration
-      - TARGET_DIR=integration
-
+      - DEP_DIR=master
+      - TARGET_DIR=master
     <<: *bootstrap_common
     volumes:
       - /buildcache:/buildcache
@@ -65,10 +63,8 @@ pipeline:
   bootstrap_integration_pr:
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
     environment:
-      - TARGET_DIR=integration
-
-      - DEP_DIR=integration
-
+      - TARGET_DIR=master
+      - DEP_DIR=master
     <<: *bootstrap_common
     when:
       event: pull_request
@@ -89,9 +85,7 @@ pipeline:
     <<: *build_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
     environment:
-
-      - TARGET_DIR=integration
-
+      - TARGET_DIR=master
     when:
 
       event: [push, pull_request]
@@ -101,9 +95,7 @@ pipeline:
     <<: *build_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:master
     environment:
-
-      - TARGET_DIR=${DRONE_BRANCH}
-
+      - TARGET_DIR=master
     when:
       event: push
       branch: [ master, ci_*, pci_* ]

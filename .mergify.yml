@@ -1,3 +1,5 @@
+# automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/%7B%7Bcookiecutter.repo%7D%7D/mergify.yml)
+
 pull_request_rules:
 
 - name: integration branch

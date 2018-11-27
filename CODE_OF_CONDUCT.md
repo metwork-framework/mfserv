@@ -1,5 +1,7 @@
 # Contributor Covenant Code of Conduct
 
+[//]: # (automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/%7B%7Bcookiecutter.repo%7D%7D/CODE_OF_CONDUCT.md)
+
 ## Our Pledge
 
 In the interest of fostering an open and welcoming environment, we as
