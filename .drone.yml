@@ -58,7 +58,7 @@ pipeline:
       - /buildcache:/buildcache
     when:
       event: push
-      branch: integration
+      branch: [ integration, ci_*, pci_* ]
 
   bootstrap_integration_pr:
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
@@ -71,16 +71,16 @@ pipeline:
       branch: integration
 
   bootstrap:
-    image: metwork/mfxxx-${OS_VERSION}-buildimage:master
+    image: metwork/mfxxx-${OS_VERSION}-buildimage:${DRONE_BRANCH}
     environment:
-      - DEP_DIR=master
-      - TARGET_DIR=master
+      - DEP_DIR=${DRONE_BRANCH##release_}
+      - TARGET_DIR=${DRONE_BRANCH##release_}
     <<: *bootstrap_common
     volumes:
       - /buildcache:/buildcache
     when:
       event: push
-      branch: [ master, ci_*, pci_* ]
+      branch: [ master, release_* ]
   build_integration:
     <<: *build_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
@@ -90,27 +90,27 @@ pipeline:
 
       event: [push, pull_request]
 
-      branch: integration
+      branch: [ integration, ci_*, pci_* ]
   build:
     <<: *build_common
-    image: metwork/mfxxx-${OS_VERSION}-buildimage:master
+    image: metwork/mfxxx-${OS_VERSION}-buildimage:${DRONE_BRANCH}
     environment:
-      - TARGET_DIR=master
+      - TARGET_DIR=${DRONE_BRANCH##release_}
     when:
       event: push
-      branch: [ master, ci_*, pci_* ]
+      branch: [ master, release_* ]
   publish_ci_integration:
     <<: *publish_ci_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
     when:
       event: push
-      branch: integration
+      branch: [ integration, pci_* ]
   publish_ci:
     <<: *publish_ci_common
-    image: metwork/mfxxx-${OS_VERSION}-buildimage:master
+    image: metwork/mfxxx-${OS_VERSION}-buildimage:${DRONE_BRANCH}
     when:
       event: push
-      branch: [ master, pci_* ]
+      branch: [ master, release_* ]
 
 
   trigger_integration_tests:
@@ -123,7 +123,7 @@ pipeline:
     when:
       status: [ success ]
       event: push
-      branch: [ master, integration ]
+      branch: [ master, integration, release_* ]
 
 
   trigger_plugins_buildimage:
@@ -134,7 +134,7 @@ pipeline:
     when:
       status: [ success ]
       event: push
-      branch: [ master, integration ]
+      branch: [ master, integration, release_* ]
       matrix:
         OS_VERSION: centos7
 
@@ -144,4 +144,4 @@ matrix:
     - centos6
     - centos7
 
-branches: [ master, integration, ci_*, pci_* ]
+branches: [ master, integration, ci_*, pci_*, release_* ]
