@@ -90,7 +90,7 @@ pipeline:
 
       event: [push, pull_request]
 
-      branch: [ integration, ci_*, pci_* ]
+      branch: [ integration, ci_*, pci_* ]
   build:
     <<: *build_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:${DRONE_BRANCH}
