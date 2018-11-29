@@ -6,5 +6,8 @@ layers/layer1_python2/0500_extra_python_packages/src
 layers/layer1_python2/0500_extra_python_packages/tempolayer*
 layers/layer1_python3/0500_extra_python_packages/src
 layers/layer1_python3/0500_extra_python_packages/tempolayer*
+layers/layer1_python3/0600_gunicorn_custom_log/build/
+layers/layer1_python3/0600_gunicorn_custom_log/dist/
+layers/layer1_python3/0600_gunicorn_custom_log/gunicorn_custom_log.egg-info/
 doc/layer_*.md
 doc/layer_*.rst
