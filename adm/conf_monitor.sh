@@ -35,6 +35,16 @@ function test_status_or_exit() {
         log WARNING "${MODULE_RUNTIME_HOME}/var/status is not RUNNING => exit"
         exit 0
     fi
+    N=$(pgrep -u "${MODULE_RUNTIME_USER}" -f "plugins\\.install" |wc -l)
+    if test "${N}" -gt 0; then
+        log WARNING "plugin installation in progress => exit"
+        exit 0
+    fi
+    N=$(pgrep -u "${MODULE_RUNTIME_USER}" -f "plugins\\.uninstall" |wc -l)
+    if test "${N}" -gt 0; then
+        log WARNING "plugin uninstallation in progress => exit"
+        exit 0
+    fi
 }
 
 log INFO "started"
