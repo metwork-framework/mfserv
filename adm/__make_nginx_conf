@@ -167,10 +167,20 @@ lua_package_paths = \
 
 nginx_conf_file = os.path.join(os.environ['MODULE_HOME'], 'config',
                                'nginx.conf')
+
+# add all MODULE-named environment variables to nginx.conf
+list_module_environment = []
+module = os.environ['MODULE']
+for key in os.environ.keys():
+    if key.startswith(module + '_'):
+        list_module_environment.append(key)
+
 with open(nginx_conf_file, "r") as f:
     extra_variables = {
         "PLUGINS": plugins,
-        "LUA_PACKAGE_PATH": ";".join(lua_package_paths) + ";;"
+        "LUA_PACKAGE_PATH": ";".join(lua_package_paths) + ";;",
+        "MODULE_ENVIRONMENT": [x for x in os.environ.keys() 
+                               if x.startswith("MFSERV_")]
     }
     content = envtpl.render_string(f.read(), extra_variables=extra_variables)
 
