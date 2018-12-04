@@ -53,6 +53,7 @@ RUN=1
 trap handle_sigterm TERM
 trap handle_sigterm INT
 
+log DEBUG "sleeping 5 seconds..."
 sleep 5
 test_status_or_exit
 
@@ -71,7 +72,7 @@ while test "${RUN}" -eq 1; do
             test_status_or_exit
             log INFO "circus conf changed => reload"
             mv -f "${NEW_CIRCUS_CONF}" "${OLD_CIRCUS_CONF}" >/dev/null 2>&1
-            timeout 30s layer_wrapper --layers=python3_circus@mfext -- circusctl --endpoint "${MFSERV_CIRCUS_ENDPOINT}" restart || true
+            timeout 30s layer_wrapper --layers=python3_circus@mfext -- circusctl --endpoint "${MFSERV_CIRCUS_ENDPOINT}" restart >/dev/null 2>&1 || true
             sleep 3
             log INFO "exiting"
             exit 0
