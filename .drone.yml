@@ -126,6 +126,7 @@ pipeline:
       branch: [ master, integration, release_* ]
 
 
+
   trigger_plugins_buildimage:
     image: metwork/drone-downstream-specific-image:latest
     repositories:
