@@ -13,7 +13,6 @@ pull_request_rules:
     - base=integration
     - -merged
     - -closed
-    - label!=no-mergify
     - label!=Merge Manual
     - status-success=pr ready to merge
     - status-success=license/cla
