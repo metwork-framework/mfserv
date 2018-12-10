@@ -113,6 +113,7 @@ pipeline:
       branch: [ master, release_* ]
 
 
+
   trigger_integration_tests:
     image: metwork/drone-downstream-specific-image:latest
     repositories:
@@ -124,7 +125,6 @@ pipeline:
       status: [ success ]
       event: push
       branch: [ master, integration, release_* ]
-
 
 
   trigger_plugins_buildimage:
