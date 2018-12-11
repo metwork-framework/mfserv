@@ -115,7 +115,7 @@ def make_watcher_conf(plugin_configuration_file):
 
         output.append("")
         output.append("[watcher:app.%s.%s]" % (plugin_name, app))
-        output.append("cmd = layer_wrapper")
+        output.append("cmd = plugin_wrapper")
 
         if typ in PYTHON_TYP_LIST:
             bind = "unix:{{MODULE_RUNTIME_HOME}}/var/" \
@@ -125,17 +125,14 @@ def make_watcher_conf(plugin_configuration_file):
                 worker_class = "aiohttp.worker.GunicornWebWorker"
             else:
                 worker_class = "sync"
-            layer_wrapper_extra_args = " --layers=plugin_%s@mfserv" % \
-                plugin_name
-            if add_plugin_dir_to_python_path:
+            layer_wrapper_extra_args = plugin_name
+            if not add_plugin_dir_to_python_path:
                 layer_wrapper_extra_args = layer_wrapper_extra_args + \
-                    " --prepend-env=PYTHONPATH,%s" % plugin_dir
+                    " --do-not-add-plugin-dir-to-python-path"
             app_dir = os.path.join(plugin_dir, app)
             if add_app_dir_to_python_path:
                 layer_wrapper_extra_args = layer_wrapper_extra_args + \
-                    " --prepend-env=PYTHONPATH,%s " % app_dir
-            layer_wrapper_extra_args = layer_wrapper_extra_args + \
-                " --extra-env-prefix=MFSERV_CURRENT_PLUGIN"
+                    " --add-extra-dir-to-python-path=%s" % app_dir
             output.append("args = %s -- "
                           "gunicorn --workers=%s "
                           "--logger-class=gunicorn_custom_log.CustomLogger "
@@ -149,17 +146,14 @@ def make_watcher_conf(plugin_configuration_file):
             bind = "unix:{{MODULE_RUNTIME_HOME}}/var/node_app_%s_%s.socket" % \
                 (plugin_name, app)
 
-            layer_wrapper_extra_args = " --layers=plugin_%s@mfserv" % \
-                plugin_name
-            if add_plugin_dir_to_node_path:
+            layer_wrapper_extra_args = plugin_name
+            if not add_plugin_dir_to_node_path:
                 layer_wrapper_extra_args = layer_wrapper_extra_args + \
-                    " --prepend-env=NODE_PATH,%s" % plugin_dir
+                    " --do-not-add-plugin-dir-to-node-path"
             app_dir = os.path.join(plugin_dir, app)
             if add_app_dir_to_node_path:
                 layer_wrapper_extra_args = layer_wrapper_extra_args + \
-                    " --prepend-env=NODE_PATH,%s " % app_dir
-            layer_wrapper_extra_args = layer_wrapper_extra_args + \
-                " --extra-env-prefix=MFSERV_CURRENT_PLUGIN"
+                    " --add-extra-dir-to-node-path=%s" % app_dir
 
             node_server = "%s/%s/%s" % (plugin_dir, app, node_arg)
 
