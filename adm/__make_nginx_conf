@@ -179,8 +179,8 @@ with open(nginx_conf_file, "r") as f:
     extra_variables = {
         "PLUGINS": plugins,
         "LUA_PACKAGE_PATH": ";".join(lua_package_paths) + ";;",
-        "MODULE_ENVIRONMENT": [x for x in os.environ.keys() 
-                               if x.startswith("MFSERV_")]
+        "MODULE_ENVIRONMENT": sorted([x for x in os.environ.keys()
+                                      if x.startswith("MFSERV_")])
     }
     content = envtpl.render_string(f.read(), extra_variables=extra_variables)
 
