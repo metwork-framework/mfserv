@@ -3,6 +3,7 @@
 import os
 import glob
 import envtpl
+import copy
 from configparser_extended import ExtendedConfigParser
 
 MODULE_RUNTIME_HOME = os.environ["MODULE_RUNTIME_HOME"]
@@ -119,16 +120,13 @@ def get_conf(plugin_configuration_file):
             virtualdomains.add("%s.%s.%s" % (app, plugin_name, host))
             if app == "main" or len(apps) == 1:
                 virtualdomains.add("%s.%s" % (plugin_name, host))
-        prefixes = ["/%s/%s" % (plugin_name, app)]
-        if app == "main" or len(apps) == 1:
-            prefixes.append("/%s" % plugin_name)
         name = "app_%s_%s" % (plugin_name, app)
         app_conf = {"name": name,
                     "app_name": app,
                     "plugin_name": plugin_name,
                     "virtualdomain_based_routing": virtualdomain_based_routing,
                     "prefix_based_routing": prefix_based_routing,
-                    "prefixes": prefixes,
+                    "prefix": "/%s/%s" % (plugin_name, app),
                     "virtualdomains": sorted(list(virtualdomains)),
                     "workdir": workdir,
                     "static_routing": static_routing,
@@ -150,6 +148,10 @@ def get_conf(plugin_configuration_file):
             envtpl.render_string(extra_nginx_conf_static_string,
                                  extra_variables={"APP": app_conf})
         plugin_conf["apps"].append(app_conf)
+        if app == "main" or len(apps) == 1:
+            copy_conf = copy.deepcopy(app_conf)
+            copy_conf['prefix'] = "/%s" % plugin_name
+            plugin_conf["apps"].append(copy_conf)
     return plugin_conf
 
 
