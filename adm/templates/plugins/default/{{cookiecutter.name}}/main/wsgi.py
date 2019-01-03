@@ -1,6 +1,6 @@
 {% if cookiecutter.type != "gunicorn3_asyncio" %}
 def application(environ, start_response):
-    status = b'200 OK'
+    status = '200 OK'
     output = b'Hello World!'
     response_headers = [('Content-Type', 'text/plain'),
                         ('Content-Length', str(len(output)))]
