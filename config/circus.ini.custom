@@ -19,9 +19,10 @@ respawn = True
 hooks.before_start=circus_hooks.before_start_shell                              
 hooks.after_stop=circus_hooks.after_stop_shell          
 working_dir = {{MODULE_RUNTIME_HOME}}/tmp
+async_kill = True
 
 [watcher:conf_monitor]                                                          
-cmd={{MODULE_HOME}}/bin/conf_monitor.sh                                         
+cmd={{MODULE_HOME}}/bin/conf_monitor.py                                         
 args=                                                                           
 numprocesses = 1                                                                
 stdout_stream.class = FileStream                                                
@@ -32,5 +33,6 @@ copy_env = True
 autostart = True                                                                
 respawn = True           
 working_dir = {{MODULE_RUNTIME_HOME}}/tmp
+stop_signal = SIGKILL
 {% endraw %}
 {% endblock %}
