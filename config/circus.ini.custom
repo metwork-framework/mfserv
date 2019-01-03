@@ -3,7 +3,7 @@
 {% block custom %}
 {% raw %}
 [plugin:autorestart]                                                            
-use = circus_autorestart.CircusAutorestart          
+use = circus_autorestart_plugin.CircusAutorestartPlugin
 
 [watcher:nginx]
 cmd={{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx                               
