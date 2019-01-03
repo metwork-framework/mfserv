@@ -43,6 +43,9 @@ def make_watcher_conf(plugin_configuration_file):
     parser.read(plugin_configuration_file)
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
+    extra_daemons = [x.replace("extra_daemon_", "", 1).split(':')[0]
+                     for x in parser.sections()
+                     if x.startswith("extra_daemon_")]
     os.environ["MFSERV_CURRENT_PLUGIN_DIR"] = \
         "%s/%s" % (MFSERV_PLUGINS_HOME, plugin_name)
 
@@ -214,7 +217,59 @@ def make_watcher_conf(plugin_configuration_file):
             new_content = envtpl.render_string(content,
                                                {"PLUGIN_NAME": plugin_name})
             f.write(new_content)
-
+    for extra_daemon in extra_daemons:
+        section = "extra_daemon_%s" % extra_daemon
+        cmd_and_args = parser.get(section, "cmd_and_args")
+        numprocesses = parser.getint(section, "numprocesses")
+        output.append("")
+        output.append("[watcher:extra_daemon_%s_for_plugin_%s]" %
+                      (extra_daemon, plugin_name))
+        output.append("cmd = plugin_wrapper")
+        output.append("args = %s -- %s" % (plugin_name, cmd_and_args))
+        output.append("working_dir = %s" % plugin_dir)
+        output.append("numprocesses = %i" % numprocesses)
+        output.append("copy_env = True")
+        output.append("async_kill = True")
+        output.append("autostart = True")
+        output.append("respawn = True")
+        output.append("stdout_stream.class = FileStream")
+        output.append("stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/"
+                      "extra_daemon_%s_plugin_%s.log" %
+                      (extra_daemon, plugin_name))
+        output.append("stderr.class = FileStream")
+        output.append("stderr_stream.filename = {{MODULE_RUNTIME_HOME}}/log/"
+                      "extra_daemon_%s_plugin_%s.log" %
+                      (extra_daemon, plugin_name))
+        rlimit_as = None
+        rlimit_nofile = None
+        rlimit_nproc = None
+        rlimit_stack = None
+        rlimit_core = None
+        rlimit_fsize = None
+        if parser.has_option(section, "rlimit_as"):
+            rlimit_as = parser.getint(section, "rlimit_as")
+        if parser.has_option(section, "rlimit_nofile"):
+            rlimit_nofile = parser.getint(section, "rlimit_nofile")
+        if parser.has_option(section, "rlimit_nproc"):
+            rlimit_nproc = parser.getint(section, "rlimit_nproc")
+        if parser.has_option(section, "rlimit_stack"):
+            rlimit_stack = parser.getint(section, "rlimit_stack")
+        if parser.has_option(section, "rlimit_core"):
+            rlimit_core = parser.getint(section, "rlimit_core")
+        if parser.has_option(section, "rlimit_fsize"):
+            rlimit_fsize = parser.getint(section, "rlimit_fsize")
+        if rlimit_as:
+            output.append("rlimit_as = %i" % rlimit_as)
+        if rlimit_nofile:
+            output.append("rlimit_nofile = %i" % rlimit_nofile)
+        if rlimit_nproc:
+            output.append("rlimit_nproc = %i" % rlimit_nproc)
+        if rlimit_stack:
+            output.append("rlimit_stack = %i" % rlimit_stack)
+        if rlimit_core:
+            output.append("rlimit_core = %i" % rlimit_core)
+        if rlimit_fsize:
+            output.append("rlimit_fsize = %i" % rlimit_fsize)
     return envtpl.render_string("\n".join(output))
 
 
