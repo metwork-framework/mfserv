@@ -13,6 +13,10 @@ cd foobar
 make develop
 
 sleep 5
+cat "${MODULE_RUNTIME_HOME}/tmp/config_auto/circus.ini"
+cat "${MODULE_RUNTIME_HOME}/tmp/config_auto/nginx.conf"
+_circusctl --endpoint "${MFSERV_CIRCUS_ENDPOINT}" --timeout=10 status
+
 timeout 10s wget -O toto "http://127.0.0.1:${MFSERV_NGINX_PORT}/foobar"
 N=$(cat toto |grep -c Hello)
 if test "${N}" -ne 1; then
@@ -25,7 +29,6 @@ if test "${N}" -ne 1; then
     echo "bad log"
     cat "${MODULE_RUNTIME_HOME}/log/extra_daemon_foo_plugin_foobar.log"
 fi
-sleep 10
 
 plugins.uninstall foobar >/dev/null 2>&1
 mfserv.stop
