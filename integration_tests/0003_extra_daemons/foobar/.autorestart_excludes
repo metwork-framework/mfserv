@@ -1,0 +1,7 @@
+# Configuration file #2 for autorestart feature
+# see https://github.com/metwork-framework/circus_autorestart_plugin
+/local/
+/python3_virtualenv_sources/
+/python2_virtualenv_sources/
+/node_sources/
+__pycache__/
