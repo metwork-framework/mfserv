@@ -56,7 +56,6 @@ def _get_plugins_home():
 
 
 def get_plugins_config_ini():
-    # FIXME: cache
     res = []
     for home in _get_plugins_home():
         config_path = "%s/config.ini" % home
@@ -66,7 +65,6 @@ def get_plugins_config_ini():
 
 
 def get_plugins_crontab():
-    # FIXME: cache
     res = []
     for home in _get_plugins_home():
         config_path = "%s/crontab" % home
@@ -245,5 +243,13 @@ if __name__ == '__main__':
             time.sleep(3)
         else:
             LOGGER.debug("nginx conf didn't change")
+        new_conf, new_md5 = make_new_crontab_conf()
+        old_conf, old_md5 = get_old_crontab_conf()
+        if new_md5 != old_md5:
+            LOGGER.info("crontab conf changed => changing crontab...")
+            deploy_crontab(old_conf, new_conf)
+            time.sleep(3)
+        else:
+            LOGGER.debug("crontab conf didn't change")
         register_watches(ih, wds)
     LOGGER.info("stopped")
