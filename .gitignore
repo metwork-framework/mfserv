@@ -11,8 +11,8 @@ layers/layer1_python3/0600_gunicorn_custom_log/dist/
 layers/layer1_python3/0600_gunicorn_custom_log/gunicorn_custom_log.egg-info/
 doc/layer_*.md
 doc/layer_*.rst
-**.plugin
-**.whl
+*.plugin
+*.whl
 integration_tests/0003_extra_daemons/foobar/local
 __pycache__/
 integration_tests/0002_python3_plugin/foobar/python3_virtualenv_sources/requirements3.txt
