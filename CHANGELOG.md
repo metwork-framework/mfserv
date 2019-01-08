@@ -1,5 +1,10 @@
 <a name=""></a>
-# (unreleased)
+# [](https://github.com/metwork-framework/mfserv/compare/v0.4.0...v) (2019-01-08)
+
+
+
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/metwork-framework/mfserv/compare/2b2044d...v0.4.0) (2019-01-08)
 
 
 ### Bug Fixes
