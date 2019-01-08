@@ -1,8 +1,8 @@
 # automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/mfxxx_drone.yml template
 
 
-
-
+    
+    
 
 
 bootstrap_common: &bootstrap_common
@@ -134,7 +134,6 @@ pipeline:
     image: metwork/mfxxx-${OS_VERSION}-buildimage:${DRONE_BRANCH}
     volumes:
       - /pub:/pub
-      - /buildcache:/buildcache
     commands:
       - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
       - mkdir -p /pub/metwork/releases/rpms/${DRONE_BRANCH}/${OS_VERSION}/
@@ -144,6 +143,7 @@ pipeline:
     when:
       event: tag
       branch: [ release_* ]
+
 
 
 
