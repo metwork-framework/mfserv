@@ -15,3 +15,5 @@ doc/layer_*.rst
 *.whl
 integration_tests/0003_extra_daemons/foobar/local
 __pycache__/
+integration_tests/0002_python3_plugin/foobar/python3_virtualenv_sources/requirements3.txt
+integration_tests/0003_extra_daemons/foobar/toto
