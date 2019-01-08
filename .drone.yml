@@ -110,7 +110,7 @@ pipeline:
     when:
       event: push
       branch: [ master, release_* ]
-  build:
+  build_tag:
     <<: *build_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:${DRONE_BRANCH}
     environment:
