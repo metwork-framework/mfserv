@@ -81,6 +81,17 @@ pipeline:
     when:
       event: push
       branch: [ master, release_* ]
+  bootstrap_tag:
+    image: metwork/mfxxx-${OS_VERSION}-buildimage:${DRONE_BRANCH}
+    environment:
+      - DEP_DIR=${DRONE_BRANCH##release_}
+      - TARGET_DIR=${DRONE_BRANCH##release_}
+    <<: *bootstrap_common
+    volumes:
+      - /buildcache:/buildcache
+    when:
+      event: tag
+      branch: [ release_* ]
   build_integration:
     <<: *build_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
@@ -99,6 +110,14 @@ pipeline:
     when:
       event: push
       branch: [ master, release_* ]
+  build:
+    <<: *build_common
+    image: metwork/mfxxx-${OS_VERSION}-buildimage:${DRONE_BRANCH}
+    environment:
+      - TARGET_DIR=${DRONE_BRANCH##release_}
+    when:
+      event: tag
+      branch: [ release_* ]
   publish_ci_integration:
     <<: *publish_ci_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
