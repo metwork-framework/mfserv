@@ -1,0 +1,6 @@
+#! /bin/bash
+
+# collect static files
+cd {{cookiecutter.project_name}}
+python manage.py collectstatic --noinput
+cd ..
