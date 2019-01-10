@@ -8,6 +8,9 @@
 ### Fix
 - fix the node plugin template
 
+### Perf
+- increate stats sending delay
+
 <a name="v0.4.0"></a>
 ## [v0.4.0] - 2019-01-08
 ### Feat
