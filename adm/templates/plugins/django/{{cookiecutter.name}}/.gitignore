@@ -1,0 +1,5 @@
+# plugin release files
+*.plugin
+
+# local directory is built while the plugin is installed
+/local
