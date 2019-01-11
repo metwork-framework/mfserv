@@ -1,6 +1,9 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v0.4.1"></a>
+## [v0.4.1] - 2019-01-09
+
 <a name="v0.4.0"></a>
 ## [v0.4.0] - 2019-01-08
 ### Feat
