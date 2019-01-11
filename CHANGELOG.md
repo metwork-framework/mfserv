@@ -6,10 +6,14 @@
 - provide a way for plugins to launch their own daemons
 
 ### Fix
+- fix some nginx location conflicts when used with multiple apps
 - fix the node plugin template
 
 ### Perf
 - increate stats sending delay
+
+<a name="v0.4.1"></a>
+## [v0.4.1] - 2019-01-09
 
 <a name="v0.4.0"></a>
 ## [v0.4.0] - 2019-01-08
