@@ -1,0 +1,15 @@
+/local/
+/*.plugin
+/*.tar.gz
+/python3_virtualenv_sources/src
+/python2_virtualenv_sources/src
+/node_sources/node_modules
+/python3_virtualenv_sources/*.tmp
+/python2_virtualenv_sources/*.tmp
+/python3_virtualenv_sources/freezed_requirements.*
+/python2_virtualenv_sources/freezed_requirements.*
+/python3_virtualenv_sources/tempolayer*
+/python2_virtualenv_sources/tempolayer*
+/tmp_build
+__pycache__/
+*.pyc
