@@ -2,6 +2,7 @@
 ## [Unreleased]
 
 ### Feat
+- add a plugin template for Django
 - first version of inotify powered conf_monitor
 - provide a way for plugins to launch their own daemons
 
