@@ -118,9 +118,7 @@ def get_old_crontab_conf():
 def restart_circus(old_conf, new_conf):
     os.unlink(old_conf)
     os.rename(new_conf, old_conf)
-    cmd = "timeout 30s layer_wrapper --layers=python3_circus@mfext -- " \
-        "circusctl --endpoint '%s' restart" % MFSERV_CIRCUS_ENDPOINT
-    BashWrapper(cmd)
+    os.system("_circus.reload &")
 
 
 def restart_nginx(old_conf, new_conf):
