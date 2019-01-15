@@ -126,10 +126,7 @@ def restart_circus(old_conf, new_conf):
 def restart_nginx(old_conf, new_conf):
     os.unlink(old_conf)
     os.rename(new_conf, old_conf)
-    cmd = "timeout 10s layer_wrapper --layers=python3_circus@mfext -- " \
-        "circusctl --endpoint '%s' " \
-        "signal nginx SIGHUP" % MFSERV_CIRCUS_ENDPOINT
-    x = BashWrapper(cmd)
+    x = BashWrapper("_nginx.reload")
     if not x:
         LOGGER.warning(x)
 
