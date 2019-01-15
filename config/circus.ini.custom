@@ -4,6 +4,8 @@
 {% raw %}
 [plugin:autorestart]                                                            
 use = circus_autorestart_plugin.CircusAutorestartPlugin
+stop_signal = 9
+stop_children = True
 
 [watcher:nginx]
 cmd={{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx                               
@@ -33,6 +35,6 @@ copy_env = True
 autostart = True                                                                
 respawn = True           
 working_dir = {{MODULE_RUNTIME_HOME}}/tmp
-stop_signal = SIGKILL
+stop_signal = 9
 {% endraw %}
 {% endblock %}
