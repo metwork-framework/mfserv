@@ -8,6 +8,7 @@ from conf_monitor import ConfMonitorRunner, md5sumfile
 
 LOGGER = getLogger("conf_monitor")
 MODULE_RUNTIME_HOME = os.environ['MODULE_RUNTIME_HOME']
+NGINX_FLAG = (int(os.environ['MFSERV_NGINX_FLAG']) == 1)
 
 
 def make_new_nginx_conf():
@@ -33,6 +34,8 @@ def restart_nginx(old_conf, new_conf):
 class MfservConfMonitorRunner(ConfMonitorRunner):
 
     def manage_nginx(self):
+        if not NGINX_FLAG:
+            return True
         new_conf, new_md5 = make_new_nginx_conf()
         old_conf, old_md5 = get_old_nginx_conf()
         if new_md5 != old_md5:

@@ -9,6 +9,7 @@ stop_signal = 9
 stop_children = True
 {% endif %}
 
+{% if MFSERV_NGINX_FLAG == "1" %}
 [watcher:nginx]
 cmd={{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx                               
 args=-p {{MODULE_RUNTIME_HOME}}/tmp/nginx_tmp_prefix -c {{MODULE_RUNTIME_HOME}}/tmp/config_auto/nginx.conf
@@ -24,6 +25,7 @@ hooks.before_start=circus_hooks.before_start_shell
 hooks.after_stop=circus_hooks.after_stop_shell          
 working_dir = {{MODULE_RUNTIME_HOME}}/tmp
 async_kill = True
+{% endif %}
 
 {% if MFSERV_AUTORESTART_FLAG == "1" %}
 [watcher:conf_monitor]                                                          
