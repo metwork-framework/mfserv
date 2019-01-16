@@ -24,7 +24,7 @@ working_dir = {{MODULE_RUNTIME_HOME}}/tmp
 async_kill = True
 
 [watcher:conf_monitor]                                                          
-cmd={{MODULE_HOME}}/bin/conf_monitor.py                                         
+cmd={{MODULE_HOME}}/bin/mfserv_conf_monitor.py                                         
 args=                                                                           
 numprocesses = 1                                                                
 stdout_stream.class = FileStream                                                

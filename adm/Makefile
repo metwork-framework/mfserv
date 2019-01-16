@@ -1,4 +1,4 @@
-BINS=_make_circus_conf conf_monitor.py _make_nginx_conf nginxfmt.py __make_nginx_conf
+BINS=_make_circus_conf mfserv_conf_monitor.py _make_nginx_conf nginxfmt.py __make_nginx_conf
 
 include root.mk
 include $(MFEXT_HOME)/share/subdir_root.mk
