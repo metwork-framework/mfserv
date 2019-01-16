@@ -9,6 +9,8 @@
 ### Fix
 - fix some nginx location conflicts when used with multiple apps
 - fix the node plugin template
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
 
 ### Perf
 - increate stats sending delay
