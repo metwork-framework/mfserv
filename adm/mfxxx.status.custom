@@ -28,4 +28,9 @@ if test "${RES}" = "0"; then
     fi
 fi
 
+if test "${MFSERV_AUTORESTART_FLAG}" = "1"; then
+    circus_status_watcher.sh conf_monitor || RES=1
+    circus_status_watcher.sh plugin:autorestart || RES=1
+fi
+
 {% endblock %}
