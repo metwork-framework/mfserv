@@ -41,6 +41,7 @@ class MfservConfMonitorRunner(ConfMonitorRunner):
             time.sleep(3)
         else:
             LOGGER.debug("nginx conf didn't change")
+        return True
 
     def handle_event(self):
         return self.manage_circus() and self.manage_nginx() and \
