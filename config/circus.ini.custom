@@ -2,10 +2,12 @@
 
 {% block custom %}
 {% raw %}
+{% if MFSERV_AUTORESTART_FLAG == "1" %}
 [plugin:autorestart]                                                            
 use = circus_autorestart_plugin.CircusAutorestartPlugin
 stop_signal = 9
 stop_children = True
+{% endif %}
 
 [watcher:nginx]
 cmd={{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx                               
@@ -23,6 +25,7 @@ hooks.after_stop=circus_hooks.after_stop_shell
 working_dir = {{MODULE_RUNTIME_HOME}}/tmp
 async_kill = True
 
+{% if MFSERV_AUTORESTART_FLAG == "1" %}
 [watcher:conf_monitor]                                                          
 cmd={{MODULE_HOME}}/bin/mfserv_conf_monitor.py                                         
 args=                                                                           
@@ -36,5 +39,6 @@ autostart = True
 respawn = True           
 working_dir = {{MODULE_RUNTIME_HOME}}/tmp
 stop_signal = 9
+{% endif %}
 {% endraw %}
 {% endblock %}
