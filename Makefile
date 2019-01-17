@@ -5,8 +5,6 @@ MODULE_LOWERCASE=mfserv
 -include $(MFEXT_HOME)/share/main_root.mk
 
 all:: directories
-	echo "root@mfcom" >$(MFSERV_HOME)/.layerapi2_dependencies
-	echo "openresty@mfext" >>$(MFSERV_HOME)/.layerapi2_dependencies
 	cd adm && $(MAKE)
 	cd config && $(MAKE)
 	cd layers && $(MAKE)
