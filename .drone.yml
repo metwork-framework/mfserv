@@ -178,4 +178,4 @@ matrix:
     - centos6
     - centos7
 
-branches: [ master, integration, ci_*, pci_*, release_* ]
+branches: [ master, integration, experimental*, ci_*, pci_*, release_* ]
