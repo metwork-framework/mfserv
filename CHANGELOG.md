@@ -2,6 +2,7 @@
 ## [Unreleased]
 
 ### Feat
+- Changes in management of layer dependencies and metapackage names (only minimal and full) Associated with changes in mfext _metwork.spec, this reduces the number of layers installed by default when installing mfserv (only necessary mfext layers are installed) Metapackage metwork-mfserv-minimal only installs the necessary layers for mfserv to work properly Metapackage metwork-mfserv or metwork-mfserv-full installs all mfserv layers
 - add a plugin template for Django
 - autorestart feature is configurable
 - first version of inotify powered conf_monitor
