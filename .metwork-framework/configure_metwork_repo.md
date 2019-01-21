@@ -1,5 +1,7 @@
 # How to configure the metwork yum repository ?
 
+[//]: # (automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/.metwork-framework/configure_metwork_repo.md)
+
 ## Prerequisites
 
 - a `Centos 6 x86_64` or `Centos 7 x86_64` linux distribution installed (it should also work with correponding RHEL or ScientificLinux distribution)

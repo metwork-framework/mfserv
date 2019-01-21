@@ -1,5 +1,7 @@
 # How to install/upgrade/remove mfserv metwork package (with internet access)
 
+[//]: # (automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/.metwork-framework/install_a_metwork_package.md)
+
 ## Prerequisites
 
 You must:
@@ -7,7 +9,7 @@ You must:
 - have configured the metwork yum repository. Please see [the corresponding document](configure_metwork_repo.md) document to do that.
 - have an internet access on this computer
 
-## Install a metwork package
+## Install mfserv metwork package
 
 You just have to execute the following command (as `root` user):
 

@@ -1,5 +1,7 @@
 # How to configure mfserv metwork package ?
 
+[//]: # (automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/.metwork-framework/configure_a_metwork_package.md)
+
 ## General
 
 There are several ways to configure a metwork package (or a plugin).
