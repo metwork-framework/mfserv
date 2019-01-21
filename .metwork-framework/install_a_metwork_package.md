@@ -11,14 +11,56 @@ You must:
 
 ## Install mfserv metwork package
 
+## Full installation
+
 You just have to execute the following command (as `root` user):
 
 ```
 yum install metwork-mfserv
 ```
 
-Of course, you can install several metwork packages on the same linux box.
+## Minimal installation
 
+If you prefer to start with a minimal installation, you have to execute the following command
+(as `root` user):
+
+```
+yum install metwork-mfserv-minimal
+```
+
+## Addons
+
+### Dependencies addons
+
+```
+# To install some devtools
+yum install metwork-mfext-devtools
+
+# To install some scientific libraries
+yum install metwork-mfext-scientific
+
+# To install python2 support
+# (including corresponding scientific and devtools addons)
+yum install metwork-mfext-python2
+```
+
+
+
+### mfserv addons
+
+```
+# To install python2 support
+# (see above to install full scientific and devtools support)
+yum install metwork-mfserv-python2
+
+# To install nodejs support
+yum install metwork-mfserv-nodejs
+```
+
+
+
+
+## Services
 
 You can start corresponding services with the root command:
 
@@ -36,8 +78,6 @@ Or you can also reboot your computer (because metwork services are started autom
 To uninstall mfserv metwork package, please stop corresponding metwork services with the `root` command:
 
 ```
-# note: this is not necessary with mfext or mfcom
-# because there is no corresponding services
 service metwork stop mfserv
 ```
 
@@ -47,6 +87,29 @@ Then, use the following command (still as `root` user):
 ```
 yum remove "metwork-mfserv*"
 ```
+
+## Upgrade mfserv metwork package
+
+To upgrade mfserv metwork package, use the following commands (still as `root` user):
+
+
+```
+# We stop mfserv services
+service metwork stop mfserv
+```
+
+
+```
+# We upgrade mfserv metwork package
+yum upgrade "metwork-mfserv*"
+```
+
+
+```
+# We start mfserv services
+service metwork start mfserv
+```
+
 
 ## Uninstall all metwork packages
 
