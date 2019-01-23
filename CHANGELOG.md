@@ -7,6 +7,7 @@
 - autorestart feature is configurable
 - first version of inotify powered conf_monitor
 - provide a way for plugins to launch their own daemons
+- we can deactivate the nginx startup
 
 ### Fix
 - fix some nginx location conflicts when used with multiple apps
