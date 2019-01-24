@@ -113,6 +113,14 @@ def get_conf(plugin_configuration_file):
             prefix_based_routing = \
                 parser.getboolean(section,
                                   "prefix_based_routing")
+        prefix_based_routing_extra_routes = []
+        if prefix_based_routing:
+            if parser.has_option(section, "prefix_based_routing_extra_routes"):
+                tmp = parser.get(section, "prefix_based_routing_extra_routes")
+                if tmp.strip() != "null":
+                    prefix_based_routing_extra_routes = \
+                        [x.strip() for x in tmp.strip().split(';')
+                         if x.startswith('/') and not x.endswith('/')]
         workdir = os.path.join(os.environ['MODULE_RUNTIME_HOME'], 'var',
                                'plugins', plugin_name, app)
         virtualdomains = set()
@@ -151,6 +159,10 @@ def get_conf(plugin_configuration_file):
         if app == "main" or len(apps) == 1:
             copy_conf = copy.deepcopy(app_conf)
             copy_conf['prefix'] = "/%s" % plugin_name
+            plugin_conf["apps"].append(copy_conf)
+        for extra_route in prefix_based_routing_extra_routes:
+            copy_conf = copy.deepcopy(app_conf)
+            copy_conf['prefix'] = extra_route
             plugin_conf["apps"].append(copy_conf)
     return plugin_conf
 
