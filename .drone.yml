@@ -47,6 +47,26 @@ publish_ci_common: &publish_ci_common
     - /pub:/pub
     - /buildcache:/buildcache
 
+
+integration_tests_common: &integration_tests_common
+  commands:
+    - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
+    - if test "${DRONE_TAG}" = ""; then if ! test -f .drone_cache; then echo "step bypass"; exit 0; fi; fi
+
+    - echo -e "[metwork_${DRONE_BRANCH}]" >/etc/yum.repos.d/metwork.repo
+    - echo -e "name=Metwork Continuous Integration Branch ${DRONE_BRANCH}" >> /etc/yum.repos.d/metwork.repo
+    - echo -e "baseurl=http://metwork-framework.org/pub/metwork/continuous_integration/rpms/${DRONE_BRANCH}/${OS_VERSION}/" >> /etc/yum.repos.d/metwork.repo
+    - echo -e "gpgcheck=0\n\enabled=1\n\metadata_expire=0\n" >>/etc/yum.repos.d/metwork.repo
+    - yum -y localinstall metwork-mfserv*.rpm
+    - su --command="mfserv.init" - mfserv
+    - su --command="mfserv.start" - mfserv
+    - su --command="mfserv.status" - mfserv
+    - if test -d "integration_tests"; then chown -R mfserv integration_tests; fi
+    - su --command="cd `pwd`; ./run_integration_tests.sh" - mfserv
+    - su --command="mfserv.stop" - mfserv
+
+
+
 pipeline:
   bootstrap_integration_push:
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
@@ -92,6 +112,7 @@ pipeline:
     when:
       event: tag
       branch: [ release_* ]
+
   build_integration:
     <<: *build_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
@@ -118,6 +139,24 @@ pipeline:
     when:
       event: tag
       branch: [ release_* ]
+
+
+  integration_tests_integration:
+    <<: *integration_tests_common
+    image: centos:${OS_VERSION}
+    when:
+
+      event: [push, pull_request]
+
+      branch: [ integration, ci_*, pci_* ]
+  integration_tests:
+    <<: *integration_tests_common
+    image: centos:${OS_VERSION}
+    when:
+      event: push
+      branch: [ master, release_*, experimental* ]
+
+    
   publish_ci_integration:
     <<: *publish_ci_common
     image: metwork/mfxxx-${OS_VERSION}-buildimage:integration
@@ -145,19 +184,6 @@ pipeline:
       branch: [ release_* ]
 
 
-
-
-  trigger_integration_tests:
-    image: metwork/drone-downstream-specific-image:latest
-    repositories:
-      - metwork-framework/mfserv-integration-tests-runner@${DRONE_BRANCH}
-    params:
-      - FORCED_OS_VERSION=${OS_VERSION}
-    secrets: [ downstream_token, downstream_server ]
-    when:
-      status: [ success ]
-      event: push
-      branch: [ master, integration, experimental*, release_* ]
 
 
   trigger_plugins_buildimage:
