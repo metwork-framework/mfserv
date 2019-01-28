@@ -7,6 +7,7 @@
 - autorestart feature is configurable
 - first version of inotify powered conf_monitor
 - provide a way for plugins to launch their own daemons
+- provide an easy way for a plugin to listen to an extra route
 - we can deactivate the nginx startup
 
 ### Fix
