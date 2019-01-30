@@ -28,9 +28,9 @@ If you prefer to start with a minimal installation, you have to execute the foll
 yum install metwork-mfserv-minimal
 ```
 
-## Addons
+## Optional Addons
 
-### Dependencies addons
+### Optional dependencies addons
 
 ```
 # To install some devtools
@@ -46,7 +46,7 @@ yum install metwork-mfext-python2
 
 
 
-### mfserv addons
+### Optional mfserv addons
 
 ```
 # To install python2 support
