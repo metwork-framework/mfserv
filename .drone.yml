@@ -111,7 +111,7 @@ pipeline:
       - /buildcache:/buildcache
     when:
       event: tag
-      branch: [ release_* ]
+      ref: refs/tags/v*
 
   build_integration:
     <<: *build_common
@@ -138,7 +138,7 @@ pipeline:
       - TARGET_DIR=${DRONE_BRANCH##release_}
     when:
       event: tag
-      branch: [ release_* ]
+      ref: refs/tags/v*
 
 
   integration_tests_integration:
@@ -181,7 +181,7 @@ pipeline:
       - if test "${OS_VERSION}" = "centos6"; then rm -Rf /pub/metwork/releases/docs/${DRONE_BRANCH}/mfserv; mkdir -p /pub/metwork/releases/docs/${DRONE_BRANCH}/mfserv ; cp -Rf html_doc/* /pub/metwork/releases/docs/${DRONE_BRANCH}/mfserv/ ; fi
     when:
       event: tag
-      branch: [ release_* ]
+      ref: refs/tags/v*
 
 
 
