@@ -1,6 +1,33 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="v0.5.2"></a>
+## [v0.5.2] - 2019-01-31
+
+<a name="v0.5.1"></a>
+## [v0.5.1] - 2019-01-29
+
+<a name="v0.5.0"></a>
+## [v0.5.0] - 2019-01-29
+### Feat
+- Changes in management of layer dependencies and metapackage names (only minimal and full) Associated with changes in mfext _metwork.spec, this reduces the number of layers installed by default when installing mfserv (only necessary mfext layers are installed) Metapackage metwork-mfserv-minimal only installs the necessary layers for mfserv to work properly Metapackage metwork-mfserv or metwork-mfserv-full installs all mfserv layers
+- add a plugin template for Django
+- autorestart feature is configurable
+- execute integration tests directly from mfserv module and lauch them on a pull request on the module
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- provide an easy way for a plugin to listen to an extra route
+- we can deactivate the nginx startup
+
+### Fix
+- fix some nginx location conflicts when used with multiple apps
+- fix the node plugin template
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+
+### Perf
+- increate stats sending delay
+
 <a name="v0.4.1"></a>
 ## [v0.4.1] - 2019-01-09
 
