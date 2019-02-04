@@ -7,7 +7,7 @@ from configparser_extended import ExtendedConfigParser
 
 MFSERV_PLUGINS_HOME = os.path.join(os.environ["MODULE_RUNTIME_HOME"],
                                    "var", "plugins")
-LOG_LEVEL = os.environ.get('MFSERV_LOG_DEFAULT_LEVEL', 'INFO')
+LOG_LEVEL = os.environ.get('MFSERV_LOG_MINIMAL_LEVEL', 'INFO')
 CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
 MODULE_RUNTIME_HOME = os.environ["MODULE_RUNTIME_HOME"]
 MODULE_HOME = os.environ["MODULE_HOME"]
