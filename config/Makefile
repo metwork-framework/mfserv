@@ -1,4 +1,4 @@
-CONFIGS=config.ini nginx.conf redis_plugin_xxx.conf
+CONFIGS=config.ini nginx.conf redis_plugin_xxx.conf mflog_override.conf
 
 include ../adm/root.mk
 include $(MFEXT_HOME)/share/subdir_root.mk
