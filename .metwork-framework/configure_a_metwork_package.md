@@ -1,10 +1,10 @@
-# How to configure mfserv metwork package ?
+# How to configure mfserv metwork module ?
 
 [//]: # (automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/.metwork-framework/configure_a_metwork_package.md)
 
 ## General
 
-There are several ways to configure a metwork package (or a plugin).
+There are several ways to configure a metwork module (or a plugin).
 
 It mainly depends:
 
@@ -16,7 +16,7 @@ All these ways are not incompatible but in what follows, you will find our recom
 
 Please read everything from the beginning to be sure to really understand the configuration process.
 
-### How to configure a metwork package (mfserv, mfbase, mfdata...) during development process ?
+### How to configure a metwork module (mfserv, mfbase, mfdata...) during development process ?
 
 #### Find the module configuration file `config.ini`
 
@@ -153,7 +153,7 @@ KEY1_VALUE = os.environ.get("MFSERV_PLUGIN_%s_KEY1" % CURRENT_PLUGIN_NAME.upper(
                             "default_value")
 ```
 
-### How to configure a metwork package (mfserv, mfbase, mfdata...) during production deployment process ?
+### How to configure a metwork module (mfserv, mfbase, mfdata...) during production deployment process ?
 
 Of course, you can use the same way described above but we recommend another way for production deployment.
 

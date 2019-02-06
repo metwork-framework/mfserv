@@ -106,5 +106,5 @@ Of course, if you prefer to choose another version, you have to change the `base
 
 ## Test
 
-To test the repository, you can use the command `yum list "metwork*"` (as `root`). You must have several `metwork-...` packages available.
+To test the repository, you can use the command `yum list "metwork*"` (as `root`). You must have several `metwork-...` modules available.
 
