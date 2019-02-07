@@ -1,8 +1,0 @@
-{
-      "name": "mfserv",
-      "version": "1.0.0",
-      "dependencies": {
-            "express": "4.16.3",
-            "cluster": "0.7.7"
-      }
-}

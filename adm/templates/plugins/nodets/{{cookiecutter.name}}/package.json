@@ -1,0 +1,15 @@
+{
+    "name": "{{cookiecutter.name}}",
+    "version": "{{cookiecutter.version}}",
+    "scripts": {
+        "transpile": "tsc -p tsconfig.json"
+    },
+    "dependencies": {
+        "express": "^4.16.4"
+    },
+    "devDependencies": {
+        "@types/node": "^7.0.55",
+        "typescript": "^3.3.1"
+    },
+    "workspaces" :[]
+}
