@@ -13,4 +13,5 @@ echo django >python3_virtualenv_sources/requirements-to-freeze.txt
 make release
 plugins.install "$(ls *.plugin)"
 plugins.uninstall foobar
+cd ..
 rm -Rf foobar*
