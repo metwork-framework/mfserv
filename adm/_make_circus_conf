@@ -59,9 +59,6 @@ def make_watcher_conf(plugin_configuration_file):
                                   'critical'):
         gunicorn_log_level = "debug"
 
-    # others like node
-    node_log_level = gunicorn_log_level
-
     for app in apps:
         section = "app_%s" % app
         typ = parser.get(section, "type")
@@ -144,10 +141,12 @@ def make_watcher_conf(plugin_configuration_file):
                           (layer_wrapper_extra_args, workers,
                            bind, worker_class, gunicorn_log_level,
                            gunicorn_arg))
+            # we force 1 here because gunicorn master deals with x workers
+            output.append("numprocesses = %i" % 1)
 
         elif typ in JS_TYP_LIST:
-            bind = "unix:{{MODULE_RUNTIME_HOME}}/var/node_app_%s_%s.socket" % \
-                (plugin_name, app)
+            bind = "{{MODULE_RUNTIME_HOME}}/var/" \
+                "node_%s_$(circus.wid).socket" % (plugin_name,)
 
             layer_wrapper_extra_args = plugin_name
             if not add_plugin_dir_to_node_path:
@@ -161,14 +160,12 @@ def make_watcher_conf(plugin_configuration_file):
             node_server = "%s/%s/%s" % (plugin_dir, app, node_arg)
 
             output.append("args = %s -- "
-                          "node %s --workers=%s "
-                          "--bind=%s --loglevel=%s" %
-                          (layer_wrapper_extra_args, node_server, workers,
-                           bind, node_log_level))
+                          "node %s %s" %
+                          (layer_wrapper_extra_args, node_server, bind))
+            output.append("numprocesses = %s" % workers)
 
         workdir = os.path.join(MFSERV_PLUGINS_HOME, plugin_name)
         output.append("working_dir = %s" % workdir)
-        output.append("numprocesses = 1")
         output.append("copy_env = True")
         output.append("async_kill = True")
         output.append("autostart = True")

@@ -1,7 +1,9 @@
 {
     "name": "{{cookiecutter.name}}",
     "version": "{{cookiecutter.version}}",
-    "dependencies": {},
+    "dependencies": {
+        "express": "^4.16.4"
+    },
     "devDependencies": {},
     "workspaces" :[]
 }

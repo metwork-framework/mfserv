@@ -3,6 +3,7 @@
 import os
 import glob
 import envtpl
+import hashlib
 import copy
 from configparser_extended import ExtendedConfigParser
 
@@ -103,6 +104,9 @@ def get_conf(plugin_configuration_file):
         static_routing = True
         if parser.has_option(section, "static_routing"):
             static_routing = parser.getboolean(section, "static_routing")
+        workers = 1
+        if parser.has_option(section, "workers"):
+            workers = int(envtpl.render_string(parser.get(section, "workers")))
         virtualdomain_based_routing = True
         if parser.has_option(section, "virtualdomain_based_routing"):
             virtualdomain_based_routing = \
@@ -130,25 +134,29 @@ def get_conf(plugin_configuration_file):
                 virtualdomains.add("%s.%s" % (plugin_name, host))
         name = "app_%s_%s" % (plugin_name, app)
         app_conf = {"name": name,
+                    "alias": "no",
                     "app_name": app,
                     "plugin_name": plugin_name,
+                    "hash": hashlib.md5(name.encode('utf8')).hexdigest(),
                     "virtualdomain_based_routing": virtualdomain_based_routing,
                     "prefix_based_routing": prefix_based_routing,
                     "prefix": "/%s/%s" % (plugin_name, app),
                     "virtualdomains": sorted(list(virtualdomains)),
                     "workdir": workdir,
                     "static_routing": static_routing,
-                    "socket": "%s/var/default_%s.socket" %
-                    (MODULE_RUNTIME_HOME, name),
+                    "sockets": ["%s/var/default_%s.socket" %
+                                (MODULE_RUNTIME_HOME, name)],
                     "type": typ}
         if typ in PYTHON_TYP_LIST:
-            app_conf["socket"] = "%s/var/gunicorn_%s.socket" % \
-                (MODULE_RUNTIME_HOME, name)
+            app_conf["sockets"] = ["%s/var/gunicorn_%s.socket" %
+                                   (MODULE_RUNTIME_HOME, name)]
         elif typ in JS_TYP_LIST:
-            app_conf["socket"] = "%s/var/node_%s.socket" % \
-                (MODULE_RUNTIME_HOME, name)
+            sockets = ["%s/var/node_%s_%i.socket" %
+                       (MODULE_RUNTIME_HOME, plugin_name, i + 1)
+                       for i in range(0, workers)]
+            app_conf["sockets"] = sockets
         elif typ in STATIC_TYP_LIST:
-            app_conf["socket"] = None
+            app_conf["sockets"] = None
         app_conf['extra_nginx_conf_string'] = \
             envtpl.render_string(extra_nginx_conf_string,
                                  extra_variables={"APP": app_conf})
@@ -159,10 +167,12 @@ def get_conf(plugin_configuration_file):
         if app == "main" or len(apps) == 1:
             copy_conf = copy.deepcopy(app_conf)
             copy_conf['prefix'] = "/%s" % plugin_name
+            copy_conf['alias'] = "yes"
             plugin_conf["apps"].append(copy_conf)
         for extra_route in prefix_based_routing_extra_routes:
             copy_conf = copy.deepcopy(app_conf)
             copy_conf['prefix'] = extra_route
+            copy_conf['alias'] = "yes"
             plugin_conf["apps"].append(copy_conf)
     return plugin_conf
 
