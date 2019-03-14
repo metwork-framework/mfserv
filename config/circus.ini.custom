@@ -25,6 +25,27 @@ hooks.before_start=circus_hooks.before_start_shell
 hooks.after_stop=circus_hooks.after_stop_shell          
 working_dir = {{MODULE_RUNTIME_HOME}}/tmp
 async_kill = True
+
+{% if MFSERV_ADMIN_HOSTNAME_IP != "null" %}
+{% if MFSERV_ADMIN_SEND_NGINX_LOGS == "1" %}
+[watcher:jsonlog2elasticsearch]
+cmd=layer_wrapper
+args=--layers=monitoring@mfext -- jsonlog2elasticsearch --transform-func=jsonlog2elasticsearch_metwork_addon.transform_func {{MFSERV_ADMIN_HOSTNAME_IP}} {{MFSERV_ADMIN_ELASTICSEARCH_HTTP_PORT}} nginx-%Y.%m.%d {{MODULE_RUNTIME_HOME}}/log/nginx_access.log
+numprocesses = 1                                                                
+stdout_stream.class = FileStream                                                
+stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/jsonlog2elasticsearch_nginx.log                  
+stderr_stream.class = FileStream                                                
+stderr_stream.filename = {{MODULE_RUNTIME_HOME}}/log/jsonlog2elasticsearch_nginx.log
+copy_env = True                                                                 
+autostart = True                                                                
+respawn = True                                                                  
+hooks.before_start=circus_hooks.before_start_shell                              
+hooks.after_stop=circus_hooks.after_stop_shell          
+working_dir = {{MODULE_RUNTIME_HOME}}/tmp
+async_kill = True
+
+{% endif %}
+{% endif %}
 {% endif %}
 
 {% if MFSERV_AUTORESTART_FLAG == "1" %}
