@@ -2,7 +2,11 @@
 ## [Unreleased]
 
 ### Feat
+- add an option to send nginx access log to mfadmin ([#124](https://github.com/metwork-framework//issues/124))
 - nginx logs are now in JSON to prepare mfadmin[#16](https://github.com/metwork-framework//issues/16) ([#123](https://github.com/metwork-framework//issues/123))
+
+### Fix
+- fix makefile target name
 
 <a name="v0.5.5"></a>
 ## [v0.5.5] - 2019-02-09
