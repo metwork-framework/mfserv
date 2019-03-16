@@ -8,7 +8,7 @@ if test $? != 0; then
     exit 0
 fi
 
-list_rep=`ls`
+list_rep=`ls|grep -v data`
 if test -z "$list_rep"; then
     echo "There are no integration tests"
     exit 0
