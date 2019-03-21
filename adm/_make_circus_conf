@@ -115,7 +115,17 @@ def make_watcher_conf(plugin_configuration_file):
 
         output.append("")
         output.append("[watcher:app.%s.%s]" % (plugin_name, app))
-        output.append("cmd = plugin_wrapper")
+        output.append("cmd = std_redirect")
+        if workers != "1" and typ in JS_TYP_LIST:
+            std_prefix = \
+                "{{MODULE_RUNTIME_HOME}}/log/app_%s_%s_worker$(circus.wid)" % \
+                (plugin_name, app)
+        else:
+            std_prefix = "{{MODULE_RUNTIME_HOME}}/log/app_%s_%s" %  \
+                (plugin_name, app)
+        stdout = std_prefix + ".stdout"
+        stderr = std_prefix + ".stderr"
+        std_redirect_extra_args = "-o %s -e %s" % (stdout, stderr)
 
         if typ in PYTHON_TYP_LIST:
             bind = "unix:{{MODULE_RUNTIME_HOME}}/var/" \
@@ -133,12 +143,13 @@ def make_watcher_conf(plugin_configuration_file):
             if add_app_dir_to_python_path:
                 layer_wrapper_extra_args = layer_wrapper_extra_args + \
                     " --add-extra-dir-to-python-path=%s" % app_dir
-            output.append("args = %s -- "
+            output.append("args = %s -- plugin_wrapper %s -- "
                           "gunicorn --workers=%s "
                           "--logger-class=gunicorn_custom_log.CustomLogger "
                           "--access-logfile=- --bind=%s --worker-class=%s "
                           "--log-level=%s %s" %
-                          (layer_wrapper_extra_args, workers,
+                          (std_redirect_extra_args,
+                           layer_wrapper_extra_args, workers,
                            bind, worker_class, gunicorn_log_level,
                            gunicorn_arg))
             # we force 1 here because gunicorn master deals with x workers
@@ -159,9 +170,10 @@ def make_watcher_conf(plugin_configuration_file):
 
             node_server = "%s/%s/%s" % (plugin_dir, app, node_arg)
 
-            output.append("args = %s -- "
+            output.append("args = %s -- plugin_wrapper %s -- "
                           "node %s %s" %
-                          (layer_wrapper_extra_args, node_server, bind))
+                          (std_redirect_extra_args,
+                           layer_wrapper_extra_args, node_server, bind))
             output.append("numprocesses = %s" % workers)
 
         workdir = os.path.join(MFSERV_PLUGINS_HOME, plugin_name)
@@ -185,11 +197,9 @@ def make_watcher_conf(plugin_configuration_file):
         output.append("stdout_stream.class = FileStream")
         output.append("stderr_stream.class = FileStream")
         output.append("stdout_stream.filename = "
-                      "{{MODULE_RUNTIME_HOME}}/log/"
-                      "app_%s_%s.stdout" % (plugin_name, app))
+                      "{{MODULE_RUNTIME_HOME}}/log/circus.log")
         output.append("stderr_stream.filename = "
-                      "{{MODULE_RUNTIME_HOME}}/log/"
-                      "app_%s_%s.stderr" % (plugin_name, app))
+                      "{{MODULE_RUNTIME_HOME}}/log/circus.log")
     if redis_service:
         output.append("")
         output.append("[watcher:redis_service_for_plugin_%s]" % plugin_name)
