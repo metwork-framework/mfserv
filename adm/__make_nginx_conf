@@ -127,6 +127,9 @@ def get_conf(plugin_configuration_file):
                          if x.startswith('/') and not x.endswith('/')]
         workdir = os.path.join(os.environ['MODULE_RUNTIME_HOME'], 'var',
                                'plugins', plugin_name, app)
+        proxy_timeout = "null"
+        if parser.has_option(section, "proxy_timeout"):
+            proxy_timeout = parser.get(section, "proxy_timeout")
         virtualdomains = set()
         for host in (HOSTNAME, HOSTNAME_FULL, "localhost"):
             virtualdomains.add("%s.%s.%s" % (app, plugin_name, host))
@@ -143,6 +146,7 @@ def get_conf(plugin_configuration_file):
                     "prefix": "/%s/%s" % (plugin_name, app),
                     "virtualdomains": sorted(list(virtualdomains)),
                     "workdir": workdir,
+                    "proxy_timeout": proxy_timeout,
                     "static_routing": static_routing,
                     "sockets": ["%s/var/default_%s.socket" %
                                 (MODULE_RUNTIME_HOME, name)],
