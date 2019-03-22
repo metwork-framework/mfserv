@@ -1,5 +1,4 @@
 {
-    "name": "name_of_your_plugin",
     "version": "0.0.1",
     "one_line_summary": "one line summary",
     "license": ["Proprietary", "BSD", "MIT", "GPL", "Specific"],
