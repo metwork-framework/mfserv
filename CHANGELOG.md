@@ -3,6 +3,7 @@
 
 ### Feat
 - add an option to send nginx access log to mfadmin ([#124](https://github.com/metwork-framework//issues/124))
+- add nginx timeout configuration
 - nginx logs are now in JSON to prepare mfadmin[#16](https://github.com/metwork-framework//issues/16) ([#123](https://github.com/metwork-framework//issues/123))
 - remove "name" from the list of questions during plugin bootstrap
 - remove plugins names from config.ini
