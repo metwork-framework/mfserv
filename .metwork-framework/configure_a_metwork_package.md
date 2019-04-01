@@ -33,7 +33,7 @@ Please make sure that your configuration file is not a symbolic link. In that pa
 
 The beginning of the file is something like that:
 
-```
+```cfg
 # THIS FILE OVERRIDES /opt/metwork-mfserv-master/config/config.ini CONFIGURATION FILE
 # DON'T CHANGE ANYTHING IN /opt/metwork-mfserv-master/config/config.ini FILE
 # DON'T REMOVE THE INCLUDE_config.ini LINE BELLOW
@@ -111,7 +111,7 @@ But again: if you don't do this, it won't break anything. But you can just miss 
 If you are working on a plugin named `foo` which need extra configuration variables, add a section to
 `${MODULE_RUNTIME_HOME}/config/config.ini` named `[plugin_foo]`. For example, for a `mfserv` plugin:
 
-```
+```cfg
 # [...]
 # At the end of ${MODULE_RUNTIME_HOME}/config/config.ini
 
@@ -164,7 +164,7 @@ this directory by putting your changes in `/etc/metwork.config.d/{metwork_module
 
 For example, to change the listening port of `nginx` for `mfserv` module, just create the `/etc/metwork.config.d/mfserv/config.ini` file with following content:
 
-```
+```cfg
 # This file overrides default values available in /opt/metwork-mfserv/config/config.ini
 # DO NOT REMOVE THE FOLLOWING LINE
 [INCLUDE_config.ini]
@@ -184,7 +184,7 @@ After that, you have to configure your module through this `/etc` file.
 
 Exactly in the same way as for a module. Add your custom plugin section at the end of `/etc/metwork.config.d/mfserv/config.ini`. to continue with the previous examples:
 
-```
+```cfg
 # This file overrides default values available in /opt/metwork-mfserv/config/config.ini
 # DO NOT REMOVE THE FOLLOWING LINE
 [INCLUDE_config.ini]

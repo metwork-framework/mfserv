@@ -3,10 +3,16 @@
 
 ### Feat
 - add an option to send nginx access log to mfadmin ([#124](https://github.com/metwork-framework//issues/124))
+- add nginx timeout configuration
 - nginx logs are now in JSON to prepare mfadmin[#16](https://github.com/metwork-framework//issues/16) ([#123](https://github.com/metwork-framework//issues/123))
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
 
 ### Fix
 - fix makefile target name
+
+<a name="v0.5.7"></a>
+## [v0.5.7] - 2019-03-16
 
 <a name="v0.5.6"></a>
 ## [v0.5.6] - 2019-02-16
@@ -23,11 +29,11 @@
 <a name="v0.5.2"></a>
 ## [v0.5.2] - 2019-01-31
 
-<a name="v0.5.0"></a>
-## [v0.5.0] - 2019-01-29
-
 <a name="v0.5.1"></a>
 ## [v0.5.1] - 2019-01-29
+
+<a name="v0.5.0"></a>
+## [v0.5.0] - 2019-01-29
 ### Feat
 - Changes in management of layer dependencies and metapackage names (only minimal and full) Associated with changes in mfext _metwork.spec, this reduces the number of layers installed by default when installing mfserv (only necessary mfext layers are installed) Metapackage metwork-mfserv-minimal only installs the necessary layers for mfserv to work properly Metapackage metwork-mfserv or metwork-mfserv-full installs all mfserv layers
 - add a plugin template for Django

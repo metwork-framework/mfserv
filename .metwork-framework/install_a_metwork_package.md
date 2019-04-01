@@ -15,7 +15,7 @@ You must:
 
 You just have to execute the following command (as `root` user):
 
-```
+```bash
 yum install metwork-mfserv
 ```
 
@@ -24,7 +24,7 @@ yum install metwork-mfserv
 If you prefer to start with a minimal installation, you have to execute the following command
 (as `root` user):
 
-```
+```bash
 yum install metwork-mfserv-minimal
 ```
 
@@ -32,7 +32,7 @@ yum install metwork-mfserv-minimal
 
 ### Optional dependencies addons
 
-```
+```bash
 # To install some devtools
 yum install metwork-mfext-devtools
 
@@ -48,7 +48,7 @@ yum install metwork-mfext-python2
 
 ### Optional mfserv addons
 
-```
+```bash
 # To install python2 support
 # (see above to install full scientific and devtools support)
 yum install metwork-mfserv-python2
@@ -64,7 +64,7 @@ yum install metwork-mfserv-nodejs
 
 You can start corresponding services with the root command:
 
-```
+```bash
 service metwork start
 ```
 
@@ -77,14 +77,14 @@ Or you can also reboot your computer (because metwork services are started autom
 
 To uninstall mfserv metwork module, please stop corresponding metwork services with the `root` command:
 
-```
+```bash
 service metwork stop mfserv
 ```
 
 Then, use the following command (still as `root` user):
 
 
-```
+```bash
 yum remove "metwork-mfserv*"
 ```
 
@@ -93,19 +93,19 @@ yum remove "metwork-mfserv*"
 To upgrade mfserv metwork module, use the following commands (still as `root` user):
 
 
-```
+```bash
 # We stop mfserv services
 service metwork stop mfserv
 ```
 
 
-```
+```bash
 # We upgrade mfserv metwork module
 yum upgrade "metwork-mfserv*"
 ```
 
 
-```
+```bash
 # We start mfserv services
 service metwork start mfserv
 ```
@@ -115,7 +115,7 @@ service metwork start mfserv
 
 To uninstall all metwork modules, use following root commands:
 
-```
+```bash
 # We stop metwork services
 service metwork stop
 
@@ -129,7 +129,7 @@ The same idea applies to upgrade.
 
 For example, to upgrade all metwork modules on a computer, use following root commands:
 
-```
+```bash
 # We stop metwork services
 service metwork stop
 
