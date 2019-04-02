@@ -7,6 +7,7 @@
 - nginx logs are now in JSON to prepare mfadmin[#16](https://github.com/metwork-framework//issues/16) ([#123](https://github.com/metwork-framework//issues/123))
 - remove "name" from the list of questions during plugin bootstrap
 - remove plugins names from config.ini
+- split multiple node workers output to multiple files
 
 ### Fix
 - fix makefile target name
