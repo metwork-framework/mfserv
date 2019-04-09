@@ -201,3 +201,6 @@ key3=value3
 ```
 
 As previously said, a good plugin should use good default values in its code to avoid to crash if custom values are not set at all.
+
+
+Currently, there no way to override a step configuration parameter in a `[step_....]` section of a `config.ini` plugin configuration file. However, it will be available in a next version of Metwork. 
