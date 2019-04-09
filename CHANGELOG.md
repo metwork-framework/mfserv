@@ -2,6 +2,7 @@
 ## [Unreleased]
 
 ### Feat
+- send mflog logs to mfadmin
 - split multiple node workers output to multiple files
 
 <a name="v0.6.0"></a>
