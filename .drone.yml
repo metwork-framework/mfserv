@@ -66,9 +66,9 @@ integration_tests_common: &integration_tests_common
     - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
     - if test "${DRONE_TAG}" = ""; then if ! test -f .drone_cache; then echo "step bypass"; exit 0; fi; fi
 
-    - echo -e "[metwork_${DRONE_BRANCH}]" >/etc/yum.repos.d/metwork.repo
-    - echo -e "name=Metwork Continuous Integration Branch ${DRONE_BRANCH}" >> /etc/yum.repos.d/metwork.repo
-    - echo -e "baseurl=http://metwork-framework.org/pub/metwork/continuous_integration/rpms/${DRONE_BRANCH}/${OS_VERSION}/" >> /etc/yum.repos.d/metwork.repo
+    - echo -e "[metwork_$${DEP_BRANCH}]" >/etc/yum.repos.d/metwork.repo
+    - echo -e "name=Metwork Continuous Integration Branch $${DEP_BRANCH}" >> /etc/yum.repos.d/metwork.repo
+    - echo -e "baseurl=http://metwork-framework.org/pub/metwork/continuous_integration/rpms/$${DEP_BRANCH}/${OS_VERSION}/" >> /etc/yum.repos.d/metwork.repo
     - echo -e "gpgcheck=0\n\enabled=1\n\metadata_expire=0\n" >>/etc/yum.repos.d/metwork.repo
     - yum -y localinstall metwork-mfserv*.rpm
     - su --command="mfserv.init" - mfserv
@@ -168,14 +168,24 @@ pipeline:
       ref: refs/tags/v*
 
 
+  integration_tests_integration:
+    <<: *integration_tests_common
+    image: centos:${OS_VERSION}
+    environment:
+      - DEP_BRANCH=integration
+    when:
+      event: [push, pull_request]
+      branch: [ integration, ci_*, pci_* ]
   integration_tests:
     <<: *integration_tests_common
     image: centos:${OS_VERSION}
+    environment:
+      - DEP_BRANCH=${DRONE_BRANCH}
     when:
 
       event: [push, pull_request]
 
-      branch: [ integration, master, ci_*, pci_*, release_*, experimental* ]
+      branch: [  master, release_*, experimental* ]
 
 
   publish_ci_integration:
