@@ -47,8 +47,8 @@ class MfservConfMonitorRunner(ConfMonitorRunner):
         return True
 
     def handle_event(self):
-        return self.manage_circus() and self.manage_nginx() and \
-            self.manage_crontab()
+        return self.manage_nginx() and self.manage_crontab() and \
+            self.manage_circus()
 
 
 if __name__ == '__main__':
