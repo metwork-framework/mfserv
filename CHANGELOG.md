@@ -2,6 +2,7 @@
 ## [Unreleased]
 
 ### Feat
+- add plugin name in logs
 - send mflog logs to mfadmin
 - split multiple node workers output to multiple files
 
