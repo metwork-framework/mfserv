@@ -2,9 +2,14 @@
 ## [Unreleased]
 
 ### Feat
+- add X-Request-Id header
 - add plugin name in logs
+- introduce automatic mflog/nginx correlation for request_id
 - send mflog logs to mfadmin
 - split multiple node workers output to multiple files
+
+### Fix
+- fix some nasty reload bugs in some corner cases
 
 <a name="v0.6.0"></a>
 ## [v0.6.0] - 2019-03-27
