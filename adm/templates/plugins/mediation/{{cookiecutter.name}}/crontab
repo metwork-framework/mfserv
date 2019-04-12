@@ -1,0 +1,7 @@
+{% if cookiecutter.crontab_support == 'yes' %}
+
+# Your crontab fragment here
+# Example:
+# 0 2 * * * {% raw %}{{MFSERV_HOME}}{% endraw %}/bin/cronwrap.sh -l -e -- plugin_wrapper {{cookiecutter.name}} your_command.sh >>{% raw %}{{MODULE_RUNTIME_HOME}}{% endraw %}/log/your_command.log 2>&1
+
+{% endif %}
