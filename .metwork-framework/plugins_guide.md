@@ -1,7 +1,7 @@
 # Plugins guide
 
 ## Plugins Configuration
-A plugin has its own configuration in `config.ini` file stored in the root directory of the plugin (`${MODULE_RUNTIME_HOME}`).
+A plugin has its own configuration in `config.ini` file stored in the root directory of the plugin.
 
 This `config.ini` file is created with its requisite configuration during the `bootstrap_plugin.py create` command.
 
