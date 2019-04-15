@@ -196,8 +196,7 @@ the `requirements.txt` uses 'exact' requirements, and contains the output of a `
 
 Working with Metwork plugin, you just need to fill the `requirements-to-freeze.txt` file. Then, when building/releasing the plugin, the `requirements.txt` will be generated.
 
-Depending of the Python
-Depending on which python version (python2 or python3) you are working with, the `requirements.txt` file will be named, respectively  `requirementsé.txt` and `requirements3.txt`
+Depending on which python version (python2 or python3) you are working with, the `requirements.txt` file will be named, respectively  `requirements2.txt` and `requirements3.txt`
 
 ### Python3 requirements-to-freeze.txt
 
