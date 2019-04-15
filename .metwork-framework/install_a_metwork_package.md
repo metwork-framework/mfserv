@@ -34,14 +34,19 @@ yum install metwork-mfserv-minimal
 
 ```bash
 # To install some devtools
-yum install metwork-mfext-devtools
+yum install metwork-mfext-layer-devtools
+yum install metwork-mfext-layer-python3_devtools
+yum install metwork-mfext-layer-python3_devtools_jupyter
 
 # To install some scientific libraries
-yum install metwork-mfext-scientific
+yum install metwork-mfext-layer-scientific
+yum install metwork-mfext-layer-python3_scientific
 
 # To install python2 support
 # (including corresponding scientific and devtools addons)
 yum install metwork-mfext-python2
+yum install metwork-mfext-python2_scientific
+yum install metwork-mfext-python2_devtools
 ```
 
 
