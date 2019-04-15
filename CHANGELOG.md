@@ -3,6 +3,7 @@
 
 ### Feat
 - add X-Request-Id header
+- add a mediation template
 - add plugin name in logs
 - introduce automatic mflog/nginx correlation for request_id
 - send mflog logs to mfadmin
