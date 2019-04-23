@@ -11,7 +11,7 @@
     "project_name": "name_of_your_first_project",
     "db_type": ["postgresql", "sqlite3"],
 
-    "db_postgres_name": "{{cookiecutter.name}}",
+    "db_postgres_name": "{{cookiecutter.project_name}}",
     "db_postgres_host": "localhost",
     "db_postgres_user": "{{cookiecutter.db_postgres_name}}",
     "db_postgres_password": "{{cookiecutter.db_postgres_name}}",
