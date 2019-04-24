@@ -1,0 +1,3 @@
+{% if cookiecutter.type|default('unknown') == "gunicorn2_sync" %}
+yes
+{% endif %}

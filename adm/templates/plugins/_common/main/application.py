@@ -1,4 +1,3 @@
-{% if cookiecutter.type == "gunicorn3_asyncio" %}
 from aiohttp import web
 from aiohttp_metwork_middlewares import mflog_middleware
 
@@ -10,4 +9,3 @@ async def handle(request):
 
 app = web.Application(middlewares=[mflog_middleware])
 app.router.add_get('/{tail:.*}', handle)
-{% endif %}

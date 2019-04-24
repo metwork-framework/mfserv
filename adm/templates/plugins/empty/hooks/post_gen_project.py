@@ -1,1 +1,0 @@
-../../default/hooks/post_gen_project.py

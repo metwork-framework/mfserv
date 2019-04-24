@@ -1,4 +1,0 @@
-{% if cookiecutter.type == "gunicorn2_sync" %}
-# python3 requirements.txt file
-# see https://pip.readthedocs.io/en/1.1/requirements.html
-{% endif %}

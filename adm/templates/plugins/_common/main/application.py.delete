@@ -1,0 +1,3 @@
+{% if cookiecutter.type != "gunicorn3_asyncio" %}
+yes
+{% endif %}
