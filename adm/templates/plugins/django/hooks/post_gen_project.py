@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+from cookiecutter_hooks import post_gen_project
+import random
+import shutil
+import os
+
+
+post_gen_project()
 
 """Tasks to be run once the project has been generated.
 
@@ -8,14 +15,6 @@ It includes :
 - the deletion of the unnecessary files (disabled by the user or empty)
 - the initialisation of a git repository if asked
 """
-
-
-import sys
-import os
-import shutil
-import random
-
-from mfutil import BashWrapperException, BashWrapperOrRaise
 
 
 def get_random_string(len):
@@ -45,24 +44,3 @@ set_django_secret_key(os.path.join('{{cookiecutter.project_name}}',
 if '{{cookiecutter.app_name}}' == 'None':
     shutil.rmtree(os.path.join('{{cookiecutter.project_name}}',
                                '{{cookiecutter.app_name}}'))
-
-
-# remove other unnecessary files
-paths_to_delete = []
-
-for path in [os.path.join(x[0], y) for x in os.walk('.') for y in x[2]]:
-    try:
-        with open(path, 'rb') as f:
-            content = f.read().strip()
-            if len(content) == 0:
-                paths_to_delete.append(path)
-    except Exception:
-        pass
-
-for path in paths_to_delete:
-    if os.path.basename(path) in ['__init__.py']:
-        continue
-    try:
-        os.unlink(path)
-    except Exception:
-        pass

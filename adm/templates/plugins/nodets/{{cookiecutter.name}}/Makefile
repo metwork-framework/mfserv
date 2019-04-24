@@ -1,6 +1,11 @@
-include $(MFCOM_HOME)/share/plugin.mk
+{% extends "_common/Makefile" %}
 
-NAME:=$(shell config.py config.ini general name)
-
+{% block extra %}
 transpile::
 	plugin_wrapper $(NAME) -- npm run transpile
+{% endblock %}
+
+{% block custom %}
+custom::
+	export METWORK_LAYERS_PATH=`pwd`:$(METWORK_LAYERS_PATH) ; plugin_wrapper $(NAME) -- npm run transpile
+{% endblock %}

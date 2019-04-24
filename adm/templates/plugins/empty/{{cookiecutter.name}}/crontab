@@ -1,1 +1,1 @@
-../../default/{{cookiecutter.name}}/crontab
+../../_common/crontab
