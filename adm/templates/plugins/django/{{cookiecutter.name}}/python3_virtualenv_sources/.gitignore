@@ -1,4 +1,0 @@
-{% if cookiecutter.type == "gunicorn3_sync" %}
-requirements3.txt
-src
-{% endif %}
