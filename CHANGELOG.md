@@ -1,6 +1,17 @@
 # release_0.6 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+
+
+### Bug Fixes
+- django template regression when bootstrapping
+
+
+
+
 
 ## v0.6.0 (2019-03-27)
 
