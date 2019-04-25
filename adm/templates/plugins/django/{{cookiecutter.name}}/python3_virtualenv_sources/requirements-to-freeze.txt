@@ -1,10 +1,5 @@
-{% if cookiecutter.type == "gunicorn3_sync" %}
+{% if cookiecutter.type == "gunicorn3_sync" or cookiecutter.type == "python3_sync" %}
 # python3 requirements.txt file
 # see https://pip.readthedocs.io/en/1.1/requirements.html
-
-django==2.1.5
-{% if cookiecutter.db_type == "postgresql" %}
-psycopg2==2.7.6.1
-{% endif %}
-
+django==2.2.1
 {% endif %}

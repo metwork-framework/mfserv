@@ -1,7 +1,2 @@
 root@mfserv
-{% if cookiecutter.type == "gunicorn2_sync" %}
-python2@mfserv
-{% else %}
 python3@mfserv
-{% endif %}
-scientific_core@mfext

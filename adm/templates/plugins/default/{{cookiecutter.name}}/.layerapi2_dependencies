@@ -1,2 +1,2 @@
 root@mfserv
-{% if cookiecutter.type == "gunicorn2_sync" %}python2@mfserv{% else %}python3@mfserv{% endif %}
+{% if cookiecutter.type == "gunicorn2_sync" or cookiecutter.type == "python2_sync" %}python2@mfserv{% else %}python3@mfserv{% endif %}

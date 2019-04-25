@@ -24,6 +24,12 @@ if parser.has_option("general", "extra_nginx_conf_filename"):
         dangerous = True
 app_sections = [x.strip() for x in parser.sections() if x.startswith("app_")]
 for app_section in app_sections:
+    if parser.has_option(app_section, "debug"):
+        tmp = parser.get(app_section, "debug").strip()
+        if tmp == "1":
+            print("WARNING: this plugin has a debug == 1 setting for the "
+                  "app: %s" % app_section.replace("app_", ""))
+            dangerous = True
     if not parser.has_option(app_section, "prefix_based_routing_extra_routes"):
         continue
     tmp = parser.get(app_section, "prefix_based_routing_extra_routes").strip()

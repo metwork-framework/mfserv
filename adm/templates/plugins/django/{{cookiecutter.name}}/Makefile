@@ -2,5 +2,5 @@
 
 {% block extra %}
 collectstatic:
-	./postinstall
+	python manage.py collectstatic --no-input
 {% endblock %}

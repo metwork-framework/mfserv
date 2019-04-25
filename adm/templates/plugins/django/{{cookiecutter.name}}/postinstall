@@ -1,6 +1,61 @@
-#! /bin/bash
+#!/bin/bash
 
-# collect static files
-cd {{cookiecutter.project_name}}
-python manage.py collectstatic --noinput
-cd ..
+set -eu
+
+rm -Rf "{{cookiecutter.name}}"
+rm -Rf hello
+rm -f manage.py
+
+django-admin startproject {{cookiecutter.name}} .
+django-admin startapp hello
+cat >hello/views.py <<EOF
+from django.http import HttpResponse
+
+
+def index(request):
+    return HttpResponse("Hello World from django app")
+EOF
+cat >hello/urls.py <<EOF
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+EOF
+
+echo "" >>{{cookiecutter.name}}/urls.py
+echo "# ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE" >>{{cookiecutter.name}}/urls.py
+echo "# FOR CONFIGURING hello app" >>{{cookiecutter.name}}/urls.py
+echo "from django.conf.urls import include, url" >>{{cookiecutter.name}}/urls.py
+echo "urlpatterns.append(url(r'^hello/', include('hello.urls')))" >>{{cookiecutter.name}}/urls.py
+echo "urlpatterns.append(path('', include('hello.urls')))" >>{{cookiecutter.name}}/urls.py
+
+echo "" >>{{cookiecutter.name}}/urls.py
+echo "# ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE" >>{{cookiecutter.name}}/urls.py
+echo "# TO PROVIDE PREFIX BASED ROUTING" >>{{cookiecutter.name}}/urls.py
+echo 'PREFIXES = [r"^{{cookiecutter.name}}/"]' >>{{cookiecutter.name}}/urls.py
+echo "urlpatterns = [url(x, include(urlpatterns)) for x in PREFIXES]" >>{{cookiecutter.name}}/urls.py
+
+cat >>{{cookiecutter.name}}/settings.py <<EOF
+
+# ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE
+# TO PROVIDE PREFIX BASED ROUTING
+STATIC_URL = '/{{cookiecutter.name}}/{{cookiecutter.name}}/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "{{cookiecutter.name}}/static")
+
+# ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE
+# TO PROVIDE DEBUG FEATURE
+DEBUG = (os.environ.get('MFSERV_CURRENT_PLUGIN_DEBUG', '0') == '1')
+import mflog
+if DEBUG:
+    mflog.set_config(minimal_level="DEBUG")
+else:
+    mflog.set_config()
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+EOF
+
+python manage.py migrate
+python manage.py collectstatic --no-input

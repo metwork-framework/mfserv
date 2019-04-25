@@ -6,10 +6,12 @@ import envtpl
 import hashlib
 import copy
 from configparser_extended import ExtendedConfigParser
+from mflog import get_logger
 
 MODULE_RUNTIME_HOME = os.environ["MODULE_RUNTIME_HOME"]
 MFSERV_PLUGINS_HOME = os.path.join(MODULE_RUNTIME_HOME,
                                    "var", "plugins")
+MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
 CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
 HOSTNAME = os.environ.get('MFCOM_HOSTNAME')
 HOSTNAME_FULL = os.environ.get('MFCOM_HOSTNAME_FULL')
@@ -20,6 +22,15 @@ Below are defined process types depending on the code language
 
 # Available types for watching python (i.e gunicorn)
 PYTHON_TYP_LIST = [
+    "gunicorn3_sync",
+    "gunicorn2_sync",
+    "gunicorn3_asyncio",
+    "python3_sync",
+    "aiohttp",
+    "python2_sync"
+]
+
+GUNICORN_TYP_LIST = [
     "gunicorn3_sync",
     "gunicorn2_sync",
     "gunicorn3_asyncio"
@@ -41,6 +52,8 @@ ALL_TYP_LIST = \
     JS_TYP_LIST + \
     STATIC_TYP_LIST
 
+LOGGER = get_logger("__make_nginx_conf")
+
 
 def get_conf(plugin_configuration_file):
     plugin_conf = {}
@@ -49,6 +62,7 @@ def get_conf(plugin_configuration_file):
 
     plugin_directory = os.path.dirname(plugin_configuration_file)
     plugin_name = os.path.basename(plugin_directory)
+    logger = LOGGER.bind(plugin_name=plugin_name)
 
     parser.read(plugin_configuration_file)
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
@@ -74,6 +88,7 @@ def get_conf(plugin_configuration_file):
     plugin_conf["apps"] = []
 
     for app in apps:
+        logger = logger.bind(app=app)
         section = "app_%s" % app
         typ = parser.get(section, "type")
         if typ not in ALL_TYP_LIST:
@@ -107,6 +122,9 @@ def get_conf(plugin_configuration_file):
         workers = 1
         if parser.has_option(section, "workers"):
             workers = int(envtpl.render_string(parser.get(section, "workers")))
+        debug = False
+        if parser.has_option(section, "debug"):
+            debug = (parser.getint(section, "debug") == 1)
         virtualdomain_based_routing = True
         if parser.has_option(section, "virtualdomain_based_routing"):
             virtualdomain_based_routing = \
@@ -127,9 +145,18 @@ def get_conf(plugin_configuration_file):
                          if x.startswith('/') and not x.endswith('/')]
         workdir = os.path.join(os.environ['MODULE_RUNTIME_HOME'], 'var',
                                'plugins', plugin_name, app)
-        proxy_timeout = "null"
+        timeout = MFSERV_NGINX_TIMEOUT
         if parser.has_option(section, "proxy_timeout"):
-            proxy_timeout = parser.get(section, "proxy_timeout")
+            logger.warning("proxy_timeout arg is deprecated, use 'timeout' "
+                           "instead")
+            if parser.get(section, "proxy_timeout") != "null":
+                if parser.getint(section, "timeout") > 0:
+                    timeout = parser.getint(section, "proxy_timeout")
+        else:
+            if parser.has_option(section, "timeout"):
+                if parser.get(section, "timeout") != "null":
+                    if parser.getint(section, "timeout") > 0:
+                        timeout = parser.getint(section, "timeout")
         virtualdomains = set()
         for host in (HOSTNAME, HOSTNAME_FULL, "localhost"):
             virtualdomains.add("%s.%s.%s" % (app, plugin_name, host))
@@ -138,6 +165,7 @@ def get_conf(plugin_configuration_file):
         name = "app_%s_%s" % (plugin_name, app)
         app_conf = {"name": name,
                     "alias": "no",
+                    "debug": debug,
                     "app_name": app,
                     "plugin_name": plugin_name,
                     "hash": hashlib.md5(name.encode('utf8')).hexdigest(),
@@ -146,18 +174,23 @@ def get_conf(plugin_configuration_file):
                     "prefix": "/%s/%s" % (plugin_name, app),
                     "virtualdomains": sorted(list(virtualdomains)),
                     "workdir": workdir,
-                    "proxy_timeout": proxy_timeout,
+                    "timeout": timeout + 2,  # kill the backend first
                     "static_routing": static_routing,
                     "sockets": ["%s/var/default_%s.socket" %
                                 (MODULE_RUNTIME_HOME, name)],
                     "type": typ}
-        if typ in PYTHON_TYP_LIST:
+        if typ in GUNICORN_TYP_LIST:
             app_conf["sockets"] = ["%s/var/gunicorn_%s.socket" %
                                    (MODULE_RUNTIME_HOME, name)]
-        elif typ in JS_TYP_LIST:
-            sockets = ["%s/var/node_%s_%i.socket" %
-                       (MODULE_RUNTIME_HOME, plugin_name, i + 1)
-                       for i in range(0, workers)]
+        elif typ not in GUNICORN_TYP_LIST:
+            if typ == "node":
+                sockets = ["%s/var/%s_%s_%i.socket" %
+                           (MODULE_RUNTIME_HOME, typ, plugin_name, i + 1)
+                           for i in range(0, workers)]
+            else:
+                sockets = ["%s/var/%s_%s_%s_%i.socket" %
+                           (MODULE_RUNTIME_HOME, typ, plugin_name, app, i + 1)
+                           for i in range(0, workers)]
             app_conf["sockets"] = sockets
         elif typ in STATIC_TYP_LIST:
             app_conf["sockets"] = None
