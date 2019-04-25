@@ -9,10 +9,14 @@
 - add X-Request-Id header
 - introduce automatic mflog/nginx correlation for request_id
 - add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
 
 
 ### Bug Fixes
 - fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
 
 
 
