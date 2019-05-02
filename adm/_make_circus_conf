@@ -146,7 +146,8 @@ def make_watcher_conf(plugin_configuration_file):
             output.append("args = %s -- plugin_wrapper %s -- "
                           "gunicorn --workers=%s "
                           "--logger-class=gunicorn_custom_log.CustomLogger "
-                          "--access-logfile=- --bind=%s --worker-class=%s "
+                          "--access-logfile=/dev/null --bind=%s "
+                          "--worker-class=%s "
                           "--log-level=%s %s" %
                           (std_redirect_extra_args,
                            layer_wrapper_extra_args, workers,
