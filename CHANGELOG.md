@@ -4,6 +4,16 @@
 ## [Unreleased]
 
 ### New Features
+- remove double access-log messages with gunicorn
+
+
+
+
+
+
+## v0.6.1 (2019-04-25)
+
+### New Features
 - send mflog logs to mfadmin
 - add plugin name in logs
 - add X-Request-Id header
