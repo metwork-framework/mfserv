@@ -11,6 +11,7 @@ LOG_LEVEL = os.environ.get('MFSERV_LOG_MINIMAL_LEVEL', 'INFO')
 CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
 MODULE_RUNTIME_HOME = os.environ["MODULE_RUNTIME_HOME"]
 MODULE_HOME = os.environ["MODULE_HOME"]
+NGINX_TIMEOUT = int(os.environ["MFSERV_NGINX_TIMEOUT"])
 
 '''
 Below are defined process types depending on the code language
@@ -99,7 +100,12 @@ def make_watcher_conf(plugin_configuration_file):
         rlimit_stack = None
         rlimit_core = None
         rlimit_fsize = None
+        timeout = NGINX_TIMEOUT
 
+        if parser.has_option(section, "proxy_timeout"):
+            timeout = parser.getint(section, "proxy_timeout")
+            if timeout <= 0:
+                timeout = NGINX_TIMEOUT
         if parser.has_option(section, "rlimit_as"):
             rlimit_as = parser.getint(section, "rlimit_as")
         if parser.has_option(section, "rlimit_nofile"):
@@ -128,6 +134,7 @@ def make_watcher_conf(plugin_configuration_file):
         std_redirect_extra_args = "-o %s -e %s" % (stdout, stderr)
 
         if typ in PYTHON_TYP_LIST:
+            gunicorn_extra_opts = ""
             bind = "unix:{{MODULE_RUNTIME_HOME}}/var/" \
                 "gunicorn_app_%s_%s.socket" % (plugin_name, app)
 
@@ -135,6 +142,7 @@ def make_watcher_conf(plugin_configuration_file):
                 worker_class = "aiohttp.worker.GunicornWebWorker"
             else:
                 worker_class = "sync"
+                gunicorn_extra_opts = "--timeout %i" % timeout
             layer_wrapper_extra_args = plugin_name
             if not add_plugin_dir_to_python_path:
                 layer_wrapper_extra_args = layer_wrapper_extra_args + \
@@ -148,10 +156,12 @@ def make_watcher_conf(plugin_configuration_file):
                           "--logger-class=gunicorn_custom_log.CustomLogger "
                           "--access-logfile=/dev/null --bind=%s "
                           "--worker-class=%s "
+                          "%s "
                           "--log-level=%s %s" %
                           (std_redirect_extra_args,
                            layer_wrapper_extra_args, workers,
-                           bind, worker_class, gunicorn_log_level,
+                           bind, worker_class, gunicorn_extra_opts,
+                           gunicorn_log_level,
                            gunicorn_arg))
             # we force 1 here because gunicorn master deals with x workers
             output.append("numprocesses = %i" % 1)
