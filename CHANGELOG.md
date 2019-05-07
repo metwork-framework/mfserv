@@ -7,6 +7,9 @@
 - remove double access-log messages with gunicorn
 
 
+### Bug Fixes
+- proxy_timeout was bypassed by gunicorn sync configurations
+
 
 
 
