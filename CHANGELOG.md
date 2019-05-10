@@ -1,6 +1,17 @@
 # release_0.6 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+
+
+### Bug Fixes
+- proxy_timeout was bypassed by gunicorn sync configurations
+
+
+
+
 
 ## v0.6.1 (2019-04-25)
 
