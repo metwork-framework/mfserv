@@ -138,7 +138,6 @@ echo "endif" >>adm/root.mk
     fi
     #echo "export PREFIX := ${MODULE_HOME}" >>adm/root.mk
 
-fi
 if test "${FTP_PROXY:-}" != ""; then
     echo "export FTP_PROXY:=${FTP_PROXY:-}" >>adm/root.mk
 fi
