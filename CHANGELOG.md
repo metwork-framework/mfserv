@@ -1,7 +1,8 @@
 # CHANGELOG
 
 
-## [Unreleased]
+
+## v0.6.2 (2019-05-10)
 
 ### New Features
 - remove double access-log messages with gunicorn
