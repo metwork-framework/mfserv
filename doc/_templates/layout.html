@@ -1,0 +1,8 @@
+{# Import the theme's layout. The exclamation point/mark forces jinja to use the parent template.#}
+{% extends "!layout.html" %}
+
+  {% block menu %}
+    {{ super() }}
+    {# Add index at the end of the menu.#}
+    <a href="genindex.html">Index</a>
+  {% endblock %}

@@ -14,6 +14,17 @@ layers/layer1_python3/0700_aiohttp_metwork_middlewares/build/
 layers/layer1_python3/0700_aiohttp_metwork_middlewares/dist/
 doc/layer_*.md
 doc/layer_*.rst
+doc/api
+doc/configure_a_metwork_package.md
+doc/configure_a_metwork_package.rst
+doc/configure_metwork_repo.md
+doc/configure_metwork_repo.rst
+doc/install_a_metwork_package.md
+doc/install_a_metwork_package.rst
+doc/plugins_guide.md
+doc/plugins_guide.rst
+CHANGELOG*.md
+CHANGELOG*.rst
 *.plugin
 *.whl
 __pycache__/
