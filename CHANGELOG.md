@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+
+
+### Bug Fixes
+- fix building issues with proxy
+
+
+
+
 
 ## v0.6.2 (2019-05-10)
 
