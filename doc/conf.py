@@ -147,8 +147,8 @@ todo_emit_warnings = False
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_style = 'css/override_theme.css'
-html_logo = 'images/logo-metwork.png'
-html_favicon = 'images/metwork.ico'
+html_logo = '_images/logo-metwork.png'
+html_favicon = '_images/metwork.ico'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
