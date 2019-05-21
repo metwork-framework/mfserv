@@ -3,5 +3,9 @@
 *.py
 *.ini
 *.js
+*.conf
+*.json
+nginx*
+magic
 .autorestart_includes
 .autorestart_excludes

@@ -4,6 +4,7 @@ import os
 import glob
 import envtpl
 from configparser_extended import ExtendedConfigParser
+from mflog import get_logger
 
 MFSERV_PLUGINS_HOME = os.path.join(os.environ["MODULE_RUNTIME_HOME"],
                                    "var", "plugins")
@@ -11,14 +12,23 @@ LOG_LEVEL = os.environ.get('MFSERV_LOG_MINIMAL_LEVEL', 'INFO')
 CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
 MODULE_RUNTIME_HOME = os.environ["MODULE_RUNTIME_HOME"]
 MODULE_HOME = os.environ["MODULE_HOME"]
-NGINX_TIMEOUT = int(os.environ["MFSERV_NGINX_TIMEOUT"])
+MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
 
 '''
 Below are defined process types depending on the code language
 '''
 
-# Available types for watching python (i.e gunicorn)
+# Available types
 PYTHON_TYP_LIST = [
+    "gunicorn3_sync",
+    "gunicorn2_sync",
+    "gunicorn3_asyncio",
+    "python3_sync",
+    "aiohttp",
+    "python2_sync"
+]
+
+GUNICORN_TYP_LIST = [
     "gunicorn3_sync",
     "gunicorn2_sync",
     "gunicorn3_asyncio"
@@ -34,13 +44,71 @@ ALL_TYP_LIST = \
     PYTHON_TYP_LIST + \
     JS_TYP_LIST
 
+LOGGER = get_logger("_make_circus_conf")
 
-def make_watcher_conf(plugin_configuration_file):
-    output = []
-    parser = ExtendedConfigParser(config=CONFIG, strict=False,
-                                  inheritance='im', interpolation=None)
+
+def get_rlimit_conf(parser, section):
+    conf = {}
+    if parser.has_option(section, "rlimit_as"):
+        conf["as"] = parser.getint(section, "rlimit_as")
+    if parser.has_option(section, "rlimit_nofile"):
+        conf["nofile"] = parser.getint(section, "rlimit_nofile")
+    if parser.has_option(section, "rlimit_nproc"):
+        conf["nproc"] = parser.getint(section, "rlimit_nproc")
+    if parser.has_option(section, "rlimit_stack"):
+        conf["stack"] = parser.getint(section, "rlimit_stack")
+    if parser.has_option(section, "rlimit_core"):
+        conf["core"] = parser.getint(section, "rlimit_core")
+    if parser.has_option(section, "rlimit_fsize"):
+        conf["fsize"] = parser.getint(section, "rlimit_fsize")
+    return conf
+
+
+def get_layer_wrapper_extra_args(plugin_name, plugin_dir, app=None,
+                                 apdtpp=False, aadtpp=False):
+    layer_wrapper_extra_args = plugin_name
+    if not apdtpp:
+        layer_wrapper_extra_args = layer_wrapper_extra_args + \
+            " --do-not-add-plugin-dir-to-python-path"
+    if aadtpp and app:
+        app_dir = os.path.join(plugin_dir, app)
+        layer_wrapper_extra_args = layer_wrapper_extra_args + \
+            " --add-extra-dir-to-python-path=%s" % app_dir
+    return layer_wrapper_extra_args
+
+
+def get_std_redirect_args(prefix, plugin_name, app=None,
+                          force_one_file=False,
+                          split_stdout_sterr=True):
+    if not force_one_file:
+        if app:
+            std_prefix = \
+                "%s/log/%s_%s_%s_worker$(circus.wid)" % \
+                (MODULE_RUNTIME_HOME, prefix, plugin_name, app)
+        else:
+            std_prefix = \
+                "%s/log/%s_%s_worker$(circus.wid)" % \
+                (MODULE_RUNTIME_HOME, prefix, plugin_name)
+    else:
+        if app:
+            std_prefix = "%s/log/%s_%s_%s" % \
+                (MODULE_RUNTIME_HOME, prefix, plugin_name, app)
+        else:
+            std_prefix = "%s/log/%s_%s" % \
+                (MODULE_RUNTIME_HOME, prefix, plugin_name)
+    if split_stdout_sterr:
+        return "-o %s.stdout -e %s.stderr" % (std_prefix, std_prefix)
+    else:
+        return "-o %s.log -e %s.log" % (std_prefix, std_prefix)
+
+
+def get_conf(plugin_configuration_file):
+    plugin_conf = {}
     plugin_name = os.path.basename(os.path.dirname(plugin_configuration_file))
     plugin_dir = os.path.dirname(plugin_configuration_file)
+    logger = LOGGER.bind(plugin_name=plugin_name)
+    parser = ExtendedConfigParser(config=CONFIG, strict=False,
+                                  inheritance='im', interpolation=None)
     parser.read(plugin_configuration_file)
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
@@ -59,15 +127,49 @@ def make_watcher_conf(plugin_configuration_file):
     if gunicorn_log_level not in ('debug', 'info', 'warning', 'error',
                                   'critical'):
         gunicorn_log_level = "debug"
+    plugin_conf["name"] = plugin_name
+    plugin_conf["dir"] = plugin_dir
+    plugin_conf["apps"] = []
+    plugin_conf["extra_daemons"] = []
 
     for app in apps:
+        logger = logger.bind(app=app)
         section = "app_%s" % app
+        app_conf = {}
         typ = parser.get(section, "type")
+        timeout = MFSERV_NGINX_TIMEOUT
+        debug = False
+        if parser.has_option(section, "debug"):
+            debug = (parser.getint(section, "debug") == 1)
+        if parser.has_option(section, "proxy_timeout"):
+            logger.warning("proxy_timeout arg is deprecated, use 'timeout' "
+                           "instead")
+            if parser.get(section, "proxy_timeout") != "null":
+                if parser.getint(section, "proxy_timeout") > 0:
+                    timeout = parser.getint(section, "proxy_timeout")
+        else:
+            if parser.has_option(section, "timeout"):
+                if parser.get(section, "timeout") != "null":
+                    if parser.getint(section, "timeout") > 0:
+                        timeout = parser.getint(section, "timeout")
+        if typ in ("empty", "static"):
+            continue
         if typ not in ALL_TYP_LIST:
+            logger.warning("unknown type: %s => ignoring app", typ)
             continue
 
         if typ in PYTHON_TYP_LIST:
-            gunicorn_arg = parser.get(section, "gunicorn_arg")
+            if parser.has_option(section, "gunicorn_arg"):
+                logger.warning("gunicorn_arg option is deprecated, "
+                               "use 'main_arg' instead")
+                main_arg = parser.get(section, "gunicorn_arg")
+            else:
+                if not parser.has_option(section, "main_arg"):
+                    logger.warning("main_arg option is missing => "
+                                   "ignoring app")
+                    continue
+                else:
+                    main_arg = parser.get(section, "main_arg")
 
             add_plugin_dir_to_python_path = True
             if parser.has_option(section, "add_plugin_dir_to_python_path"):
@@ -80,153 +182,148 @@ def make_watcher_conf(plugin_configuration_file):
                     parser.getboolean(section, "add_app_dir_to_python_path")
 
         elif typ in JS_TYP_LIST:
-            node_arg = parser.get(section, "node_arg")
-
-            add_plugin_dir_to_node_path = True
-            if parser.has_option(section, "add_plugin_dir_to_node_path"):
-                add_plugin_dir_to_node_path = \
-                    parser.getboolean(section, "add_plugin_dir_to_node_path")
-
-            add_app_dir_to_node_path = False
-            if parser.has_option(section, "add_app_dir_to_node_path"):
-                add_app_dir_to_node_path = \
-                    parser.getboolean(section, "add_app_dir_to_node_path")
+            if parser.has_option(section, "node_arg"):
+                logger.warning("node_arg option is deprecated, "
+                               "use 'main_arg' instead")
+                main_arg = parser.get(section, "node_arg")
+            else:
+                if not parser.has_option(section, "main_arg"):
+                    logger.warning("main_arg option is missing => "
+                                   "ignoring app")
+                    continue
+                else:
+                    main_arg = parser.get(section, "main_arg")
 
         workers = parser.get(section, "workers")
 
-        rlimit_as = None
-        rlimit_nofile = None
-        rlimit_nproc = None
-        rlimit_stack = None
-        rlimit_core = None
-        rlimit_fsize = None
-        timeout = NGINX_TIMEOUT
+        max_age = 0
+        graceful_timeout = 30
+        if parser.has_option(section, "max_age") and workers != "1" and \
+                not debug:
+            max_age = parser.getint(section, "max_age")
+            max_age = max(60, max_age)
+        if parser.has_option(section, "graceful_timeout"):
+            graceful_timeout = parser.getint(section, "graceful_timeout")
 
-        if parser.has_option(section, "proxy_timeout"):
-            timeout = parser.getint(section, "proxy_timeout")
-            if timeout <= 0:
-                timeout = NGINX_TIMEOUT
-        if parser.has_option(section, "rlimit_as"):
-            rlimit_as = parser.getint(section, "rlimit_as")
-        if parser.has_option(section, "rlimit_nofile"):
-            rlimit_nofile = parser.getint(section, "rlimit_nofile")
-        if parser.has_option(section, "rlimit_nproc"):
-            rlimit_nproc = parser.getint(section, "rlimit_nproc")
-        if parser.has_option(section, "rlimit_stack"):
-            rlimit_stack = parser.getint(section, "rlimit_stack")
-        if parser.has_option(section, "rlimit_core"):
-            rlimit_core = parser.getint(section, "rlimit_core")
-        if parser.has_option(section, "rlimit_fsize"):
-            rlimit_fsize = parser.getint(section, "rlimit_fsize")
+        fof = (workers == "1" or typ in GUNICORN_TYP_LIST)
+        std_redirect_extra_args = \
+            get_std_redirect_args("app", plugin_name, app, force_one_file=fof)
 
-        output.append("")
-        output.append("[watcher:app.%s.%s]" % (plugin_name, app))
-        output.append("cmd = std_redirect")
-        if workers != "1" and typ in JS_TYP_LIST:
-            std_prefix = \
-                "{{MODULE_RUNTIME_HOME}}/log/app_%s_%s_worker$(circus.wid)" % \
-                (plugin_name, app)
-        else:
-            std_prefix = "{{MODULE_RUNTIME_HOME}}/log/app_%s_%s" %  \
-                (plugin_name, app)
-        stdout = std_prefix + ".stdout"
-        stderr = std_prefix + ".stderr"
-        std_redirect_extra_args = "-o %s -e %s" % (stdout, stderr)
-
-        if typ in PYTHON_TYP_LIST:
-            gunicorn_extra_opts = ""
-            bind = "unix:{{MODULE_RUNTIME_HOME}}/var/" \
-                "gunicorn_app_%s_%s.socket" % (plugin_name, app)
-
+        if typ in GUNICORN_TYP_LIST:
+            bind = "unix:%s/var/gunicorn_app_%s_%s.socket" % (
+                MODULE_RUNTIME_HOME, plugin_name, app)
             if typ == "gunicorn3_asyncio":
                 worker_class = "aiohttp.worker.GunicornWebWorker"
             else:
                 worker_class = "sync"
-                gunicorn_extra_opts = "--timeout %i" % timeout
-            layer_wrapper_extra_args = plugin_name
-            if not add_plugin_dir_to_python_path:
-                layer_wrapper_extra_args = layer_wrapper_extra_args + \
-                    " --do-not-add-plugin-dir-to-python-path"
-            app_dir = os.path.join(plugin_dir, app)
-            if add_app_dir_to_python_path:
-                layer_wrapper_extra_args = layer_wrapper_extra_args + \
-                    " --add-extra-dir-to-python-path=%s" % app_dir
-            output.append("args = %s -- plugin_wrapper %s -- "
-                          "gunicorn --workers=%s "
-                          "--logger-class=gunicorn_custom_log.CustomLogger "
-                          "--access-logfile=/dev/null --bind=%s "
-                          "--worker-class=%s "
-                          "%s "
-                          "--log-level=%s %s" %
-                          (std_redirect_extra_args,
-                           layer_wrapper_extra_args, workers,
-                           bind, worker_class, gunicorn_extra_opts,
-                           gunicorn_log_level,
-                           gunicorn_arg))
+            layer_wrapper_extra_args = get_layer_wrapper_extra_args(
+                plugin_name, plugin_dir, app,
+                apdtpp=add_plugin_dir_to_python_path,
+                aadtpp=add_app_dir_to_python_path)
+            gunicorn_extra_opts = "--timeout %i" % timeout
+            cmd_args = "%s -- plugin_wrapper %s -- gunicorn --workers=%s " \
+                "--logger-class=gunicorn_custom_log.CustomLogger " \
+                "--bind=%s --worker-class=%s %s " \
+                "--log-level=%s %s" % (
+                    std_redirect_extra_args, layer_wrapper_extra_args,
+                    workers, bind, worker_class, gunicorn_extra_opts,
+                    gunicorn_log_level, main_arg)
             # we force 1 here because gunicorn master deals with x workers
-            output.append("numprocesses = %i" % 1)
+            workers = 1
+
+        elif typ == "aiohttp":
+            bind = "%s/var/aiohttp_%s_%s_$(circus.wid).socket" % (
+                MODULE_RUNTIME_HOME, plugin_name, app)
+            layer_wrapper_extra_args = get_layer_wrapper_extra_args(
+                plugin_name, plugin_dir, app,
+                apdtpp=add_plugin_dir_to_python_path,
+                aadtpp=add_app_dir_to_python_path)
+            cmd_args = "%s -- plugin_wrapper %s -- python %s %s %i" % (
+                std_redirect_extra_args,
+                layer_wrapper_extra_args, main_arg,
+                bind, timeout)
+
+        elif typ in ("python3_sync", "python2_sync"):
+            bind = "%s/var/%s_%s_%s_$(circus.wid).socket" % (
+                MODULE_RUNTIME_HOME, typ, plugin_name, app)
+            layer_wrapper_extra_args = get_layer_wrapper_extra_args(
+                plugin_name, plugin_dir, app,
+                apdtpp=add_plugin_dir_to_python_path,
+                aadtpp=add_app_dir_to_python_path)
+            debug_arg = ""
+            if debug:
+                debug_arg = "--debug --debug-evalex"
+            cmd_args = "%s -- plugin_wrapper %s -- bjoern_wrapper.py %s " \
+                "--timeout %i %s %s" % (std_redirect_extra_args,
+                                        layer_wrapper_extra_args, debug_arg,
+                                        timeout, main_arg, bind)
 
         elif typ in JS_TYP_LIST:
-            bind = "{{MODULE_RUNTIME_HOME}}/var/" \
-                "node_%s_$(circus.wid).socket" % (plugin_name,)
+            bind = "%s/var/node_%s_$(circus.wid).socket" % (
+                MODULE_RUNTIME_HOME, plugin_name)
+            layer_wrapper_extra_args = get_layer_wrapper_extra_args(
+                plugin_name, plugin_dir)
+            node_server = "%s/%s/%s" % (plugin_dir, app, main_arg)
+            node_opts = ""
+            if parser.has_option(section, "node_extra_opts"):
+                node_opts = parser.get(section, "node_extra_opts")
+            cmd_args = "%s -- plugin_wrapper %s -- node %s %s %s %i" % (
+                std_redirect_extra_args, layer_wrapper_extra_args, node_opts,
+                node_server, bind, timeout)
 
-            layer_wrapper_extra_args = plugin_name
-            if not add_plugin_dir_to_node_path:
-                layer_wrapper_extra_args = layer_wrapper_extra_args + \
-                    " --do-not-add-plugin-dir-to-node-path"
-            app_dir = os.path.join(plugin_dir, app)
-            if add_app_dir_to_node_path:
-                layer_wrapper_extra_args = layer_wrapper_extra_args + \
-                    " --add-extra-dir-to-node-path=%s" % app_dir
+        app_conf["max_age"] = max_age
+        app_conf["name"] = app
+        app_conf["debug"] = debug
+        app_conf["numprocesses"] = workers
+        app_conf["cmd_args"] = cmd_args
+        app_conf["graceful_timeout"] = graceful_timeout
+        app_conf["rlimits"] = get_rlimit_conf(parser, section)
+        plugin_conf["apps"].append(app_conf)
 
-            node_server = "%s/%s/%s" % (plugin_dir, app, node_arg)
+    for extra_daemon in extra_daemons:
+        extra_conf = {}
+        numprocesses = parser.get(section, "numprocesses")
+        std_redirect_extra_args = \
+            get_std_redirect_args("extra_daemon_%s_plugin" % extra_daemon,
+                                  plugin_name, split_stdout_sterr=True,
+                                  force_one_file=(numprocesses == "1"))
+        section = "extra_daemon_%s" % extra_daemon
+        cmd_and_args = parser.get(section, "cmd_and_args")
+        extra_conf["name"] = "extra_daemon_%s_for_plugin_%s" % (extra_daemon,
+                                                                plugin_name)
+        extra_conf["cmd_args"] = "%s -- plugin_wrapper %s -- %s" % (
+            std_redirect_extra_args, plugin_name, cmd_and_args)
+        extra_conf["numprocesses"] = numprocesses
+        extra_conf["rlimits"] = get_rlimit_conf(parser, section)
+        debug = False
+        if parser.has_option(section, "debug"):
+            debug = (parser.getint(section, "debug") == 1)
+        extra_conf["graceful_timeout"] = 30
+        extra_conf["max_age"] = 0
+        extra_conf["debug"] = debug
+        if parser.has_option(section, "graceful_timeout"):
+            extra_conf["graceful_timeout"] = parser.getint(section,
+                                                           "graceful_timeout")
+        if parser.has_option(section, "max_age"):
+            extra_conf["max_age"] = parser.getint(section, "max_age")
+        plugin_conf["extra_daemons"].append(extra_conf)
 
-            output.append("args = %s -- plugin_wrapper %s -- "
-                          "node %s %s" %
-                          (std_redirect_extra_args,
-                           layer_wrapper_extra_args, node_server, bind))
-            output.append("numprocesses = %s" % workers)
-
-        workdir = os.path.join(MFSERV_PLUGINS_HOME, plugin_name)
-        output.append("working_dir = %s" % workdir)
-        output.append("copy_env = True")
-        output.append("async_kill = True")
-        output.append("autostart = True")
-        output.append("respawn = True")
-        if rlimit_as:
-            output.append("rlimit_as = %i" % rlimit_as)
-        if rlimit_nofile:
-            output.append("rlimit_nofile = %i" % rlimit_nofile)
-        if rlimit_nproc:
-            output.append("rlimit_nproc = %i" % rlimit_nproc)
-        if rlimit_stack:
-            output.append("rlimit_stack = %i" % rlimit_stack)
-        if rlimit_core:
-            output.append("rlimit_core = %i" % rlimit_core)
-        if rlimit_fsize:
-            output.append("rlimit_fsize = %i" % rlimit_fsize)
-        output.append("stdout_stream.class = FileStream")
-        output.append("stderr_stream.class = FileStream")
-        output.append("stdout_stream.filename = "
-                      "{{MODULE_RUNTIME_HOME}}/log/circus.log")
-        output.append("stderr_stream.filename = "
-                      "{{MODULE_RUNTIME_HOME}}/log/circus.log")
     if redis_service:
-        output.append("")
-        output.append("[watcher:redis_service_for_plugin_%s]" % plugin_name)
-        output.append("cmd = redis-server")
-        output.append("args = {{MODULE_RUNTIME_HOME}}/tmp/config_auto/"
-                      "redis_plugin_%s.conf" % plugin_name)
-        output.append("numprocesses = 1")
-        output.append("stdout_stream.class = FileStream")
-        output.append("stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/"
-                      "redis_plugin_%s.log" % plugin_name)
-        output.append("stderr.class = FileStream")
-        output.append("stderr.filename = {{MODULE_RUNTIME_HOME}}/log/"
-                      "redis_plugin_%s.log" % plugin_name)
-        output.append("copy_env = True")
-        output.append("autostart = True")
-        output.append("respawn = True")
+        std_redirect_extra_args = \
+            get_std_redirect_args("redis_plugin", plugin_name,
+                                  force_one_file=True,
+                                  split_stdout_sterr=False)
+        extra_conf = {}
+        extra_conf["name"] = "redis_service_for_plugin_%s" % plugin_name
+        extra_conf["cmd_args"] = "%s -- plugin_wrapper %s -- %s" % (
+            std_redirect_extra_args, plugin_name,
+            "redis-server %s/tmp/config_auto/redis_plugin_%s.conf" % (
+                MODULE_RUNTIME_HOME, plugin_name))
+        extra_conf["numprocesses"] = 1
+        extra_conf["max_age"] = 0
+        extra_conf["graceful_timeout"] = 10
+        extra_conf["rlimits"] = {}
+        plugin_conf["extra_daemons"].append(extra_conf)
         with open("%s/tmp/config_auto/redis_plugin_%s.conf" %
                   (MODULE_RUNTIME_HOME, plugin_name), "w+") as f:
             with open("%s/config/redis_plugin_xxx.conf" % MODULE_HOME,
@@ -235,68 +332,24 @@ def make_watcher_conf(plugin_configuration_file):
             new_content = envtpl.render_string(content,
                                                {"PLUGIN_NAME": plugin_name})
             f.write(new_content)
-    for extra_daemon in extra_daemons:
-        section = "extra_daemon_%s" % extra_daemon
-        cmd_and_args = parser.get(section, "cmd_and_args")
-        numprocesses = parser.getint(section, "numprocesses")
-        output.append("")
-        output.append("[watcher:extra_daemon_%s_for_plugin_%s]" %
-                      (extra_daemon, plugin_name))
-        output.append("cmd = plugin_wrapper")
-        output.append("args = %s -- %s" % (plugin_name, cmd_and_args))
-        output.append("working_dir = %s" % plugin_dir)
-        output.append("numprocesses = %i" % numprocesses)
-        output.append("copy_env = True")
-        output.append("async_kill = True")
-        output.append("autostart = True")
-        output.append("respawn = True")
-        output.append("stdout_stream.class = FileStream")
-        output.append("stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/"
-                      "extra_daemon_%s_plugin_%s.log" %
-                      (extra_daemon, plugin_name))
-        output.append("stderr.class = FileStream")
-        output.append("stderr_stream.filename = {{MODULE_RUNTIME_HOME}}/log/"
-                      "extra_daemon_%s_plugin_%s.log" %
-                      (extra_daemon, plugin_name))
-        rlimit_as = None
-        rlimit_nofile = None
-        rlimit_nproc = None
-        rlimit_stack = None
-        rlimit_core = None
-        rlimit_fsize = None
-        if parser.has_option(section, "rlimit_as"):
-            rlimit_as = parser.getint(section, "rlimit_as")
-        if parser.has_option(section, "rlimit_nofile"):
-            rlimit_nofile = parser.getint(section, "rlimit_nofile")
-        if parser.has_option(section, "rlimit_nproc"):
-            rlimit_nproc = parser.getint(section, "rlimit_nproc")
-        if parser.has_option(section, "rlimit_stack"):
-            rlimit_stack = parser.getint(section, "rlimit_stack")
-        if parser.has_option(section, "rlimit_core"):
-            rlimit_core = parser.getint(section, "rlimit_core")
-        if parser.has_option(section, "rlimit_fsize"):
-            rlimit_fsize = parser.getint(section, "rlimit_fsize")
-        if rlimit_as:
-            output.append("rlimit_as = %i" % rlimit_as)
-        if rlimit_nofile:
-            output.append("rlimit_nofile = %i" % rlimit_nofile)
-        if rlimit_nproc:
-            output.append("rlimit_nproc = %i" % rlimit_nproc)
-        if rlimit_stack:
-            output.append("rlimit_stack = %i" % rlimit_stack)
-        if rlimit_core:
-            output.append("rlimit_core = %i" % rlimit_core)
-        if rlimit_fsize:
-            output.append("rlimit_fsize = %i" % rlimit_fsize)
-    return envtpl.render_string("\n".join(output))
+
+    return plugin_conf
 
 
 circus_ini_file = os.path.join(os.environ['MODULE_HOME'], 'config',
                                'circus.ini')
-with open(circus_ini_file, "r") as f:
-    content = envtpl.render_string(f.read())
-
+plugins = []
 for config_file in glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini"):
-    content = content + make_watcher_conf(config_file)
+    plugin_conf = get_conf(config_file)
+    plugins.append(plugin_conf)
+
+with open(circus_ini_file, "r") as f:
+    extra_variables = {
+        "PLUGINS": plugins
+    }
+    tmp_content = envtpl.render_string(f.read(),
+                                       extra_variables=extra_variables)
+    # double evaluation for some corner cases
+    content = envtpl.render_string(tmp_content)
 
 print(content)

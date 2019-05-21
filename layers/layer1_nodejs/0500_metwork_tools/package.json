@@ -1,0 +1,10 @@
+{
+    "name": "metwork-tools",
+    "version": "0.0.1",
+    "dependencies": {
+        "base64url": "^3.0.1"
+    },
+    "devDependencies": {},
+    "workspaces": [],
+    "main": "metwork-tools/index.js"
+}

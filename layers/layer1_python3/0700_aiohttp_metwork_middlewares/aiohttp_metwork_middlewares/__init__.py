@@ -1,6 +1,8 @@
 from aiohttp import web
 import os
 from mflog import get_logger
+from async_timeout import timeout
+
 
 MODULE = os.environ['MODULE']
 CURRENT_PLUGIN_NAME_ENV_VAR = "%s_CURRENT_PLUGIN_NAME" % MODULE
@@ -8,6 +10,14 @@ if CURRENT_PLUGIN_NAME_ENV_VAR in os.environ:
     PLUGIN = os.environ[CURRENT_PLUGIN_NAME_ENV_VAR]
 else:
     PLUGIN = None
+
+
+def timeout_middleware_factory(seconds):
+    @web.middleware
+    async def timeout_middleware(request, handler):
+        async with timeout(seconds):
+            return await handler(request)
+    return timeout_middleware
 
 
 @web.middleware

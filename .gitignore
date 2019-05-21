@@ -29,3 +29,7 @@ doc/CHANGELOG*.rst
 *.whl
 __pycache__/
 null
+*.egg-info/
+layers/layer1_python2/0550_bjoern/build/
+layers/layer1_python3/0550_bjoern/build/
+layers/layer1_nodejs/0500_metwork_tools/node_modules/

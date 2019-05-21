@@ -1,5 +1,8 @@
+import sys
+import os
 from aiohttp import web, ClientSession
 from aiohttp_metwork_middlewares import mflog_middleware
+from aiohttp_metwork_middlewares import timeout_middleware_factory
 
 CHUNK_SIZE = 4096 * 1024
 STREAMING_MODE = True
@@ -61,5 +64,17 @@ async def handle(request):
     return response
 
 
-app = web.Application(middlewares=[mflog_middleware])
-app.router.add_route('*', '/{tail:.*}', handle)
+def get_app(timeout=int(os.environ['MFSERV_NGINX_TIMEOUT']) + 2):
+    app = web.Application(middlewares=[timeout_middleware_factory(timeout),
+                                       mflog_middleware])
+    app.router.add_route('*', '/{tail:.*}', handle)
+    return app
+
+
+if __name__ == '__main__':
+    if len(sys.argv) == 3:
+        web.run_app(get_app(int(sys.argv[2])), path=sys.argv[1])
+    elif len(sys.argv) == 2:
+        web.run_app(get_app(), path=sys.argv[1])
+    else:
+        web.run_app(get_app())
