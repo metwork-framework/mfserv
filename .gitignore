@@ -23,8 +23,8 @@ doc/install_a_metwork_package.md
 doc/install_a_metwork_package.rst
 doc/plugins_guide.md
 doc/plugins_guide.rst
-CHANGELOG*.md
-CHANGELOG*.rst
+doc/CHANGELOG*.md
+doc/CHANGELOG*.rst
 *.plugin
 *.whl
 __pycache__/
