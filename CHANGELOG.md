@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- huge refactoring (sorry about this monster commit)
 - remove double access-log messages with gunicorn
 - add a .gitignore file in plugin templates
 - introduce template inheritance for mfserv plugins
