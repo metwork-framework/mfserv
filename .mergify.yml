@@ -2,14 +2,6 @@
 
 pull_request_rules:
 
-- name: backport to 0.4
-  conditions:
-    - base=integration
-    - label=backport-to-0.4
-  actions:
-    backport:
-      branches:
-        - release_0.4
 - name: backport to 0.5
   conditions:
     - base=integration
@@ -26,6 +18,14 @@ pull_request_rules:
     backport:
       branches:
         - release_0.6
+- name: backport to 0.7
+  conditions:
+    - base=integration
+    - label=backport-to-0.7
+  actions:
+    backport:
+      branches:
+        - release_0.7
 - name: release branch
   actions:
     merge:
