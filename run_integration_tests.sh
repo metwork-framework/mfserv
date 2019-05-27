@@ -14,7 +14,6 @@ if test -z "$list_rep"; then
     exit 0
 fi
 
-ret=0
 for rep in $list_rep; do
     if [ -d $rep ]; then
         cd $rep
@@ -35,11 +34,9 @@ for rep in $list_rep; do
                 echo "Test $test OK"
             else
                 echo "Test $test KO"
-                ret=1
+                exit 1
             fi
         done
         cd ..
     fi
 done
-
-exit $ret
