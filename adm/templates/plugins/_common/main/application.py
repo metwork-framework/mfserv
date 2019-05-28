@@ -18,7 +18,6 @@ def get_app(timeout=int(os.environ['MFSERV_NGINX_TIMEOUT']) + 2):
     return app
 
 
-app = get_app()
 if __name__ == '__main__':
     if len(sys.argv) == 3:
         web.run_app(get_app(int(sys.argv[2])), path=sys.argv[1])
