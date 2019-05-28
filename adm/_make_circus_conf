@@ -281,13 +281,13 @@ def get_conf(plugin_configuration_file):
         plugin_conf["apps"].append(app_conf)
 
     for extra_daemon in extra_daemons:
+        section = "extra_daemon_%s" % extra_daemon
         extra_conf = {}
         numprocesses = parser.get(section, "numprocesses")
         std_redirect_extra_args = \
             get_std_redirect_args("extra_daemon_%s_plugin" % extra_daemon,
                                   plugin_name, split_stdout_sterr=True,
                                   force_one_file=(numprocesses == "1"))
-        section = "extra_daemon_%s" % extra_daemon
         cmd_and_args = parser.get(section, "cmd_and_args")
         extra_conf["name"] = "extra_daemon_%s_for_plugin_%s" % (extra_daemon,
                                                                 plugin_name)
