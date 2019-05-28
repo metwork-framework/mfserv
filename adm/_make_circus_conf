@@ -331,7 +331,8 @@ def get_conf(plugin_configuration_file):
                       "r") as f2:
                 content = f2.read()
             new_content = envtpl.render_string(content,
-                                               {"PLUGIN_NAME": plugin_name})
+                                               {"PLUGIN_NAME": plugin_name},
+                                               keep_multi_blank_lines=False)
             f.write(new_content)
 
     return plugin_conf
@@ -349,8 +350,9 @@ with open(circus_ini_file, "r") as f:
         "PLUGINS": plugins
     }
     tmp_content = envtpl.render_string(f.read(),
-                                       extra_variables=extra_variables)
+                                       extra_variables=extra_variables,
+                                       keep_multi_blank_lines=False)
     # double evaluation for some corner cases
-    content = envtpl.render_string(tmp_content)
+    content = envtpl.render_string(tmp_content, keep_multi_blank_lines=False)
 
 print(content)
