@@ -121,7 +121,7 @@ max_age_variance = {{EXTRA.max_age}}
 rlimit_{{key}} = {{value}}
 {% endfor %}
 
-{% if APP.debug %}
+{% if EXTRA.debug %}
 [env:{{EXTRA.name}}]
 MFSERV_CURRENT_PLUGIN_DEBUG=1
 {% endif %}
