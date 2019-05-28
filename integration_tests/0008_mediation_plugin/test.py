@@ -33,7 +33,7 @@ print(BashWrapperOrRaise('cd foobar && plugins.install "$(ls *.plugin)"'))
 now_fn = datetime.datetime.now
 before = now_fn()
 code = 1
-while (now_fn() - before).total_seconds() <= 20:
+while (now_fn() - before).total_seconds() <= 30:
     time.sleep(1)
     url = "http://127.0.0.1:%i/foobar" % NGINX_PORT
     print("trying GET %s..." % url)
