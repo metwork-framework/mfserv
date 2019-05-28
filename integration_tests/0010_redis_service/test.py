@@ -9,11 +9,20 @@ from mfutil import BashWrapperOrRaise
 
 NGINX_PORT = int(os.environ['MFSERV_NGINX_PORT'])
 
+VERSION = 3
 BashWrapperOrRaise("rm -Rf foobar")
 BashWrapperOrRaise("plugins.uninstall foobar || true")
 
 print(BashWrapperOrRaise("bootstrap_plugin.py create --template=default "
-                         "foobar <stdin"))
+                         "foobar <stdin_python%i" % VERSION))
+cmd = "cat foobar/config.ini |sed 's/^redis_service=.*$/redis_service=1/g' " \
+    ">foobar/config.ini2"
+BashWrapperOrRaise(cmd)
+BashWrapperOrRaise("mv -f foobar/config.ini2 foobar/config.ini")
+BashWrapperOrRaise("cp -f wsgi.py foobar/main/wsgi.py")
+with open("foobar/python%i_virtualenv_sources/"
+          "requirements-to-freeze.txt" % VERSION, "w") as f:
+    f.write("redis\n")
 print(BashWrapperOrRaise("cd foobar && make release"))
 print(BashWrapperOrRaise('cd foobar && plugins.install "$(ls *.plugin)"'))
 
@@ -29,15 +38,16 @@ while (now_fn() - before).total_seconds() <= 30:
     except Exception:
         continue
     if x.status_code == 200:
-        if "Hello World" in x.text.strip():
+        if x.text.strip() == "Hello World!":
             code = 0
             break
 
 if code != 0:
-    print("ERROR: can't get a valid outpu")
+    print("ERROR: can't get a valid output")
+    sys.exit(code)
 else:
     BashWrapperOrRaise("plugins.uninstall foobar")
     BashWrapperOrRaise("rm -Rf foobar")
     print("ok")
 
-sys.exit(code)
+sys.exit(0)

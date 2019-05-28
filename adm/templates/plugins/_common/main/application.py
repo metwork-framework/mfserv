@@ -1,4 +1,6 @@
+{% if cookiecutter.type|default('unknown') != "gunicorn3_asyncio" -%}
 import sys
+{% endif -%}
 import os
 from aiohttp import web
 from aiohttp_metwork_middlewares import mflog_middleware
@@ -11,14 +13,13 @@ async def handle(request):
     return web.Response(text="Hello World")
 
 
-def get_app(timeout=int(os.environ['MFSERV_NGINX_TIMEOUT']) + 2):
+def get_app(timeout=int(os.environ['MFSERV_NGINX_TIMEOUT']) - 2):
     app = web.Application(middlewares=[timeout_middleware_factory(timeout),
                                        mflog_middleware])
     app.router.add_get('/{tail:.*}', handle)
     return app
 
-
-app = get_app()
+{% if cookiecutter.type|default('unknown') != "gunicorn3_asyncio" %}
 if __name__ == '__main__':
     if len(sys.argv) == 3:
         web.run_app(get_app(int(sys.argv[2])), path=sys.argv[1])
@@ -26,3 +27,6 @@ if __name__ == '__main__':
         web.run_app(get_app(), path=sys.argv[1])
     else:
         web.run_app(get_app())
+{% else %}
+app = get_app()
+{% endif %}
