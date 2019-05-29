@@ -18,6 +18,7 @@
 
 
 ### Bug Fixes
+- fix extra daemon feature and add test
 - fix building issues with proxy
 - proxy_timeout was bypassed by gunicorn sync configurations
 - django template regression when bootstrapping
