@@ -24,7 +24,7 @@ help:
 	echo ".. GENERATED FILE, DO NOT EDIT (edit $< instead)" >tempo.md
 	echo ":original_file: $<" >>tempo.md
 	echo >>tempo.md
-	cat $< |envtpl >>tempo.md
+	cat $< |envtpl --reduce-multi-blank-lines >>tempo.md
 	layer_wrapper --layers=python3_devtools@mfext -- m2r --overwrite tempo.md
 	cat tempo.rst |sed 's/^.. code-block::$$/.. code-block:: none\n\n   Output:/g' >$@
 	rm -f tempo.md
