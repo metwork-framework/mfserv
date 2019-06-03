@@ -82,7 +82,8 @@ def get_conf(plugin_configuration_file):
     plugin_conf["name"] = plugin_name
     plugin_conf["extra_general_nginx_conf_string"] = \
         envtpl.render_string(extra_general_nginx_conf_string,
-                             extra_variables={"PLUGIN": plugin_conf})
+                             extra_variables={"PLUGIN": plugin_conf},
+                             keep_multi_blank_lines=False)
 
     plugin_conf['lua_package_paths'] = []
     plugin_conf["apps"] = []
@@ -121,7 +122,8 @@ def get_conf(plugin_configuration_file):
             static_routing = parser.getboolean(section, "static_routing")
         workers = 1
         if parser.has_option(section, "workers"):
-            workers = int(envtpl.render_string(parser.get(section, "workers")))
+            workers = int(envtpl.render_string(parser.get(section, "workers"),
+                                               keep_multi_blank_lines=False))
         debug = False
         if parser.has_option(section, "debug"):
             debug = (parser.getint(section, "debug") == 1)
@@ -196,10 +198,12 @@ def get_conf(plugin_configuration_file):
             app_conf["sockets"] = None
         app_conf['extra_nginx_conf_string'] = \
             envtpl.render_string(extra_nginx_conf_string,
-                                 extra_variables={"APP": app_conf})
+                                 extra_variables={"APP": app_conf},
+                                 keep_multi_blank_lines=False)
         app_conf['extra_nginx_conf_static_string'] = \
             envtpl.render_string(extra_nginx_conf_static_string,
-                                 extra_variables={"APP": app_conf})
+                                 extra_variables={"APP": app_conf},
+                                 keep_multi_blank_lines=False)
         plugin_conf["apps"].append(app_conf)
         if app == "main" or len(apps) == 1:
             copy_conf = copy.deepcopy(app_conf)
@@ -243,6 +247,7 @@ with open(nginx_conf_file, "r") as f:
         "MODULE_ENVIRONMENT": sorted([x for x in os.environ.keys()
                                       if x.startswith("MFSERV_")])
     }
-    content = envtpl.render_string(f.read(), extra_variables=extra_variables)
+    content = envtpl.render_string(f.read(), extra_variables=extra_variables,
+                                   keep_multi_blank_lines=False)
 
 print(content)
