@@ -210,7 +210,7 @@ pipeline:
       - mkdir -p /pub/metwork/releases/rpms/${DRONE_BRANCH}/${OS_VERSION}/
       - cp *.rpm /pub/metwork/releases/rpms/${DRONE_BRANCH}/${OS_VERSION}/
       - createrepo --update /pub/metwork/releases/rpms/${DRONE_BRANCH}/${OS_VERSION}
-      - if test "${OS_VERSION}" = "centos6"; then rm -Rf /pub/metwork/releases/docs/${DRONE_BRANCH}/mfserv; mkdir -p /pub/metwork/releases/docs/${DRONE_BRANCH}/mfserv ; cp -Rf html_doc/* /pub/metwork/releases/docs/${DRONE_BRANCH}/mfserv/ ; fi
+      - if test "${OS_VERSION}" = "centos6"; then rm -Rf /pub/metwork/releases/docs/${DRONE_BRANCH}/mfserv; mkdir -p /pub/metwork/releases/docs/${DRONE_BRANCH}/mfserv ; if test -d html_doc; then cp -Rf html_doc/* /pub/metwork/releases/docs/${DRONE_BRANCH}/mfserv/ ; fi ; fi
     when:
       event: tag
       ref: refs/tags/v*
