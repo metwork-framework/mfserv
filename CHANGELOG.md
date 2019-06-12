@@ -1,6 +1,18 @@
 # release_0.7 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+- move plugin extra_nginx_general_conf to server section.
+
+
+### Bug Fixes
+- remove debug message in nginx conf
+
+
+
+
 
 ## v0.7.0 (2019-05-29)
 
