@@ -55,6 +55,22 @@ ALL_TYP_LIST = \
 LOGGER = get_logger("__make_nginx_conf")
 
 
+def get_nginx_conf_string(parser, plugin_directory, plugin_name, section, key):
+    extra_nginx_conf_string = ""
+    if parser.has_option(section, key):
+        extra_nginx_conf_filename = parser.get(section, key)
+        if extra_nginx_conf_filename != "null":
+            extra_nginx_conf_filepath = \
+                os.path.join(plugin_directory,
+                             extra_nginx_conf_filename)
+            with open(extra_nginx_conf_filepath, "r") as f:
+                extra_nginx_conf_string = f.read()
+    return envtpl.render_string(
+        extra_nginx_conf_string,
+        extra_variables={"PLUGIN": {"name": plugin_name}},
+        keep_multi_blank_lines=False)
+
+
 def get_conf(plugin_configuration_file):
     plugin_conf = {}
     parser = ExtendedConfigParser(config=CONFIG, strict=False,
@@ -68,22 +84,30 @@ def get_conf(plugin_configuration_file):
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
 
-    extra_general_nginx_conf_string = ""
-    if parser.has_option("general", "extra_nginx_conf_filename"):
-        extra_general_nginx_conf_filename = \
-            parser.get("general", "extra_nginx_conf_filename")
-        if extra_general_nginx_conf_filename != "null":
-            extra_general_nginx_conf_filepath = \
-                os.path.join(plugin_directory,
-                             extra_general_nginx_conf_filename)
-            with open(extra_general_nginx_conf_filepath, "r") as f:
-                extra_general_nginx_conf_string = f.read()
+    extra_general_nginx_http_conf_string = \
+        get_nginx_conf_string(parser, plugin_directory, plugin_name, "general",
+                              "extra_nginx_http_conf_filename")
+    if extra_general_nginx_http_conf_string == "":
+        # DEPRECATED (for compatibility)
+        extra_general_nginx_http_conf_string = \
+            get_nginx_conf_string(parser, plugin_directory, plugin_name,
+                                  "general", "extra_nginx_conf_filename")
+    extra_general_nginx_server_conf_string = \
+        get_nginx_conf_string(parser, plugin_directory, plugin_name, "general",
+                              "extra_nginx_server_conf_filename")
 
     plugin_conf["name"] = plugin_name
+<<<<<<< HEAD
     plugin_conf["extra_general_nginx_conf_string"] = \
         envtpl.render_string(extra_general_nginx_conf_string,
                              extra_variables={"PLUGIN": plugin_conf})
 
+=======
+    plugin_conf["extra_general_nginx_http_conf_string"] = \
+        extra_general_nginx_http_conf_string
+    plugin_conf["extra_general_nginx_server_conf_string"] = \
+        extra_general_nginx_server_conf_string
+>>>>>>> 884dfd8... feat: add a new configuration key (for extending nginx conf)
     plugin_conf['lua_package_paths'] = []
     plugin_conf["apps"] = []
 
@@ -96,26 +120,12 @@ def get_conf(plugin_configuration_file):
         if len(glob.glob(os.path.join(plugin_directory, app, '*.lua'))) > 0:
             lua_package_path = os.path.join(plugin_directory, app, '?.lua')
             plugin_conf['lua_package_paths'].append(lua_package_path)
-        extra_nginx_conf_string = ""
-        if parser.has_option(section, "extra_nginx_conf_filename"):
-            extra_nginx_conf_filename = parser.get(section,
-                                                   "extra_nginx_conf_filename")
-            if extra_nginx_conf_filename != "null":
-                extra_nginx_conf_filepath = \
-                    os.path.join(plugin_directory,
-                                 extra_nginx_conf_filename)
-                with open(extra_nginx_conf_filepath, "r") as f:
-                    extra_nginx_conf_string = f.read()
-        extra_nginx_conf_static_string = ""
-        if parser.has_option(section, "extra_nginx_conf_static_filename"):
-            extra_nginx_conf_static_filename = \
-                parser.get(section, "extra_nginx_conf_static_filename")
-            if extra_nginx_conf_static_filename != "null":
-                extra_nginx_conf_static_filepath = \
-                    os.path.join(plugin_directory,
-                                 extra_nginx_conf_static_filename)
-                with open(extra_nginx_conf_static_filepath, "r") as f:
-                    extra_nginx_conf_static_string = f.read()
+        extra_nginx_conf_string = \
+            get_nginx_conf_string(parser, plugin_directory, plugin_name,
+                                  section, "extra_nginx_conf_filename")
+        extra_nginx_conf_static_string = \
+            get_nginx_conf_string(parser, plugin_directory, plugin_name,
+                                  section, "extra_nginx_conf_static_filename")
         static_routing = True
         if parser.has_option(section, "static_routing"):
             static_routing = parser.getboolean(section, "static_routing")
