@@ -38,7 +38,8 @@ async def handle(request):
                 body = await resp.read()
                 response = web.Response(
                     headers={"Content-Type": resp.headers['Content-Type']},
-                    body=body
+                    body=body,
+                    status=backend_status
                 )
 
             else:
@@ -48,7 +49,8 @@ async def handle(request):
 
                 # Let's prepare a streaming response
                 response = web.StreamResponse(
-                    headers={"Content-Type": resp.headers['Content-Type']}
+                    headers={"Content-Type": resp.headers['Content-Type']},
+                    status=backend_status
                 )
                 await response.prepare(request)
                 response.content_type = resp.headers['Content-Type']
