@@ -1,6 +1,15 @@
 # release_0.7 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+- allow / to be used as extra_route
+
+
+
+
+
 
 ## v0.7.1 (2019-06-12)
 

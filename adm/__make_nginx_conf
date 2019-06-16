@@ -152,7 +152,8 @@ def get_conf(plugin_configuration_file):
                 if tmp.strip() != "null":
                     prefix_based_routing_extra_routes = \
                         [x.strip() for x in tmp.strip().split(';')
-                         if x.startswith('/') and not x.endswith('/')]
+                         if x.startswith('/') and
+                         (x == '/' or not x.endswith('/'))]
         workdir = os.path.join(os.environ['MODULE_RUNTIME_HOME'], 'var',
                                'plugins', plugin_name, app)
         timeout = MFSERV_NGINX_TIMEOUT
