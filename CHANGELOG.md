@@ -1,10 +1,12 @@
 # release_0.7 CHANGELOG
 
 
-## [Unreleased]
+
+## v0.7.2 (2019-06-17)
 
 ### New Features
 - allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
 
 
 
