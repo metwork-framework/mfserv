@@ -7,6 +7,7 @@ export EXTENSION=zip
 export CHECKTYPE=MD5
 export CHECKSUM=0ecf48ca01016ba33eb0ca0e4f15d9ef
 DESCRIPTION=\
+Fast And Ultra-Lightweight HTTP/1.1 WSGI Server
 WEBSITE=https://github.com/thefab/bjoern/tree/metwork
 LICENSE=BSD
 
