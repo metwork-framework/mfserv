@@ -1,0 +1,11 @@
+# Configuration file #1 for autorestart feature
+# see https://github.com/metwork-framework/circus_autorestart_plugin
+*.py
+*.ini
+*.js
+*.conf
+*.json
+nginx*
+magic
+.autorestart_includes
+.autorestart_excludes
