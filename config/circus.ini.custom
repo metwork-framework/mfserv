@@ -102,6 +102,7 @@ MFSERV_CURRENT_PLUGIN_DEBUG=1
 [watcher:{{EXTRA.name}}]
 cmd = std_redirect
 args = {{EXTRA.cmd_args}}
+numprocesses = {{EXTRA.numprocesses}}
 working_dir = {{PLUGIN.dir}}
 copy_env = True
 async_kill = True
