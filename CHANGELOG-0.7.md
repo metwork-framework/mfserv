@@ -1,6 +1,17 @@
 # release_0.7 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+
+
+### Bug Fixes
+- add the missing line for numprocesses
+
+
+
+
 
 ## v0.7.2 (2019-06-17)
 
