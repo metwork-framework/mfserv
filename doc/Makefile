@@ -11,7 +11,9 @@ BUILDDIR      = _build
 RST_FILES=$(shell ls *.md |grep -v tempo.md 2>/dev/null |sed 's/\.md$$/\.rst/g')
 IPYNB_FILES=$(shell ls *.ipynb 2>/dev/null |sed 's/\.ipynb$$/\.mdtemp/g')
 COMMON_DOCFILES=configure_a_metwork_package.rst configure_metwork_repo.rst install_a_metwork_package.rst plugins_guide.rst
-CHANGELOGS_FILES=$(shell ls ../CHANGELOG*.md |awk -F '/' '{print $$2;}' |sed 's/\.md$$/\.rst/g')
+CHANGELOGS_FILES=$(shell ls -r ../CHANGELOG*.md |awk -F '/' '{print $$2;}' |sed 's/\.md$$/\.rst/g')
+CHANGELOGS_RST_TMPL=changelogs.tmpl
+CHANGELOGS_RST_FILE=changelogs.rst
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -63,6 +65,9 @@ plugins_guide.md: ../.metwork-framework/plugins_guide.md
 
 CHANGELOG-%.md: ../CHANGELOG-%.md
 	cp -f $< $@
+	echo "   $(shell echo "$<" |awk -F '/' '{print $$2;}' |sed 's/\.md$$//g')" >>$(CHANGELOGS_RST_FILE)
 
 CHANGELOG.md: ../CHANGELOG.md
 	cp -f $< $@
+	cat ${CHANGELOGS_RST_TMPL} >$(CHANGELOGS_RST_FILE)
+	echo "   $(shell echo "$<" |awk -F '/' '{print $$2;}' |sed 's/\.md$$//g')" >>$(CHANGELOGS_RST_FILE)

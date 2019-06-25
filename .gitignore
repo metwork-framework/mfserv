@@ -23,8 +23,13 @@ doc/install_a_metwork_package.md
 doc/install_a_metwork_package.rst
 doc/plugins_guide.md
 doc/plugins_guide.rst
+doc/mfserv_intro.rst
+doc/mfserv_load_env.rst
+doc/mfserv_tuning_monitoring.rst
+doc/mfserv_create_plugins.rst
 doc/CHANGELOG*.md
 doc/CHANGELOG*.rst
+doc/changelogs.rst
 *.plugin
 *.whl
 __pycache__/
