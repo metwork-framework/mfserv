@@ -23,7 +23,7 @@ All these technologies are managed in a "production ready" with:
 
 ![image](./_images/overall_architecture.svg)
 
-**MSERV relies on the following components:**
+**MFSERV relies on the following components:**
 
 - [Circus](https://circus.readthedocs.io/en/latest/) monitors and controls processes and sockets. Circus acts as a process watcher and runner. You may check the full `circus.ini` configuration file in the `/home/mfserv/tmp/config_auto/` directory. Check the [Circus architecture](https://circus.readthedocs.io/en/latest/design/architecture/)
 - [Telegraf](https://docs.influxdata.com/telegraf/) acts as a server agent for collecting and sending metrics and events from databases, systems, and IoT sensors.
