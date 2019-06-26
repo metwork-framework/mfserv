@@ -25,6 +25,7 @@ hooks.before_start=circus_hooks.before_start_shell
 hooks.after_stop=circus_hooks.after_stop_shell          
 working_dir = {{MODULE_RUNTIME_HOME}}/tmp
 async_kill = True
+stop_signal = SIGQUIT
 
 {% if MFSERV_ADMIN_HOSTNAME_IP != "null" %}
 {% if MFSERV_ADMIN_SEND_NGINX_LOGS == "1" %}

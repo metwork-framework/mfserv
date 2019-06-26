@@ -1,0 +1,21 @@
+{% extends "mfxxx.stop" %}
+
+{% block custom %}
+
+if test "${MFSERV_NGINX_SMART_STOP_DELAY}" -gt 0; then
+    echo -n "- Waiting ${MFSERV_NGINX_SMART_STOP_DELAY} seconds (smart stop delay)"
+    echo_running
+    sleep "${MFSERV_NGINX_SMART_STOP_DELAY}"
+    echo_ok
+fi
+
+_circus_schedule_stop_watcher.sh conf_monitor
+if test "${MFSERV_AUTORESTART_FLAG}" = "1"; then
+    _circus_schedule_stop_watcher.sh plugin:autorestart
+fi
+if test "${MFSERV_NGINX_FLAG}" = "1"; then
+    _circus_schedule_stop_watcher.sh nginx
+    _circus_wait_watcher_stopped.sh nginx
+fi
+
+{% endblock %}
