@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -eu
+
+function usage() {
+    echo "usage: _plugins.postinstall NAME VERSION RELEASE"
+    echo "DO NOT USE DIRECTLY ! it's called by plugins.install/develop"
+}
+
+if test $# -ne 3; then
+    usage
+    exit 1
+fi
+
+"${MFCOM_HOME}/bin/_plugins.postinstall" "${1}" "${2}" "${3}"
+
+PHOME=$(plugins.info --just-home "${1}")
+
+echo "Testing circus conf generation..."
+_make_circus_conf "${PHOME}" >/dev/null
+echo "Ok"
+echo "Testing nginx conf generation..."
+_make_nginx_conf "${PHOME}" >/dev/null
+echo "Ok"
