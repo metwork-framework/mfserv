@@ -3,6 +3,8 @@
 set -eu
 
 TMPFILE="${MODULE_RUNTIME_HOME}/tmp/nginx_conf.$$"
+TMPFILE2="${MODULE_RUNTIME_HOME}/tmp/nginx_conf2.$$"
+TMPFILE3="${MODULE_RUNTIME_HOME}/tmp/nginx_conf3.$$"
 
 UUID=$(cat "${MODULE_RUNTIME_HOME}/var/uuid" 2>/dev/null)
 if test "${UUID}" = ""; then
@@ -10,9 +12,22 @@ if test "${UUID}" = ""; then
 fi
 export UUID
 
-__make_nginx_conf >"${TMPFILE}"
+__make_nginx_conf "$@" >"${TMPFILE}"
 nginxfmt.py "${TMPFILE}"
 # FIXME: ugly hack to circumvent nginxfmt problem with JSON
-cat -s "${TMPFILE}" |sed 's/~~~1/{/g' |sed 's/~~~2/}/g' |grep -v 'FIXME: ugly hack'
-
+cat -s "${TMPFILE}" |sed 's/~~~1/{/g' |sed 's/~~~2/}/g' |grep -v 'FIXME: ugly hack' >"${TMPFILE2}"
 rm -f "${TMPFILE}"
+
+if ! test -f "${MODULE_RUNTIME_HOME}/tmp/config_auto/mime.types"; then
+    cp -f "${MFEXT_HOME}/opt/openresty/config/mime.types" "${MODULE_RUNTIME_HOME}/tmp/config_auto/mime.types"
+fi
+set +e
+"${MFEXT_HOME}/opt/openresty/nginx/sbin/nginx" -t -c "${TMPFILE2}" >"${TMPFILE3}" 2>&1
+if test $? -ne 0; then
+    >&2 echo "ERROR: bad nginx configuration (${TMPFILE2} => see ${TMPFILE3} for details"
+    exit 1
+fi
+set -e
+
+cat "${TMPFILE2}"
+rm -f "${TMPFILE2}" "${TMPFILE3}"

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+RES=0
+echo -n "- Checking nginx conf generation..."
+_make_nginx_conf >/dev/null 2>&1
+if test $? -eq 0; then
+    echo_ok
+else
+    echo_nok
+    RES=1
+    for TMP in $(plugins.list --raw 2>/dev/null); do
+        PLUGIN=$(echo "${TMP}" |awk -F '~~~' '{print $1;}')
+        PHOME=$(echo "${TMP}" |awk -F '~~~' '{print $4;}')
+        TMPOUTPUT="${MODULE_RUNTIME_HOME}/tmp/confdebug.$(get_unique_hexa_identifier)"
+        _make_nginx_conf "${PHOME}" >"${TMPOUTPUT}" 2>&1
+        if test $? -ne 0; then
+            echo_bold "=> the plugin ${PLUGIN} seems to break nginx conf"
+            echo_bold "   please check your plugin config.ini and ${TMPOUTPUT} output"
+        else
+            rm -f "${TMPOUTPUT}"
+        fi
+    done
+fi
+exit ${RES}

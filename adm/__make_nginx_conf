@@ -3,6 +3,7 @@
 import os
 import glob
 import envtpl
+import sys
 import hashlib
 import copy
 from configparser_extended import ExtendedConfigParser
@@ -224,7 +225,11 @@ def get_conf(plugin_configuration_file):
 
 plugins = []
 lua_package_paths = []
-for config_file in glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini"):
+if len(sys.argv) == 2:
+    config_files = glob.glob(sys.argv[1] + "/config.ini")
+else:
+    config_files = glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini")
+for config_file in config_files:
     plugin_conf = get_conf(config_file)
     lua_package_paths = lua_package_paths + plugin_conf['lua_package_paths']
     plugins.append(plugin_conf)
