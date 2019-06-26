@@ -35,4 +35,13 @@ if test "${MFSERV_AUTORESTART_FLAG}" = "1"; then
     circus_status_watcher.sh plugin:autorestart || RES=1
 fi
 
+if test "${RES}" = "0"; then
+    if test "${MFSERV_NGINX_SMART_START_DELAY}" -gt 0; then
+        echo -n "- Waiting ${MFSERV_NGINX_SMART_START_DELAY} seconds (smart start delay)"
+        echo_running
+        sleep "${MFSERV_NGINX_SMART_START_DELAY}"
+        echo_ok
+    fi
+fi
+
 {% endblock %}
