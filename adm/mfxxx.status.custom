@@ -1,7 +1,13 @@
 {% extends "mfxxx.status" %}
 {% block custom %}
 
+if test "${1}" != "QUIET"; then
+    _check_circus_conf || RES=1
+fi
 if test "${MFSERV_NGINX_FLAG}" = "1"; then
+    if test "${1}" != "QUIET"; then
+        _check_nginx_conf || RES=1
+    fi
     circus_status_watcher.sh nginx || RES=1
 
     if test "${RES}" = "0"; then

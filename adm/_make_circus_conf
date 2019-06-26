@@ -2,6 +2,7 @@
 
 import os
 import glob
+import sys
 import envtpl
 from configparser_extended import ExtendedConfigParser
 from mflog import get_logger
@@ -341,7 +342,11 @@ def get_conf(plugin_configuration_file):
 circus_ini_file = os.path.join(os.environ['MODULE_HOME'], 'config',
                                'circus.ini')
 plugins = []
-for config_file in glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini"):
+if len(sys.argv) == 2:
+    config_files = glob.glob(sys.argv[1] + "/config.ini")
+else:
+    config_files = glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini")
+for config_file in config_files:
     plugin_conf = get_conf(config_file)
     plugins.append(plugin_conf)
 
