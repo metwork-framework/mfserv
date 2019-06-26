@@ -1,0 +1,13 @@
+{% extends "mfxxx.start" %}
+
+{% block custom_before_circus %}
+    _check_circus_conf || RES=1
+{% endblock %}
+
+{% block custom %}
+
+if test "${MFSERV_NGINX_FLAG}" = "1" -a "${RES}" = "0"; then
+    _check_nginx_conf || RES=1
+fi
+
+{% endblock %}
