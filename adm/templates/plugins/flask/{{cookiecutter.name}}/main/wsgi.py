@@ -1,5 +1,5 @@
 """
-Main code of the template exemple to use Flask.
+Flask template.
 """
 
 from flask import Flask, render_template
@@ -7,7 +7,7 @@ from jinja2 import Template
 
 app = Flask(__name__)
 
-# Simple use of appi with jinja implements {%raw%}{{}}{%endraw%}
+# Simple use of app with jinja implements ({%raw%}{{}}{%endraw%})
 @app.route("/{{cookiecutter.name}}/")
 def hello_world():
     return "Hello World !"
@@ -22,13 +22,12 @@ def webpage():
 
 template = Template('{% raw %}{{ name }}{% endraw %} je te salue')
 
-# Insert variables with name and send it to the rendering.
+# Insert variables with <> and send it to the rendering.
 @app.route("/{{cookiecutter.name}}/jinja2/<name>")
 def jinja(name):
     return (template.render(name=name) +
             render_template("template_jinja_examples/index.html", name=name))
 
-# Simple error handler
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('page_not_found.html'), 404
