@@ -67,7 +67,7 @@ stop_signal = 9
 {% for PLUGIN in PLUGINS %}
     {% for APP in PLUGIN.apps %}
 
-[watcher:step.{{PLUGIN.name}}.{{APP.name}}]
+[watcher:app.{{PLUGIN.name}}.{{APP.name}}]
 cmd = std_redirect
 args = {{APP.cmd_args}}
 numprocesses = {{APP.numprocesses}}
@@ -91,7 +91,7 @@ rlimit_{{key}} = {{value}}
 {% endfor %}
 
 {% if APP.debug %}
-[env:step.{{PLUGIN.name}}.{{APP.name}}]
+[env:app.{{PLUGIN.name}}.{{APP.name}}]
 MFSERV_CURRENT_PLUGIN_DEBUG=1
 {% endif %}
 
