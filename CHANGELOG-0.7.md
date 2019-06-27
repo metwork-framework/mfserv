@@ -4,6 +4,8 @@
 ## [Unreleased]
 
 ### New Features
+- add a healthcheck endpoint
+- add some smart start/stop options and features
 
 
 ### Bug Fixes
