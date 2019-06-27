@@ -100,7 +100,7 @@ class TimeoutWsgiMiddleware(object):
         self.app = app
         self.timeout = timeout
         if hard_timeout is None:
-            self.hard_timeout = timeout + 2
+            self.hard_timeout = timeout + 1
         else:
             self.hard_timeout = hard_timeout
         self.started = None
@@ -146,12 +146,10 @@ class TimeoutWsgiMiddleware(object):
             if hasattr(iterable, 'close'):
                 iterable.close()
         if soft_timeout_exc_info:
-            output = b"HTTP/504 Gateway Time-out"
-            response_headers = [('Content-Type', 'text/plain'),
-                                ('Content-Length', str(len(output)))]
+            response_headers = [('Content-Type', 'text/plain')]
             start_response("504 Gateway Time-out", response_headers,
                            soft_timeout_exc_info)
-            yield output
+            return []
 
 
 class MflogWsgiMiddleware(object):
