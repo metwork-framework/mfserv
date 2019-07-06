@@ -149,7 +149,7 @@ class TimeoutWsgiMiddleware(object):
             response_headers = [('Content-Type', 'text/plain')]
             start_response("504 Gateway Time-out", response_headers,
                            soft_timeout_exc_info)
-            return []
+            return
 
 
 class MflogWsgiMiddleware(object):
