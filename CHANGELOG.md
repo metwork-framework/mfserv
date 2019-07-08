@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- add proxy_ignore_client_abort option
 - add some smart start/stop options and features
 - add a healthcheck endpoint
 - debug circus and nginx configuration generation
