@@ -4,6 +4,11 @@
 ## [Unreleased]
 
 ### New Features
+- add proxy_ignore_client_abort option
+- add some smart start/stop options and features
+- add a healthcheck endpoint
+- debug circus and nginx configuration generation
+- rename circus watcher names (step => app)
 - add template "flask"
 - add a new configuration key (for extending nginx conf)
 - allow / to be used as extra_route

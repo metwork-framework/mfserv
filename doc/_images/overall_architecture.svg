@@ -29,7 +29,7 @@
     </g>
     <g onmouseout="HideTooltip(evt)" id="y.node.1" onmousemove="ShowTooltip(evt)">
       <a target="_blank" xlink:type="simple" xlink:href="https://circus.readthedocs.io/en/latest/" xlink:show="new">
-        <g text-rendering="geometricPrecision" shape-rendering="geometricPrecision" transform="matrix(1,0,0,1,491.63,376)" image-rendering="optimizeQuality">
+        <g text-rendering="geometricPrecision" shape-rendering="geometricPrecision" transform="matrix(1,0,0,1,566.63,385)" image-rendering="optimizeQuality">
           <image preserveAspectRatio="none" x="0" width="32" y="0" height="32" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA5ElEQVR4Xu2TuwoC&#10;MRBF4/sFCuKjsFlBBcFCEK0EsRBF//9/vIcoiM1mZ7ecA6fNnZtJQnAcx3Gc6qkV&#10;tBK+h9VlQzYLWBqCCW3JjuzJvhwkWgoa04JgDhvJsZzK2cd5jmZoTnhXDkMMXchM&#10;ruRabhI0w7XTnHCaLOVW7uVBHuUpQRPf9lw7zQnfhXjgWV7kNVET7L4d4s65dpoT&#10;TvBN3uUjURMMwO55cFmI105zwp/yVUAT7J/vNgnxwbFz2tP8PyBPEwzAX+eb8dp5&#10;cOyTK/0PyNPE7wB8JfbvA/gAPoAPYBrgDe+LRUQzKeqzAAAAAElFTkSuQmCC"/>
           <image x="0" y="0" transform="matrix(3.3263,0,0,1,32,0)" width="32" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAUklEQVR4Xu3IsQ2A&#10;QBDEQCORUcB3QAnkZEj0388X4Hw3OUuTGKZpmqYJjjLOMq4yVhl3GU8ZbxlfGX+Z&#10;RppGmkaaRppGmkaaRppGmkaaRppG1AbG7ZIBO0NCHAAAAABJRU5ErkJggg==" height="32" preserveAspectRatio="none"/>
           <image x="0" y="0" transform="matrix(1,0,0,1,138.44,0)" width="32" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA0UlEQVR4Xu3USwtB&#10;YRSF4eV+S3KJopBbShkIEyVSiP//f6zVNjJxvnNOSu1dz9jb/vYB+Pj4+Pj4AJlA&#10;qU8+UI6ySDGoFqBKFSpRARaTOKIXQfetQy1qwIIUkjhiEdGcpjSmASymjhQi9hHt&#10;aENrWsJCtBVFFGF3EWvOEZ3oSAfa0opG1IbdhrYQa+4BrnSBhShCm+jDtqCjjPUM&#10;z0AKUYQ2oecYUhN2C7Ge4fMHvnnANqEt6CYmsGco44cBN9hN6BlmsC9C/w8e4AEe&#10;4AH/F/ACW6RJKQHFDiEAAAAASUVORK5CYII=" height="32" preserveAspectRatio="none"/>
@@ -38,12 +38,12 @@
           <image x="0" y="0" transform="matrix(1,0,0,1,-0,34.48)" width="32" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA7ElEQVR4Xu3TW0uC&#10;URCF4fFAamGgWRfdFGUhCAp2uAlKicrD//8/vYvpuwrcn1sRwVnwXO/FzB6zvNRw&#10;iis84hUzzLHaUFaiQBSIAlHgYApc4gEvmNqeC7TQwz2e8I4f+/9ASlaqaKKLG4zx&#10;hk/zKSywLCkrKnCCc1xjgGfzKajEF77NJ5KSlQrqODNfwy2G5iU0CRX5MP8XKdnR&#10;FBpom1+DVqFJjDAxL1NGdjQFfcaixIX5OlTkDv0/upJ1tkpRQv9BZ6k/0TEvo9Xo&#10;TFO2jkpoHfoTKqKJ6ERFpVJ2FhUpyogmU0YkEolEjjy/oipJG8HAskcAAAAASUVO&#10;RK5CYII=" height="32" preserveAspectRatio="none"/>
           <image x="0" y="0" transform="matrix(3.3263,0,0,1,32,34.48)" width="32" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAU0lEQVR4Xu3IoQ2A&#10;UBTF0CY4PCOwAQPgfgL778MA9fcKXpNjCvCWaaRppGmkaaRppGmkaaRppGmkaaRp&#10;pPGUscq4y7jKOMs4ytjL2MqmaZqmn/cB5OOaAcaws0wAAAAASUVORK5CYII=" height="32" preserveAspectRatio="none"/>
           <image x="0" y="0" transform="matrix(1,0,0,1,138.44,34.48)" width="32" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA70lEQVR4Xu2TTUsC&#10;YBCEpw9LQyGyDl6SyBCEDpEXwUgCjer//5/m4cWLl9YVpMMOPNd3Znb3laSfPfk2&#10;n2Zl5mZibk3PnCqhXYO/qAAVoAJUgH8T4N28mkcdOcCXWZs382IezI3pKhmARlEw&#10;p/2HWZhnc2+uzaWSAXgwwkatOeZLtfFPzcgMTMecKKFVAPYNjJ3mmM/U2g/V9n+m&#10;pLjkCJiyc8ZO87G5M31zoeT40VMAvhrXzsHRmrHTHHN2n26PaBGBr4YpB8fOr9Sa&#10;Y57a/VY8FIE989VozMGdq439IHNEgygYbk0PNi6VSqVSCf0Ci4NNNYelBbcAAAAA&#10;SUVORK5CYII=" height="32" preserveAspectRatio="none"/>
-          <rect x="70.63" y="390" transform="matrix(1,0,0,1,-57.63,-377)" fill="rgb(255,153,0)" width="138.44" image-rendering="auto" rx="5" ry="5" height="34.48" stroke="none"/>
-          <path fill="url(#linearGradient2)" d="M73.13 400 Q73.13 392.5 80.63 392.5 L150.616 392.5 Q158.116 392.5 158.116 400 Q158.116 407.5 123.123 411.292 Q88.13 415.084 80.63 415.084 Q73.13 415.084 73.13 407.584 Z" transform="matrix(1,0,0,1,-57.63,-377)" stroke="none" image-rendering="auto"/>
+          <rect x="145.63" y="399" transform="matrix(1,0,0,1,-132.63,-386)" fill="rgb(255,153,0)" width="138.44" image-rendering="auto" rx="5" ry="5" height="34.48" stroke="none"/>
+          <path fill="url(#linearGradient2)" d="M148.13 409 Q148.13 401.5 155.63 401.5 L225.616 401.5 Q233.116 401.5 233.116 409 Q233.116 416.5 198.123 420.292 Q163.13 424.084 155.63 424.084 Q148.13 424.084 148.13 416.584 Z" transform="matrix(1,0,0,1,-132.63,-386)" stroke="none" image-rendering="auto"/>
         </g>
         <g>
           <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" font-weight="bold" stroke-miterlimit="1.45">
-            <text x="89.8842" xml:space="preserve" y="411.3943" stroke="none">Circus daemon</text>
+            <text x="164.8842" xml:space="preserve" y="420.3943" stroke="none">Circus daemon</text>
           </g>
         </g>
       </a>
@@ -85,7 +85,7 @@
       </g>
       <g>
         <g font-size="8px" stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" font-weight="bold" stroke-miterlimit="1.45">
-          <text x="-347.9513" xml:space="preserve" y="436.9695" stroke="none">step-{{PLUGIN.name}}.{{APP.name}}</text>
+          <text x="-346.5079" xml:space="preserve" y="436.9695" stroke="none">app-{{PLUGIN.name}}.{{APP.name}}</text>
         </g>
       </g>
     </g>
@@ -109,7 +109,7 @@
         <g>
           <svg xml:space="preserve" opacity="1" writing-mode="lr-tb" stop-color="rgb(0, 0, 0)" shape-rendering="auto" glyph-orientation-horizontal="0deg" color-profile="auto" lighting-color="rgb(255, 255, 255)" color="rgb(0, 0, 0)" font-weight="400" alignment-baseline="auto" font-style="normal" version="1.1" color-interpolation-filters="linearrgb" text-anchor="start" stroke-linecap="butt" color-interpolation="srgb" font-variant="normal" word-spacing="normal" fill-opacity="1" text-rendering="auto" clip-path="none" text-decoration="none" letter-spacing="normal" viewBox="0 -0.741 36 57" glyph-orientation-vertical="auto" display="inline" font-size-adjust="none" overflow="hidden" fill="rgb(0, 0, 0)" font-stretch="normal" stroke-dasharray="none" stroke-miterlimit="4" stop-opacity="1" color-rendering="auto" font-size="12" pointer-events="visiblepainted" mask="none" direction="ltr" baseline-shift="baseline" enable-background="new 0 -0.741 36 57" fill-rule="nonzero" image-rendering="auto" stroke-dashoffset="0" width="36px" marker-end="none" clip="auto" cursor="auto" stroke="none" filter="none" visibility="visible" kerning="auto" stroke-width="1" font-family="&quot;Arial&quot;,&quot;Helvetica&quot;,sans-serif" flood-opacity="1" clip-rule="nonzero" src="none" height="57px" unicode-bidi="normal" stroke-linejoin="miter" stroke-opacity="1" flood-color="rgb(0, 0, 0)" dominant-baseline="auto" marker-start="none" x="0px" marker-mid="none" y="0px">
 <defs>
-<linearGradient x1="-370.1923" gradientUnits="userSpaceOnUse" x2="-350.9679" y1="384.556" y2="435.2651" id="linearGradient1" spreadMethod="pad"><stop stop-opacity="0.8627" stop-color="rgb(255,255,255)" offset="0%"/><stop stop-opacity="0.1255" stop-color="rgb(255,255,255)" offset="100%"/></linearGradient><linearGradient x1="70.63" gradientUnits="userSpaceOnUse" x2="73.0948" y1="390" y2="416.8284" id="linearGradient2" spreadMethod="pad"><stop stop-opacity="0.8627" stop-color="rgb(255,255,255)" offset="0%"/><stop stop-opacity="0.1255" stop-color="rgb(255,255,255)" offset="100%"/></linearGradient><linearGradient x1="-36.9642" gradientUnits="userSpaceOnUse" x2="-36.9642" y1="133.48" y2="150.48" id="linearGradient3" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="-403.77" gradientUnits="userSpaceOnUse" x2="-403.77" y1="169.52" y2="186.52" id="linearGradient4" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="-356.66" gradientUnits="userSpaceOnUse" x2="-356.66" y1="418.2" y2="435.2" id="linearGradient5" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="323.55" gradientUnits="userSpaceOnUse" x2="323.55" y1="285.64" y2="302.64" id="linearGradient6" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="56.168" gradientUnits="userSpaceOnUse" x2="56.168" y1="175.4" y2="192.4" id="linearGradient7" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="180.19" gradientUnits="userSpaceOnUse" x2="180.19" y1="232.6853" y2="249.6853" id="linearGradient8" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="-222.8601" gradientUnits="userSpaceOnUse" x2="-203.6357" y1="223.008" y2="273.7171" id="linearGradient9" spreadMethod="pad"><stop stop-opacity="0.8627" stop-color="rgb(255,255,255)" offset="0%"/><stop stop-opacity="0.1255" stop-color="rgb(255,255,255)" offset="100%"/></linearGradient><linearGradient x1="-212.5278" gradientUnits="userSpaceOnUse" x2="-212.5278" y1="255.052" y2="272.052" id="linearGradient10" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="-145.6879" gradientUnits="userSpaceOnUse" x2="-126.4635" y1="476.208" y2="526.9171" id="linearGradient11" spreadMethod="pad"><stop stop-opacity="0.8627" stop-color="rgb(255,255,255)" offset="0%"/><stop stop-opacity="0.1255" stop-color="rgb(255,255,255)" offset="100%"/></linearGradient><linearGradient x1="-132.1556" gradientUnits="userSpaceOnUse" x2="-132.1556" y1="509.852" y2="526.852" id="linearGradient12" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="-22.5941" gradientUnits="userSpaceOnUse" x2="-3.3697" y1="559.9387" y2="610.6478" id="linearGradient13" spreadMethod="pad"><stop stop-opacity="0.8627" stop-color="rgb(255,255,255)" offset="0%"/><stop stop-opacity="0.1255" stop-color="rgb(255,255,255)" offset="100%"/></linearGradient><linearGradient x1="-9.0618" gradientUnits="userSpaceOnUse" x2="-9.0618" y1="593.5827" y2="610.5827" id="linearGradient14" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><clipPath clipPathUnits="userSpaceOnUse" id="clipPath1"><path d="M0 0 L863 0 L863 648 L0 648 L0 0 Z"/></clipPath><clipPath clipPathUnits="userSpaceOnUse" id="clipPath2"><path d="M-434 1 L429 1 L429 649 L-434 649 L-434 1 Z"/></clipPath><clipPath clipPathUnits="userSpaceOnUse" id="clipPath3"><path d="M0 0 L0 17 L107 17 L107 0 Z"/></clipPath><clipPath clipPathUnits="userSpaceOnUse" id="clipPath4"><path d="M0 0 L0 17 L111 17 L111 0 Z"/></clipPath><clipPath clipPathUnits="userSpaceOnUse" id="clipPath5"><path d="M0 0 L0 17 L124 17 L124 0 Z"/></clipPath><clipPath clipPathUnits="userSpaceOnUse" id="clipPath6"><path d="M0 0 L0 17 L210 17 L210 0 Z"/></clipPath><script type="text/ecmascript"><![CDATA[      var SVGDocument = null;
+<linearGradient x1="-370.1923" gradientUnits="userSpaceOnUse" x2="-350.9679" y1="384.556" y2="435.2651" id="linearGradient1" spreadMethod="pad"><stop stop-opacity="0.8627" stop-color="rgb(255,255,255)" offset="0%"/><stop stop-opacity="0.1255" stop-color="rgb(255,255,255)" offset="100%"/></linearGradient><linearGradient x1="145.63" gradientUnits="userSpaceOnUse" x2="148.0948" y1="399" y2="425.8284" id="linearGradient2" spreadMethod="pad"><stop stop-opacity="0.8627" stop-color="rgb(255,255,255)" offset="0%"/><stop stop-opacity="0.1255" stop-color="rgb(255,255,255)" offset="100%"/></linearGradient><linearGradient x1="-36.9642" gradientUnits="userSpaceOnUse" x2="-36.9642" y1="133.48" y2="150.48" id="linearGradient3" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="-403.77" gradientUnits="userSpaceOnUse" x2="-403.77" y1="169.52" y2="186.52" id="linearGradient4" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="-356.66" gradientUnits="userSpaceOnUse" x2="-356.66" y1="418.2" y2="435.2" id="linearGradient5" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="323.55" gradientUnits="userSpaceOnUse" x2="323.55" y1="285.64" y2="302.64" id="linearGradient6" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="56.168" gradientUnits="userSpaceOnUse" x2="56.168" y1="175.4" y2="192.4" id="linearGradient7" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="180.19" gradientUnits="userSpaceOnUse" x2="180.19" y1="232.6853" y2="249.6853" id="linearGradient8" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="-222.8601" gradientUnits="userSpaceOnUse" x2="-203.6357" y1="223.008" y2="273.7171" id="linearGradient9" spreadMethod="pad"><stop stop-opacity="0.8627" stop-color="rgb(255,255,255)" offset="0%"/><stop stop-opacity="0.1255" stop-color="rgb(255,255,255)" offset="100%"/></linearGradient><linearGradient x1="-212.5278" gradientUnits="userSpaceOnUse" x2="-212.5278" y1="255.052" y2="272.052" id="linearGradient10" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="-145.6879" gradientUnits="userSpaceOnUse" x2="-126.4635" y1="476.208" y2="526.9171" id="linearGradient11" spreadMethod="pad"><stop stop-opacity="0.8627" stop-color="rgb(255,255,255)" offset="0%"/><stop stop-opacity="0.1255" stop-color="rgb(255,255,255)" offset="100%"/></linearGradient><linearGradient x1="-132.1556" gradientUnits="userSpaceOnUse" x2="-132.1556" y1="509.852" y2="526.852" id="linearGradient12" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><linearGradient x1="-22.5941" gradientUnits="userSpaceOnUse" x2="-3.3697" y1="559.9387" y2="610.6478" id="linearGradient13" spreadMethod="pad"><stop stop-opacity="0.8627" stop-color="rgb(255,255,255)" offset="0%"/><stop stop-opacity="0.1255" stop-color="rgb(255,255,255)" offset="100%"/></linearGradient><linearGradient x1="-9.0618" gradientUnits="userSpaceOnUse" x2="-9.0618" y1="593.5827" y2="610.5827" id="linearGradient14" spreadMethod="pad"><stop stop-opacity="1" stop-color="rgb(204,242,242)" offset="0%"/><stop stop-opacity="1" stop-color="rgb(92,214,214)" offset="100%"/></linearGradient><clipPath clipPathUnits="userSpaceOnUse" id="clipPath1"><path d="M0 0 L863 0 L863 648 L0 648 L0 0 Z"/></clipPath><clipPath clipPathUnits="userSpaceOnUse" id="clipPath2"><path d="M-434 1 L429 1 L429 649 L-434 649 L-434 1 Z"/></clipPath><clipPath clipPathUnits="userSpaceOnUse" id="clipPath3"><path d="M0 0 L0 17 L107 17 L107 0 Z"/></clipPath><clipPath clipPathUnits="userSpaceOnUse" id="clipPath4"><path d="M0 0 L0 17 L111 17 L111 0 Z"/></clipPath><clipPath clipPathUnits="userSpaceOnUse" id="clipPath5"><path d="M0 0 L0 17 L124 17 L124 0 Z"/></clipPath><clipPath clipPathUnits="userSpaceOnUse" id="clipPath6"><path d="M0 0 L0 17 L210 17 L210 0 Z"/></clipPath><script type="text/ecmascript"><![CDATA[      var SVGDocument = null;
       var SVGRoot = null;
       var TrueCoords = null;
       var lastElement = null;
@@ -300,7 +300,7 @@
         <g>
           <g font-size="10px" stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" font-weight="bold" stroke-miterlimit="1.45">
             <text x="-162.682" xml:space="preserve" y="238.2902" stroke="none">WSGI application</text>
-            <text x="-164.0858" xml:space="preserve" y="249.9308" stroke="none">server (Gunicorn)</text>
+            <text x="-132.4134" xml:space="preserve" y="249.9308" stroke="none">server</text>
           </g>
         </g>
       </a>
@@ -314,7 +314,7 @@
       </g>
       <g>
         <g font-size="8px" stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" font-weight="bold" stroke-miterlimit="1.45">
-          <text x="-203.8191" xml:space="preserve" y="273.8215" stroke="none">step-{{PLUGIN.name}}.{{APP.name}}</text>
+          <text x="-202.3757" xml:space="preserve" y="273.8215" stroke="none">app-{{PLUGIN.name}}.{{APP.name}}</text>
         </g>
       </g>
     </g>
@@ -349,7 +349,7 @@
       </g>
       <g>
         <g font-size="8px" stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" font-weight="bold" stroke-miterlimit="1.45">
-          <text x="-123.4469" xml:space="preserve" y="528.6215" stroke="none">step-{{PLUGIN.name}}.{{APP.name}}</text>
+          <text x="-122.0035" xml:space="preserve" y="528.6215" stroke="none">app-{{PLUGIN.name}}.{{APP.name}}</text>
         </g>
       </g>
     </g>
@@ -384,31 +384,31 @@
       </g>
       <g>
         <g font-size="8px" stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" font-weight="bold" stroke-miterlimit="1.45">
-          <text x="-0.3531" xml:space="preserve" y="612.3522" stroke="none">step-{{PLUGIN.name}}.{{APP.name}}</text>
+          <text x="1.0903" xml:space="preserve" y="612.3522" stroke="none">app-{{PLUGIN.name}}.{{APP.name}}</text>
         </g>
       </g>
     </g>
     <g id="y.edge.0">
       <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-        <path fill="none" d="M108.0423 385.2532 L106.1295 383.8384 L91.1155 371.1928 L77.3323 357.9173 L64.7798 344.0119 L53.4582 329.4766 L43.3674 314.3115 L34.5073 298.5164 L26.8781 282.0915 L20.4797 265.0366 L15.312 247.3519 L11.3752 229.0373 L8.6691 210.0928 L7.1939 190.5184 L6.9758 172.4914 L6.9805 172.3915"/>
-        <path d="M114.4741 390.0106 L107.7998 378.8547 L107.2383 384.6585 L101.8531 386.8944 Z" stroke="none"/>
-        <path d="M7.228 164.3953 L1.8592 176.2349 L6.9496 173.391 L11.8544 176.5443 Z" stroke="none"/>
+        <path fill="none" d="M168.8001 395.3937 L168.7101 395.3502 L151.215 385.4887 L132.5509 373.2623 L115.1605 360.0478 L99.044 345.8453 L84.2012 330.6548 L70.6321 314.4763 L58.3369 297.3098 L47.3154 279.1553 L37.5677 260.0128 L29.0938 239.8823 L21.8936 218.7637 L15.9672 196.6572 L11.3146 173.5626 L11.1525 172.407"/>
+        <path d="M175.9234 399.0349 L167.5142 389.121 L167.9097 394.9385 L162.9627 398.0251 Z" stroke="none"/>
+        <path d="M10.041 164.4846 L6.7568 177.0629 L11.2914 173.3973 L16.6598 175.6735 Z" stroke="none"/>
       </g>
       <g>
         <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-          <text x="10.0064" xml:space="preserve" y="302.6707" stroke="none">manage</text>
+          <text x="46.1312" xml:space="preserve" y="318.6306" stroke="none">manage</text>
         </g>
       </g>
     </g>
     <g id="y.edge.1">
       <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-        <path fill="none" d="M62.7101 412.8584 L62.6102 412.8627 L25.6952 412.1044 L-10.239 408.9631 L-45.1145 403.4404 L-78.9312 395.5363 L-111.6893 385.2509 L-143.3887 372.5841 L-174.0293 357.5359 L-203.6113 340.1064 L-232.1345 320.2954 L-259.599 298.1031 L-286.0048 273.5294 L-311.3519 246.5743 L-335.6403 217.2378 L-343.1407 206.9968"/>
-        <path d="M70.703 412.5228 L58.5038 408.0306 L61.711 412.9004 L58.9234 418.0219 Z" stroke="none"/>
-        <path d="M-347.8676 200.5426 L-344.8111 213.1782 L-342.5499 207.8035 L-336.7434 207.2695 Z" stroke="none"/>
+        <path fill="none" d="M137.6745 424.9687 L127.7114 425.753 L85.7947 426.4003 L44.9796 424.308 L5.2662 419.4763 L-33.3455 411.905 L-70.8555 401.5943 L-107.2638 388.544 L-142.5705 372.7543 L-176.7755 354.225 L-209.8788 332.9563 L-241.8804 308.948 L-272.7803 282.2003 L-302.5786 252.713 L-331.2751 220.4863 L-342.0837 206.7904"/>
+        <path d="M145.6498 424.3408 L133.2944 420.298 L136.6776 425.0471 L134.0793 430.2672 Z" stroke="none"/>
+        <path d="M-347.0398 200.5104 L-343.5306 213.0278 L-341.4642 207.5753 L-335.6807 206.8328 Z" stroke="none"/>
       </g>
       <g>
         <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-          <text x="-167.8896" xml:space="preserve" y="376.7384" stroke="none">manage</text>
+          <text x="-131.7648" xml:space="preserve" y="392.6983" stroke="none">manage</text>
         </g>
       </g>
     </g>
@@ -421,26 +421,26 @@
     </g>
     <g id="y.edge.2">
       <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-        <path fill="none" d="M63.4019 419.1255 L41.7596 429.5815 L12.6127 440.2558 L-16.807 447.6546 L-46.4997 451.778 L-76.4654 452.626 L-106.704 450.1985 L-137.2155 444.4955 L-152.4735 440.0455"/>
-        <path d="M70.6052 415.6454 L57.6251 416.3634 L62.5014 419.5605 L61.9753 425.3677 Z" stroke="none"/>
-        <path d="M-160.1536 437.8056 L-150.0335 445.9655 L-151.5135 440.3255 L-147.2336 436.3654 Z" stroke="none"/>
+        <path fill="none" d="M138.3084 427.9496 L126.3115 433.3837 L106.9522 441.0595 L87.5555 447.6591 L68.1215 453.1824 L48.6502 457.6295 L29.1415 461.0004 L9.5954 463.2951 L-9.988 464.5135 L-29.6088 464.6558 L-49.2669 463.7218 L-68.9623 461.7115 L-88.6952 458.6251 L-108.4654 454.4625 L-128.2729 449.2236 L-148.1178 442.9085 L-152.6961 441.2065"/>
+        <path d="M145.5957 424.6488 L132.6017 425.0455 L137.3975 428.3622 L136.7278 434.1546 Z" stroke="none"/>
+        <path d="M-160.1947 438.4189 L-150.6891 447.287 L-151.7587 441.555 L-147.2045 437.9137 Z" stroke="none"/>
       </g>
       <g>
         <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-          <text x="-71.0007" xml:space="preserve" y="455.9323" stroke="none">manage</text>
+          <text x="-34.489" xml:space="preserve" y="468.6678" stroke="none">manage</text>
         </g>
       </g>
     </g>
     <g id="y.edge.3"/>
     <g id="y.edge.4">
       <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-        <path fill="none" d="M157.3251 383.7842 L161.3657 378.7581 L172.8799 366.1546 L184.8983 354.6425 L197.421 344.2221 L210.4479 334.8932 L223.979 326.6559 L238.0144 319.5101 L252.554 313.4558 L267.5979 308.4932 L283.146 304.6221 L299.1983 301.8426 L315.5243 300.1781 L315.6243 300.1746"/>
-        <path d="M152.3126 390.0192 L163.7282 383.7995 L157.9516 383.0049 L155.9344 377.5339 Z" stroke="none"/>
-        <path d="M323.6188 299.8795 L311.4425 295.3256 L314.625 300.2115 L311.8115 305.3188 Z" stroke="none"/>
+        <path fill="none" d="M226.3277 391.7776 L226.389 391.6469 L240.1169 369.9875 L256.0336 351.2619 L274.1392 335.47 L294.4336 322.6119 L315.8898 313.1409 L315.986 313.1136"/>
+        <path d="M222.9296 399.02 L232.5533 390.2802 L226.7525 390.8723 L223.5003 386.0326 Z" stroke="none"/>
+        <path d="M323.6384 310.781 L310.7019 309.4973 L315.0294 313.4052 L313.6177 319.0627 Z" stroke="none"/>
       </g>
       <g>
         <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-          <text x="213.5134" xml:space="preserve" y="323.6644" stroke="none">manage</text>
+          <text x="249.6382" xml:space="preserve" y="339.6243" stroke="none">manage</text>
         </g>
       </g>
     </g>
@@ -452,13 +452,13 @@
     </g>
     <g id="y.edge.9">
       <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-        <path fill="none" d="M125.1774 384.4857 L125.1012 384.4209 L108.37 366.0696 L100.0812 354.835 L92.7514 343.2236 L86.3808 331.2354 L80.9691 318.8704 L76.5166 306.1285 L73.0232 293.0099 L70.4888 279.5144 L68.9135 265.6422 L68.6401 236.7672 L71.2678 214.3602"/>
-        <path d="M130.9218 390.0536 L125.7851 378.1115 L124.4593 383.7897 L118.8252 385.292 Z" stroke="none"/>
-        <path d="M72.1996 206.4147 L65.836 217.7506 L71.1514 215.3534 L75.7679 218.9153 Z" stroke="none"/>
+        <path fill="none" d="M183.8301 394.889 L177.7175 391.2234 L163.5887 381.4146 L150.4619 370.8709 L138.3372 359.5923 L127.2146 347.5788 L117.094 334.8303 L107.9754 321.3469 L99.8589 307.1286 L92.7445 292.1753 L86.6321 276.4871 L81.5218 260.064 L77.4135 242.9059 L74.3073 225.0129 L73.1052 214.3708"/>
+        <path d="M190.691 399.0034 L182.9711 388.5438 L182.9725 394.3747 L177.8282 397.1199 Z" stroke="none"/>
+        <path d="M72.2072 206.4214 L68.5857 218.9068 L73.2174 215.3645 L78.5226 217.7843 Z" stroke="none"/>
       </g>
       <g>
         <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-          <text x="52.6306" xml:space="preserve" y="273.7817" stroke="none">manage</text>
+          <text x="72.5939" xml:space="preserve" y="281.7617" stroke="none">manage</text>
         </g>
       </g>
     </g>
@@ -470,13 +470,13 @@
     </g>
     <g id="y.edge.8">
       <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-        <path fill="none" d="M143.4392 382.1204 L143.4286 382.021 L143.8376 361.3478 L147.237 340.1976 L153.5938 320.2447 L162.9079 301.489 L175.1793 283.9305 L189.0772 268.9991 L189.154 268.9351"/>
-        <path d="M144.0764 390.095 L148.1047 377.7348 L143.3596 381.1236 L138.1365 378.5314 Z" stroke="none"/>
-        <path d="M195.1359 263.6231 L182.8431 267.8524 L188.4063 269.5991 L189.4831 275.3298 Z" stroke="none"/>
+        <path fill="none" d="M206.2796 392.0098 L206.226 391.9254 L199.0562 376.6928 L192.8228 356.5663 L189.7186 336.2046 L189.7437 315.6077 L192.8979 294.7755 L199.1815 273.708 L200.3788 270.9983"/>
+        <path d="M210.0023 399.0909 L208.844 386.1425 L205.8143 391.1246 L199.9926 390.7959 Z" stroke="none"/>
+        <path d="M203.6121 263.6808 L194.1887 272.6362 L199.9746 271.913 L203.3356 276.6779 Z" stroke="none"/>
       </g>
       <g>
         <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-          <text x="129.0928" xml:space="preserve" y="324.399" stroke="none">manage</text>
+          <text x="165.2176" xml:space="preserve" y="340.3589" stroke="none">manage</text>
         </g>
       </g>
     </g>
@@ -507,13 +507,13 @@
     </g>
     <g id="y.edge.12">
       <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-        <path fill="none" d="M62.9714 393.3856 L62.8739 393.3633 L30.5286 382.3314 L-2.1733 367.052 L-33.0058 348.2844 L-61.9691 326.0285 L-89.0631 300.2844 L-96.1288 292.0961"/>
-        <path d="M70.7124 395.4045 L60.3627 387.5379 L62.0037 393.1332 L57.839 397.2142 Z" stroke="none"/>
-        <path d="M-101.3552 286.0393 L-97.3011 298.391 L-95.4755 292.8532 L-89.7301 291.858 Z" stroke="none"/>
+        <path fill="none" d="M137.8526 410.0613 L137.7534 410.0491 L120.6086 407.0491 L98.2938 401.9279 L76.4771 395.6772 L55.1587 388.2971 L34.3385 379.7875 L14.0165 370.1486 L-5.8073 359.3802 L-25.1329 347.4824 L-43.9603 334.4551 L-62.2895 320.2985 L-80.1205 305.0124 L-94.2292 291.6503 L-94.2985 291.5782"/>
+        <path d="M145.7513 411.3308 L134.6967 404.4899 L136.8653 409.9026 L133.1099 414.3632 Z" stroke="none"/>
+        <path d="M-99.9904 285.9566 L-94.966 297.9464 L-93.587 292.2809 L-87.939 290.8315 Z" stroke="none"/>
       </g>
       <g>
         <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-          <text x="-32.438" xml:space="preserve" y="400.7533" stroke="none">manage</text>
+          <text x="8.0661" xml:space="preserve" y="414.1897" stroke="none">manage</text>
         </g>
       </g>
     </g>
@@ -527,37 +527,25 @@
     </g>
     <g id="y.edge.15">
       <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-        <path fill="none" d="M123.3877 430.917 L123.3308 430.9992 L106.1769 451.2035 L86.8983 469.6076 L65.9916 485.6266 L43.4569 499.2606 L25.6095 507.5693 L25.515 507.6018"/>
-        <path d="M128.0003 424.3806 L116.9962 431.3023 L122.8111 431.734 L125.1667 437.068 Z" stroke="none"/>
-        <path d="M18.221 510.8879 L31.2157 510.5175 L26.4267 507.1911 L27.1081 501.4001 Z" stroke="none"/>
+        <path fill="none" d="M191.794 439.1375 L189.0201 441.8923 L161.6857 464.1301 L132.8468 482.9533 L102.5033 498.3621 L70.6554 510.3564 L70.1627 510.4831"/>
+        <path d="M197.4703 433.5002 L185.4325 438.4084 L191.0844 439.8422 L192.4791 445.5038 Z" stroke="none"/>
+        <path d="M62.415 512.4761 L75.2822 514.3289 L71.1312 510.2339 L72.7909 504.6442 Z" stroke="none"/>
       </g>
       <g>
         <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-          <text x="92.1323" xml:space="preserve" y="479.7808" stroke="none">manage</text>
+          <text x="140.0868" xml:space="preserve" y="494.2948" stroke="none">manage</text>
         </g>
       </g>
     </g>
     <g id="y.edge.16"/>
-    <g id="y.edge.20">
+    <g id="y.edge.19">
       <g stroke-linecap="round" transform="matrix(1,0,0,1,434,-1)" stroke-dashoffset="2" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke-dasharray="0,8" stroke-width="2" stroke-miterlimit="1.45">
         <path fill="none" d="M-395.1982 200.5226 L-406.767 253.2712 L-411.7247 282.8058 L-415.3984 311.1063 L-417.7883 338.1728 L-418.8943 364.0052 L-418.7163 388.6036 L-417.2545 411.9679 L-414.5087 434.0982 L-410.4791 454.9945 L-405.1655 474.6567 L-398.5681 493.0849 L-390.6867 510.279 L-381.5215 526.2391 L-371.0724 540.9652 L-359.3393 554.4572 L-346.3224 566.7152 L-332.0215 577.7391 L-316.4367 587.5291 L-299.5681 596.0849 L-281.4155 603.4067 L-261.9791 609.4945 L-241.2587 614.3482 L-219.2545 617.9679 L-195.9663 620.3536 L-171.3943 621.5052 L-145.5383 621.4227 L-118.3984 620.1063 L-89.9747 617.5558 L-60.267 613.7712 L-31.47 608.641"/>
         <path d="M-22.6096 607.0624 L-36.8869 603.8925 L-32.5776 608.8383 L-34.9137 614.9681 Z" stroke="none"/>
       </g>
       <g/>
     </g>
-    <g id="y.edge.18">
-      <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-        <path fill="none" d="M142.9267 432.4292 L143.2367 434.9671 L143.846 461.9987 L141.678 488.3348 L136.7327 513.9755 L129.01 538.9205 L118.5101 563.1701 L105.2328 586.7242 L104.2963 588.0575"/>
-        <path d="M141.9567 424.4882 L138.4485 437.0059 L143.0479 433.4218 L148.3748 435.7935 Z" stroke="none"/>
-        <path d="M99.6983 594.6041 L110.687 587.658 L104.8711 587.2392 L102.5037 581.9104 Z" stroke="none"/>
-      </g>
-      <g>
-        <g stroke-linecap="butt" transform="matrix(1,0,0,1,434,-1)" fill="rgb(255,102,0)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke="rgb(255,102,0)" stroke-miterlimit="1.45">
-          <text x="143.3344" xml:space="preserve" y="480.8121" stroke="none">manage</text>
-        </g>
-      </g>
-    </g>
-    <g id="y.edge.19"/>
+    <g id="y.edge.18"/>
     <g visibility="hidden" id="tooltip.y.node.0" pointer-events="none">
       <g fill="rgb(195,212,232)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" font-family="sans-serif" stroke="rgb(195,212,232)">
         <rect x="0" width="107" height="17" y="0" clip-path="url(#clipPath3)" stroke="none"/>

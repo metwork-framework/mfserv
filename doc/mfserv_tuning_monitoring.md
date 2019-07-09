@@ -15,53 +15,62 @@ numprocesses = 3
 .. index:: limits, resource
 ### Resource limits
 
-You are able to control resource limits for each step of a plugin by setting the following parameters in the [step....] section of the `config.ini` plugin configuration file, e.g.:
+You are able to control resource limits for each app workers of a plugin by setting the following parameters in the `[app....]` section of the `config.ini` plugin configuration file, e.g.:
 
 ```cfg
-# resource limit for each step process
-# rlimit_as => maximum area (in bytes) of address space which may be taken by the process.
-# rlimit_nofile => maximum number of open file descriptors for the current process.
-# rlimit_stack => maximum size (in bytes) of the call stack for the current process.
-#     This only affects the stack of the main thread in a multi-threaded process.
-# rlimit_core => maximum size (in bytes) of a core file that the current process can create.
-# rlimit_fsize =>  maximum size of a file which the process may create.
+# resource limit for each app worker
+# rlimit_as => maximum area (in bytes) of address space which may be taken by the worker.
+# rlimit_nofile => maximum number of open file descriptors for the current worker.
+# rlimit_stack => maximum size (in bytes) of the call stack for the current worker.
+#     This only affects the stack of the main thread in a multi-threaded worker.
+# rlimit_core => maximum size (in bytes) of a core file that the current worker can create.
+# rlimit_fsize =>  maximum size of a file which the worker may create.
 # (empty value means no limit)
 rlimit_as = 1000000000
 rlimit_nofile = 1000
-rlimit_nproc = 100
 rlimit_stack = 10000000
-rlimit_core = 10000000
+rlimit_core = 100000
 rlimit_fsize = 100000000
 ```
 
 For further information about Linux resource limits, check [Linux documentation](http://man7.org/linux/man-pages/man2/setrlimit.2.html).
 
+.. index:: Nginx, Request body size limit, Nginx workers, Nginx timeout, Nginx rate limiting, Rate limiting, extra_nginx_conf_filename
+### Nginx tuning an rate limiting
+
+You are able to act on Nginx tuning parameters: refer to the `[nginx]` section of the `config/config.ini` file of the MFSERV module (in the root directory of the MFSERV user).
+
+Nginx server allows you to limit the amount of HTTP requests a user can make in a given period of time.
+
+You can easily implement this feature by setting your plugin configuration for this purpose. 
+
+In order to understand the 'Nginx Rate limiting' and learn how to implement it in your plugin, read this MetWork [Implement a MFSERV plugin with rate limiting](https://medium.com/metwork-framework/implement-a-mfserv-plugin-with-rate-limiting-fd38d2d5ccd8).
+
+### Advanced settings
+
+Some advanced settings are available for each application. Check the `[app....]` section of the `config.ini` plugin configuration file, e.g.: `extra_nginx_conf_filename`, `extra_nginx_conf_static_filename`
+
+
 ### Miscellaneous
 
-You are able to act on others tuning parameters for each step of a plugin.
+You are able to act on others tuning parameters for each app of a plugin.
 
 ```cfg 
-# The number of seconds to wait for a step to terminate gracefully
-# before killing it. When stopping a process, we first send it a TERM signal.
-# A step may catch this signal to perform clean up operations before exiting.
+
+# If set then the process will be restarted sometime after max_age and
+# max_age + random(0, max_age) seconds.
+# 0 => disable this feature
+# Note: the feature is automatically disabled if workers=1
+# Note: 60 seconds is a minimum
+max_age = 3600
+
+# The number of seconds to wait for a process to terminate gracefully before killing it.
+# When stopping a worker process, we first send it a SIGTERM.
+# A worker may catch this signal to perform clean up operations before exiting
+# like finishing to reply to already accepted requests.
 # If the worker is still active after graceful_timeout seconds, we send it a
-# KILL signal. It is not possible to catch a KILL signal so the worker will stop.
-# If you use the standard Acquisition framework to implement your step, the
-# TERM signal is handled like this: "we don't process files anymore but we
-# try to end with the current processed file before stopping". So the
-# graceful_timeout must by greater than the maximum processing time of one file.
-# Default value is 600 seconds
-graceful_timeout = 600
-
-# If set then the step will be restarted sometime after max_age seconds.
-# Default value is 310 seconds
-max_age = 310
-
-# If max_age is set then the step will live between max_age and
-# max_age + random(0, max_age_variance) seconds.
-# This avoids restarting all processes for a step at once.
-# Default value is 300 seconds
-max_age_variance = 300
+# SIGKILL signal. It is not possible to catch SIGKILL signals so the worker will stop.
+graceful_timeout = 30
 ```
 
 .. index:: monitoring, MFADMIN, dashboard

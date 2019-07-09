@@ -4,6 +4,18 @@
 ## [Unreleased]
 
 ### New Features
+- add proxy_ignore_client_abort option
+
+
+
+
+
+
+## v0.7.3 (2019-06-27)
+
+### New Features
+- add a healthcheck endpoint
+- add some smart start/stop options and features
 
 
 ### Bug Fixes
