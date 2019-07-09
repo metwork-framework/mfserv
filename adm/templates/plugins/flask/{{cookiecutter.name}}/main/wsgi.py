@@ -11,16 +11,13 @@ app = Flask(__name__)
 @app.route("/{{cookiecutter.name}}/")
 def hello_world():
     return "Hello World !"
+
 @app.route("/{{cookiecutter.name}}/<name>")
 def hello(name="unknown"):
     return render_template("template_urlparse/index.html", name=name)
 
-# rendering html (and other files types) template.
-@app.route("/{{cookiecutter.name}}/webpage")
-def webpage():
-    return render_template("template_webpage/index.html")
-
-template = Template('{% raw %}{{ name }}{% endraw %} je te salue')
+template = Template('Rendering template with variable:'
+                    ' {% raw %}{{ name }}{% endraw %}')
 
 # Insert variables with <> and send it to the rendering.
 @app.route("/{{cookiecutter.name}}/jinja2/<name>")
