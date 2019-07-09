@@ -25,8 +25,14 @@ doc/plugins_guide.md
 doc/plugins_guide.rst
 doc/mfserv_intro.rst
 doc/mfserv_load_env.rst
+doc/mfserv_quick_start.rst
 doc/mfserv_tuning_monitoring.rst
 doc/mfserv_create_plugins.rst
+doc/mfserv_debug_plugin.rst
+doc/mfserv_miscellaneous.rst
+doc/mfserv_tutorials.rst
+doc/mfserv_log.rst
+doc/mfserv_deploy_plugin.rst
 doc/CHANGELOG*.md
 doc/CHANGELOG*.rst
 doc/changelogs.rst
