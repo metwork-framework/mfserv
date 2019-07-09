@@ -1,6 +1,15 @@
 # release_0.7 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+- add proxy_ignore_client_abort option
+
+
+
+
+
 
 ## v0.7.3 (2019-06-27)
 
