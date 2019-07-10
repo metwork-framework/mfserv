@@ -6,9 +6,12 @@ import sys
 import envtpl
 from configparser_extended import ExtendedConfigParser
 from mflog import get_logger
+from mfutil.plugins import layerapi2_label_to_plugin_name
 
 MFSERV_PLUGINS_HOME = os.path.join(os.environ["MODULE_RUNTIME_HOME"],
                                    "var", "plugins")
+MFSERV_PLUGINS_HOTSWAP_HOME = os.path.join(os.environ["MODULE_RUNTIME_HOME"],
+                                           "tmp", "plugins.hotswap")
 LOG_LEVEL = os.environ.get('MFSERV_LOG_MINIMAL_LEVEL', 'INFO')
 CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
 MODULE_RUNTIME_HOME = os.environ["MODULE_RUNTIME_HOME"]
@@ -103,10 +106,26 @@ def get_std_redirect_args(prefix, plugin_name, app=None,
         return "-o %s.log -e %s.log" % (std_prefix, std_prefix)
 
 
-def get_conf(plugin_configuration_file):
+def get_conf(plugin_configuration_file, hot_swap_plugin=False):
     plugin_conf = {}
-    plugin_name = os.path.basename(os.path.dirname(plugin_configuration_file))
     plugin_dir = os.path.dirname(plugin_configuration_file)
+    try:
+        with open(os.path.join(plugin_dir, ".layerapi2_label"), "r") as f:
+            label = f.read().strip()
+    except Exception:
+        LOGGER.warning(
+            "can't read %s/.layerapi2_label => ignoring this plugin",
+            plugin_dir)
+        return None
+    try:
+        plugin_name = layerapi2_label_to_plugin_name(label)
+    except Exception as e:
+        LOGGER.warning("can't read %s/.layerapi2_label with error: %s => "
+                       "ignoring this plugin", plugin_dir, e)
+        return None
+    original_plugin_name = plugin_name
+    if hot_swap_plugin:
+        plugin_name = "__hs_" + plugin_name
     logger = LOGGER.bind(plugin_name=plugin_name)
     parser = ExtendedConfigParser(config=CONFIG, strict=False,
                                   inheritance='im', interpolation=None)
@@ -116,9 +135,7 @@ def get_conf(plugin_configuration_file):
     extra_daemons = [x.replace("extra_daemon_", "", 1).split(':')[0]
                      for x in parser.sections()
                      if x.startswith("extra_daemon_")]
-    os.environ["MFSERV_CURRENT_PLUGIN_DIR"] = \
-        "%s/%s" % (MFSERV_PLUGINS_HOME, plugin_name)
-
+    os.environ["MFSERV_CURRENT_PLUGIN_DIR"] = plugin_dir
     redis_service = False
     if parser.has_option("general", "redis_service"):
         redis_service = parser.getboolean("general", "redis_service")
@@ -132,6 +149,8 @@ def get_conf(plugin_configuration_file):
     plugin_conf["dir"] = plugin_dir
     plugin_conf["apps"] = []
     plugin_conf["extra_daemons"] = []
+    plugin_conf["hot_swap_plugin"] = hot_swap_plugin
+    plugin_conf["hot_swap_home"] = MFSERV_PLUGINS_HOTSWAP_HOME
 
     for app in apps:
         logger = logger.bind(app=app)
@@ -218,7 +237,7 @@ def get_conf(plugin_configuration_file):
             else:
                 worker_class = "sync"
             layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-                plugin_name, plugin_dir, app,
+                original_plugin_name, plugin_dir, app,
                 apdtpp=add_plugin_dir_to_python_path,
                 aadtpp=add_app_dir_to_python_path)
             gunicorn_extra_opts = "--timeout %i" % timeout
@@ -236,7 +255,7 @@ def get_conf(plugin_configuration_file):
             bind = "%s/var/aiohttp_%s_%s_$(circus.wid).socket" % (
                 MODULE_RUNTIME_HOME, plugin_name, app)
             layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-                plugin_name, plugin_dir, app,
+                original_plugin_name, plugin_dir, app,
                 apdtpp=add_plugin_dir_to_python_path,
                 aadtpp=add_app_dir_to_python_path)
             cmd_args = "%s -- plugin_wrapper %s -- python %s %s %i" % (
@@ -248,7 +267,7 @@ def get_conf(plugin_configuration_file):
             bind = "%s/var/%s_%s_%s_$(circus.wid).socket" % (
                 MODULE_RUNTIME_HOME, typ, plugin_name, app)
             layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-                plugin_name, plugin_dir, app,
+                original_plugin_name, plugin_dir, app,
                 apdtpp=add_plugin_dir_to_python_path,
                 aadtpp=add_app_dir_to_python_path)
             debug_arg = ""
@@ -263,7 +282,7 @@ def get_conf(plugin_configuration_file):
             bind = "%s/var/node_%s_$(circus.wid).socket" % (
                 MODULE_RUNTIME_HOME, plugin_name)
             layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-                plugin_name, plugin_dir)
+                original_plugin_name, plugin_dir)
             node_server = "%s/%s/%s" % (plugin_dir, app, main_arg)
             node_opts = ""
             if parser.has_option(section, "node_extra_opts"):
@@ -293,7 +312,7 @@ def get_conf(plugin_configuration_file):
         extra_conf["name"] = "extra_daemon_%s_for_plugin_%s" % (extra_daemon,
                                                                 plugin_name)
         extra_conf["cmd_args"] = "%s -- plugin_wrapper %s -- %s" % (
-            std_redirect_extra_args, plugin_name, cmd_and_args)
+            std_redirect_extra_args, original_plugin_name, cmd_and_args)
         extra_conf["numprocesses"] = numprocesses
         extra_conf["rlimits"] = get_rlimit_conf(parser, section)
         debug = False
@@ -317,9 +336,9 @@ def get_conf(plugin_configuration_file):
         extra_conf = {}
         extra_conf["name"] = "redis_service_for_plugin_%s" % plugin_name
         extra_conf["cmd_args"] = "%s -- plugin_wrapper %s -- %s" % (
-            std_redirect_extra_args, plugin_name,
+            std_redirect_extra_args, original_plugin_name,
             "redis-server %s/tmp/config_auto/redis_plugin_%s.conf" % (
-                MODULE_RUNTIME_HOME, plugin_name))
+                MODULE_RUNTIME_HOME, original_plugin_name))
         extra_conf["numprocesses"] = 1
         extra_conf["max_age"] = 0
         extra_conf["graceful_timeout"] = 10
@@ -345,10 +364,14 @@ plugins = []
 if len(sys.argv) == 2:
     config_files = glob.glob(sys.argv[1] + "/config.ini")
 else:
-    config_files = glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini")
-for config_file in config_files:
-    plugin_conf = get_conf(config_file)
-    plugins.append(plugin_conf)
+    config_files1 = glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini")
+    config_files2 = glob.glob(MFSERV_PLUGINS_HOTSWAP_HOME + "/*/config.ini")
+    config_files = config_files1 + config_files2
+    for config_file in config_files:
+        plugin_conf = get_conf(config_file,
+                               hot_swap_plugin=(config_file in config_files2))
+        if plugin_conf:
+            plugins.append(plugin_conf)
 
 with open(circus_ini_file, "r") as f:
     extra_variables = {

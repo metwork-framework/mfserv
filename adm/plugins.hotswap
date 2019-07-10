@@ -1,0 +1,226 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import sys
+import time
+import atexit
+from mfutil import BashWrapper
+from mfutil.cli import echo_running, echo_ok, echo_nok, echo_bold
+from mfutil.plugins import get_plugin_info, init_plugins_base, \
+    install_plugin, uninstall_plugin
+
+CIRCUS_ENDPOINT = os.environ['MFSERV_CIRCUS_ENDPOINT']
+MODULE_RUNTIME_HOME = os.environ['MODULE_RUNTIME_HOME']
+DESCRIPTION = "hotswap the current installed plugin with a newer version"
+HOTSWAP_PLUGINS_BASE = "%s/tmp/plugins.hotswap" % MODULE_RUNTIME_HOME
+
+
+def init_hotswap_plugins_base():
+    echo_running("Creating hotswap plugins base...")
+    BashWrapper("rm -Rf " + HOTSWAP_PLUGINS_BASE)
+    init_plugins_base(HOTSWAP_PLUGINS_BASE)
+    echo_ok()
+
+
+def drop_hotswap_plugins_base():
+    echo_running("Dropping hotswap plugins base...")
+    BashWrapper("rm -Rf " + HOTSWAP_PLUGINS_BASE)
+    echo_ok()
+
+
+def _bash_wrapper_to_diagnostic(x):
+    if not x:
+        echo_nok()
+        echo_bold("DIAGNOSTIC: %s" % x)
+        sys.exit(1)
+    echo_ok()
+
+
+def stop_autorestart_plugin():
+    echo_running("Stopping autorestart circus plugin...")
+    x = BashWrapper("_circusctl --endpoint %s --timeout=10 stop "
+                    "plugin:autorestart" % CIRCUS_ENDPOINT)
+    _bash_wrapper_to_diagnostic(x)
+
+
+def stop_conf_monitor():
+    echo_running("Stopping conf_monitor daemon...")
+    x = BashWrapper("_circusctl --endpoint %s --timeout=10 stop "
+                    "conf_monitor" % CIRCUS_ENDPOINT)
+    _bash_wrapper_to_diagnostic(x)
+
+
+def start_conf_monitor():
+    echo_running("Starting conf_monitor daemon...")
+    x = BashWrapper("_circusctl --endpoint %s --timeout=10 start "
+                    "conf_monitor" % CIRCUS_ENDPOINT)
+    _bash_wrapper_to_diagnostic(x)
+
+
+def start_autorestart_plugin():
+    echo_running("Starting autorestart circus plugin...")
+    x = BashWrapper("_circusctl --endpoint %s --timeout=10 start "
+                    "plugin:autorestart" % CIRCUS_ENDPOINT)
+    _bash_wrapper_to_diagnostic(x)
+
+
+def disable_nginx_conf(home, label):
+    echo_running("Disable nginx conf for %s" % label)
+    try:
+        BashWrapper("cp -f %s/config.ini %s/config.ini.hotswap" % (home, home))
+        with open(home + "/config.ini", "r") as f:
+            c = f.read()
+        with open(home + "/config.ini", "w") as f:
+            f.write("[__advanced]\ndisable_nginx_conf=1\n")
+            f.write(c)
+    except Exception as e:
+        echo_bold("ERROR: %s" % e)
+        sys.exit(1)
+    echo_ok()
+
+
+def reenable_nginx_conf(home, label):
+    echo_running("Re-Enable nginx conf for %s" % label)
+    BashWrapper("mv -f %s/config.ini.hotswap %s/config.ini" % (home, home))
+    echo_ok()
+
+
+def install_plugin_in_hotswap_base(plugin_file):
+    echo_running("Installing new version in hotswap plugins base...")
+    install_plugin(plugin_file, plugins_base_dir=HOTSWAP_PLUGINS_BASE)
+    echo_ok()
+
+
+def install_plugin_in_standard_base(plugin_file):
+    echo_running("Installing new version in standard plugins base...")
+    install_plugin(plugin_file)
+    echo_ok()
+
+
+def uninstall_plugin_from_standard_base(plugin_name):
+    echo_running("Uninstalling plugin from standard base...")
+    uninstall_plugin(plugin_name, ignore_errors=True, quiet=True)
+    echo_ok()
+
+
+def uninstall_plugin_from_hotswap_base(plugin_name):
+    echo_running("Uninstalling plugin from standard base...")
+    uninstall_plugin(plugin_name, ignore_errors=True, quiet=True,
+                     plugins_base_dir=HOTSWAP_PLUGINS_BASE)
+    echo_ok()
+
+
+def wait(sleep):
+    echo_running("Wait %i seconds..." % sleep)
+    time.sleep(sleep)
+    echo_ok()
+
+
+def block_autorestart():
+    echo_running("Blocking mfserv.autorestart...")
+    BashWrapper("touch %s/var/block_autorestart" % MODULE_RUNTIME_HOME)
+    echo_ok()
+
+
+def unblock_autorestart():
+    echo_running("Unblocking mfserv.autorestart...")
+    BashWrapper("rm -f %s/var/block_autorestart" % MODULE_RUNTIME_HOME)
+    echo_ok()
+
+
+def circus_reload():
+    echo_running("Generating new circus conf...")
+    x = BashWrapper("_make_circus_conf >%s/tmp/config_auto/circus.ini" %
+                    MODULE_RUNTIME_HOME)
+    _bash_wrapper_to_diagnostic(x)
+    echo_running("Reloading circus...")
+    x = BashWrapper("_circus.reload")
+    _bash_wrapper_to_diagnostic(x)
+
+
+def nginx_reload():
+    echo_running("Generating new nginx conf...")
+    x = BashWrapper("_make_nginx_conf >%s/tmp/config_auto/nginx.conf" %
+                    MODULE_RUNTIME_HOME)
+    _bash_wrapper_to_diagnostic(x)
+    echo_running("Reloading nginx...")
+    x = BashWrapper("_nginx.reload")
+    _bash_wrapper_to_diagnostic(x)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
+    parser.add_argument("--wait-after-circus-reload", type=int, default=10,
+                        help="wait time after circus reload (in seconds)")
+    parser.add_argument("--wait-after-nginx-reload", type=int, default=3,
+                        help="wait time after nginx reload (in seconds)")
+    parser.add_argument("--dont-restart-circus", action="store_true",
+                        help="if set, don't restart circus at all (faster "
+                        "with static plugins for example)")
+    parser.add_argument("PLUGIN_FILE", help=".plugin file full path")
+    args = parser.parse_args()
+    infos = get_plugin_info(args.PLUGIN_FILE, mode="file")
+    if infos is None:
+        echo_bold("ERROR: can't read plugin infos at: %s" % args.PLUGIN_FILE)
+        sys.exit(1)
+    name = infos['metadatas']['name']
+    infos = get_plugin_info(name, mode="name")
+    if infos is None:
+        echo_bold("ERROR: the plugin: %s is not currently installed "
+                  "=> use a regular plugins.install to install it" % name)
+        sys.exit(1)
+    if infos['metadatas']['release'] == "dev_link":
+        echo_bold("ERROR: the plugin: %s is currently installed as devlink "
+                  "=> this is not supported by plugins.hotswap")
+        sys.exit(1)
+
+    # Preparing...
+    block_autorestart()
+    atexit.register(unblock_autorestart)
+    stop_autorestart_plugin()
+    atexit.register(start_autorestart_plugin)
+    stop_conf_monitor()
+    atexit.register(start_conf_monitor)
+    init_hotswap_plugins_base()
+    atexit.register(drop_hotswap_plugins_base)
+
+    # Installing new plugin in tmp base
+    install_plugin_in_hotswap_base(args.PLUGIN_FILE)
+    if not args.dont_restart_circus:
+        circus_reload()
+        wait(args.wait_after_circus_reload)
+
+    # Using new plugin in tmp base
+    disable_nginx_conf(infos['home'], "old plugin")
+    nginx_reload()
+    wait(args.wait_after_nginx_reload)
+
+    # Removing old plugin from standard base
+    uninstall_plugin_from_standard_base(name)
+    if not args.dont_restart_circus:
+        circus_reload()
+        wait(args.wait_after_circus_reload)
+
+    # Installing new plugin in standard base
+    install_plugin_in_standard_base(args.PLUGIN_FILE)
+    if not args.dont_restart_circus:
+        circus_reload()
+        wait(args.wait_after_circus_reload)
+
+    # Using new plugin in standard base
+    tmp_infos = get_plugin_info(name, mode="name",
+                                plugins_base_dir=HOTSWAP_PLUGINS_BASE)
+    disable_nginx_conf(tmp_infos['home'], "new tmp plugin")
+    nginx_reload()
+    wait(args.wait_after_nginx_reload)
+
+    # Removing old plugin from tmp base
+    uninstall_plugin_from_hotswap_base(name)
+    if not args.dont_restart_circus:
+        circus_reload()
+        wait(args.wait_after_circus_reload)
+
+
+if __name__ == "__main__":
+    main()

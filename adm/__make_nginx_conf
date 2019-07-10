@@ -8,10 +8,13 @@ import hashlib
 import copy
 from configparser_extended import ExtendedConfigParser
 from mflog import get_logger
+from mfutil.plugins import layerapi2_label_to_plugin_name
 
 MODULE_RUNTIME_HOME = os.environ["MODULE_RUNTIME_HOME"]
 MFSERV_PLUGINS_HOME = os.path.join(MODULE_RUNTIME_HOME,
                                    "var", "plugins")
+MFSERV_PLUGINS_HOTSWAP_HOME = os.path.join(MODULE_RUNTIME_HOME,
+                                           "tmp", "plugins.hotswap")
 MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
 CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
 HOSTNAME = os.environ.get('MFCOM_HOSTNAME')
@@ -73,16 +76,37 @@ def get_nginx_conf_string(parser, plugin_directory, plugin_name, section, key):
         keep_multi_blank_lines=False)
 
 
-def get_conf(plugin_configuration_file):
+def get_conf(plugin_configuration_file, hot_swap_plugin=False):
     plugin_conf = {}
+    plugin_directory = os.path.dirname(plugin_configuration_file)
     parser = ExtendedConfigParser(config=CONFIG, strict=False,
                                   inheritance='im', interpolation=None)
-
-    plugin_directory = os.path.dirname(plugin_configuration_file)
-    plugin_name = os.path.basename(plugin_directory)
+    try:
+        with open(os.path.join(plugin_directory,
+                               ".layerapi2_label"), "r") as f:
+            label = f.read().strip()
+    except Exception:
+        LOGGER.warning(
+            "can't read %s/.layerapi2_label => ignoring this plugin",
+            plugin_directory)
+        return None
+    try:
+        plugin_name = layerapi2_label_to_plugin_name(label)
+    except Exception as e:
+        LOGGER.warning("can't read %s/.layerapi2_label with error: %s => "
+                       "ignoring this plugin", plugin_directory, e)
+        return None
     logger = LOGGER.bind(plugin_name=plugin_name)
+    if hot_swap_plugin:
+        hot_swap_prefix = "__hs_"
+    else:
+        hot_swap_prefix = ""
 
     parser.read(plugin_configuration_file)
+    if parser.has_option("__advanced", "disable_nginx_conf"):
+        if parser.getboolean("__advanced", "disable_nginx_conf"):
+            logger.warning("disabled plugin => ignoring")
+            return None
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
 
@@ -150,8 +174,7 @@ def get_conf(plugin_configuration_file):
                         [x.strip() for x in tmp.strip().split(';')
                          if x.startswith('/') and
                          (x == '/' or not x.endswith('/'))]
-        workdir = os.path.join(os.environ['MODULE_RUNTIME_HOME'], 'var',
-                               'plugins', plugin_name, app)
+        workdir = os.path.join(plugin_directory, app)
         timeout = MFSERV_NGINX_TIMEOUT
         if parser.has_option(section, "proxy_timeout"):
             logger.warning("proxy_timeout arg is deprecated, use 'timeout' "
@@ -187,16 +210,19 @@ def get_conf(plugin_configuration_file):
                                 (MODULE_RUNTIME_HOME, name)],
                     "type": typ}
         if typ in GUNICORN_TYP_LIST:
-            app_conf["sockets"] = ["%s/var/gunicorn_%s.socket" %
-                                   (MODULE_RUNTIME_HOME, name)]
+            app_conf["sockets"] = ["%s/var/gunicorn_%s%s.socket" %
+                                   (MODULE_RUNTIME_HOME,
+                                    hot_swap_prefix, name)]
         elif typ not in GUNICORN_TYP_LIST:
             if typ == "node":
-                sockets = ["%s/var/%s_%s_%i.socket" %
-                           (MODULE_RUNTIME_HOME, typ, plugin_name, i + 1)
+                sockets = ["%s/var/%s_%s%s_%i.socket" %
+                           (MODULE_RUNTIME_HOME, typ, hot_swap_prefix,
+                            plugin_name, i + 1)
                            for i in range(0, workers)]
             else:
-                sockets = ["%s/var/%s_%s_%s_%i.socket" %
-                           (MODULE_RUNTIME_HOME, typ, plugin_name, app, i + 1)
+                sockets = ["%s/var/%s_%s%s_%s_%i.socket" %
+                           (MODULE_RUNTIME_HOME, typ, hot_swap_prefix,
+                            plugin_name, app, i + 1)
                            for i in range(0, workers)]
             app_conf["sockets"] = sockets
         elif typ in STATIC_TYP_LIST:
@@ -227,12 +253,18 @@ plugins = []
 lua_package_paths = []
 if len(sys.argv) == 2:
     config_files = glob.glob(sys.argv[1] + "/config.ini")
+    config_files2 = []
 else:
-    config_files = glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini")
+    config_files1 = glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini")
+    config_files2 = glob.glob(MFSERV_PLUGINS_HOTSWAP_HOME + "/*/config.ini")
+    config_files = config_files1 + config_files2
 for config_file in config_files:
-    plugin_conf = get_conf(config_file)
-    lua_package_paths = lua_package_paths + plugin_conf['lua_package_paths']
-    plugins.append(plugin_conf)
+    plugin_conf = get_conf(config_file,
+                           hot_swap_plugin=(config_file in config_files2))
+    if plugin_conf:
+        lua_package_paths = lua_package_paths + \
+            plugin_conf['lua_package_paths']
+        plugins.append(plugin_conf)
 lua_package_paths = \
     lua_package_paths + ["%s/config/?.lua" % os.environ['MFSERV_HOME'],
                          "%s/lib/?.lua" % os.environ['MFSERV_HOME'],
