@@ -26,7 +26,6 @@ MFSERV documentation
    layer_python3
    layer_default
    layer_nodejs
-   todo
    changelogs
 
 
