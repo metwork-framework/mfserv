@@ -17,6 +17,7 @@
 
 
 ### Bug Fixes
+- issues in flask plugin.
 - add the missing line for numprocesses
 - remove debug message in nginx conf
 - fix extra daemon feature and add test
