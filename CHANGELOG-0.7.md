@@ -1,11 +1,15 @@
 # release_0.7 CHANGELOG
 
 
-## [Unreleased]
+
+## v0.7.4 (2019-07-15)
 
 ### New Features
 - add proxy_ignore_client_abort option
 
+
+### Bug Fixes
+- typo with virtualdomain based routing
 
 
 
