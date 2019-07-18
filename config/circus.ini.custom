@@ -91,9 +91,14 @@ max_age_variance = {{APP.max_age}}
 rlimit_{{key}} = {{value}}
 {% endfor %}
 
-{% if APP.debug %}
+{% if APP.debug or PLUGIN.hot_swap_plugin %}
 [env:app.{{PLUGIN.name}}.{{APP.name}}]
+{% if APP.debug %}
 MFSERV_CURRENT_PLUGIN_DEBUG=1
+{% endif %}
+{% if PLUGIN.hot_swap_plugin %}
+MODULE_PLUGINS_BASE_DIR={{PLUGIN.hot_swap_home}}
+{% endif %}
 {% endif %}
 
     {% endfor %}
@@ -123,9 +128,14 @@ max_age_variance = {{EXTRA.max_age}}
 rlimit_{{key}} = {{value}}
 {% endfor %}
 
-{% if EXTRA.debug %}
+{% if EXTRA.debug or PLUGIN.hot_swap_plugin %}
 [env:{{EXTRA.name}}]
+{% if EXTRA.debug %}
 MFSERV_CURRENT_PLUGIN_DEBUG=1
+{% endif %}
+{% if PLUGIN.hot_swap_plugin %}
+MODULE_PLUGINS_BASE_DIR={{PLUGIN.hot_swap_home}}
+{% endif %}
 {% endif %}
 
     {% endfor %}
