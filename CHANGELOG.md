@@ -17,6 +17,8 @@
 
 
 ### Bug Fixes
+- more precise condition to delete python-requirement
+- typo with virtualdomain based routing
 - issues in flask plugin.
 - add the missing line for numprocesses
 - remove debug message in nginx conf
