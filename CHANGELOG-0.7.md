@@ -2,6 +2,11 @@
 
 
 
+## v0.7.5 (2019-07-16)
+
+- No interesting change
+
+
 ## v0.7.4 (2019-07-15)
 
 ### New Features
