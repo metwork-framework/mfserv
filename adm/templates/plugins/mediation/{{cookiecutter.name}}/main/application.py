@@ -6,12 +6,15 @@ from aiohttp_metwork_middlewares import timeout_middleware_factory
 
 CHUNK_SIZE = 4096 * 1024
 STREAMING_MODE = True
+CLIENT_SESSION = None
+
 
 def get_client_session():
     global CLIENT_SESSION
     if CLIENT_SESSION is None or CLIENT_SESSION.closed:
         CLIENT_SESSION = ClientSession()
     return CLIENT_SESSION
+
 
 async def handle(request):
 
