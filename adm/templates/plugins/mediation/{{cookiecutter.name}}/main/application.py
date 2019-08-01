@@ -6,6 +6,14 @@ from aiohttp_metwork_middlewares import timeout_middleware_factory
 
 CHUNK_SIZE = 4096 * 1024
 STREAMING_MODE = True
+CLIENT_SESSION = None
+
+
+def get_client_session():
+    global CLIENT_SESSION
+    if CLIENT_SESSION is None or CLIENT_SESSION.closed:
+        CLIENT_SESSION = ClientSession()
+    return CLIENT_SESSION
 
 
 async def handle(request):
@@ -23,45 +31,47 @@ async def handle(request):
     # Let's build the backend url
     backend_url = "http://mybackend%s" % url_path_qs
 
-    async with ClientSession() as session:
-        log.info("calling %s on %s..." % (http_method, backend_url))
-        async with session.get(backend_url) as resp:
+    # Open a session and keep the session object.
+    session = get_client_session()
 
-            backend_status = resp.status
-            log.info("got an HTTP/%i status" % backend_status)
+    log.info("calling %s on %s..." % (http_method, backend_url))
+    async with session.get(backend_url) as resp:
 
-            if not STREAMING_MODE:
-                ######################
-                # NON STREAMING MODE #
-                ######################
+        backend_status = resp.status
+        log.info("got an HTTP/%i status" % backend_status)
 
-                body = await resp.read()
-                response = web.Response(
-                    headers={"Content-Type": resp.headers['Content-Type']},
-                    body=body,
-                    status=backend_status
-                )
+        if not STREAMING_MODE:
+            ######################
+            # NON STREAMING MODE #
+            ######################
 
-            else:
-                ##################
-                # STREAMING MODE #
-                ##################
+            body = await resp.read()
+            response = web.Response(
+                headers={"Content-Type": resp.headers['Content-Type']},
+                body=body,
+                status=backend_status
+            )
 
-                # Let's prepare a streaming response
-                response = web.StreamResponse(
-                    headers={"Content-Type": resp.headers['Content-Type']},
-                    status=backend_status
-                )
-                await response.prepare(request)
-                response.content_type = resp.headers['Content-Type']
+        else:
+            ##################
+            # STREAMING MODE #
+            ##################
 
-                # Let's stream the response body to avoid storing it in memory
-                while True:
-                    chunk = await resp.content.read(CHUNK_SIZE)
-                    if not chunk:
-                        break
-                    await response.write(chunk)
-                await response.write_eof()
+            # Let's prepare a streaming response
+            response = web.StreamResponse(
+                headers={"Content-Type": resp.headers['Content-Type']},
+                status=backend_status
+            )
+            await response.prepare(request)
+            response.content_type = resp.headers['Content-Type']
+
+            # Let's stream the response body to avoid storing it in memory
+            while True:
+                chunk = await resp.content.read(CHUNK_SIZE)
+                if not chunk:
+                    break
+                await response.write(chunk)
+            await response.write_eof()
 
     return response
 
