@@ -207,7 +207,9 @@ pipeline:
     environment:
       - DEP_BRANCH=integration
     when:
+
       event: [push, pull_request]
+
       branch: [ integration, ci_*, pci_* ]
   integration_tests:
     <<: *integration_tests_common
