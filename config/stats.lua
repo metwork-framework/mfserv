@@ -1,7 +1,7 @@
 local _M = {}
 
 local statsd = require("resty.statsd")
-local synutil = require("synutil")
+local mfutil = require("mfutil")
 local _statsd_instance = nil
 local _statsd_options = nil
 
@@ -14,7 +14,7 @@ end
 local function get_statsd_instance()
     if _statsd_instance == nil then
         if _statsd_options == nil then
-            synutil.exit_with_ngx_error(500, "stats module not initiliazed", "SAME")
+            mfutil.exit_with_ngx_error(500, "stats module not initiliazed", "SAME")
         end
         _statsd_instance = statsd.new(_statsd_options)
     end
