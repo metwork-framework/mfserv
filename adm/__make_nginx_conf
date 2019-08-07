@@ -104,6 +104,10 @@ def get_conf(plugin_configuration_file):
     plugin_conf['lua_package_paths'] = []
     plugin_conf["apps"] = []
 
+    if len(glob.glob(os.path.join(plugin_directory, '*.lua'))) > 0:
+        lua_package_path = os.path.join(plugin_directory, '?.lua')
+        plugin_conf['lua_package_paths'].append(lua_package_path)
+
     for app in apps:
         logger = logger.bind(app=app)
         section = "app_%s" % app
