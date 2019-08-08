@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- add plugin dir as valid path for lua files (for openresty)
 - plugins.hotswap feature!
 - add proxy_ignore_client_abort option
 - add some smart start/stop options and features
