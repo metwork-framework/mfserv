@@ -203,7 +203,9 @@ pipeline:
 
   integration_tests_integration:
     <<: *integration_tests_common
-    image: centos:${OS_VERSION}
+    
+    image: metwork/mfxxx-${OS_VERSION}-testimage:integration
+    
     environment:
       - DEP_BRANCH=integration
     when:
@@ -213,7 +215,9 @@ pipeline:
       branch: [ integration, ci_*, pci_* ]
   integration_tests:
     <<: *integration_tests_common
-    image: centos:${OS_VERSION}
+    
+    image: metwork/mfxxx-${OS_VERSION}-testimage:${DRONE_BRANCH}
+    
     environment:
       - DEP_BRANCH=${DRONE_BRANCH}
     when:
