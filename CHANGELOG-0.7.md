@@ -1,7 +1,8 @@
 # release_0.7 CHANGELOG
 
 
-## [Unreleased]
+
+## v0.7.6 (2019-08-09)
 
 ### New Features
 - add plugin dir as valid path for lua files (for openresty)
