@@ -6,8 +6,12 @@ TMPFILE="${MODULE_RUNTIME_HOME}/tmp/nginx_conf.$$"
 TMPFILE2="${MODULE_RUNTIME_HOME}/tmp/nginx_conf2.$$"
 TMPFILE3="${MODULE_RUNTIME_HOME}/tmp/nginx_conf3.$$"
 
-UUID=$(cat "${MODULE_RUNTIME_HOME}/var/uuid" 2>/dev/null)
-if test "${UUID}" = ""; then
+if test -f "${MODULE_RUNTIME_HOME}/var/uuid"; then
+    UUID=$(cat "${MODULE_RUNTIME_HOME}/var/uuid")
+    if test "${UUID}" = ""; then
+        UUID="unknown"
+    fi
+else
     UUID="unknown"
 fi
 export UUID
