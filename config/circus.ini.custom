@@ -63,6 +63,8 @@ autostart = True
 respawn = True           
 working_dir = {{MODULE_RUNTIME_HOME}}/tmp
 stop_signal = 9
+hooks.before_start=circus_hooks.before_start_shell                              
+hooks.after_stop=circus_hooks.after_stop_shell          
 {% endif %}
 
 {% for PLUGIN in PLUGINS %}
