@@ -1,30 +1,31 @@
 # release_0.8 CHANGELOG
 
 
-## [Unreleased]
+
+## v0.8.0 (2019-08-14)
 
 ### New Features
-- add plugin dir as valid path for lua files (for openresty)
-- plugins.hotswap feature!
-- add proxy_ignore_client_abort option
-- add some smart start/stop options and features
-- add a healthcheck endpoint
-- debug circus and nginx configuration generation
-- rename circus watcher names (step => app)
-- add template "flask"
-- add a new configuration key (for extending nginx conf)
-- allow / to be used as extra_route
-- move plugin extra_nginx_general_conf to server section.
 - use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
 
 
 ### Bug Fixes
-- more precise condition to delete python-requirement
-- typo with virtualdomain based routing
-- issues in flask plugin.
-- add the missing line for numprocesses
-- remove debug message in nginx conf
 - fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
 
 
 
