@@ -55,9 +55,7 @@ publish_ci_common: &publish_ci_common
     - mkdir -p /pub/metwork/continuous_integration/rpms/${DRONE_BRANCH}/${OS_VERSION}/
     - cp *.rpm /pub/metwork/continuous_integration/rpms/${DRONE_BRANCH}/${OS_VERSION}/
     - createrepo --update /pub/metwork/continuous_integration/rpms/${DRONE_BRANCH}/${OS_VERSION}
-
-    - if test "${OS_VERSION}" = "centos6"; then rm -Rf /pub/metwork/continuous_integration/docs/${DRONE_BRANCH}/mfserv; mkdir -p /pub/metwork/continuous_integration/docs/${DRONE_BRANCH}/mfserv ; cp -Rf html_doc/* /pub/metwork/continuous_integration/docs/${DRONE_BRANCH}/mfserv/ ; fi
-
+    - if test "${OS_VERSION}" = "centos6"; then rm -Rf /pub/metwork/continuous_integration/docs/${DRONE_BRANCH}/mfserv; mkdir -p /pub/metwork/continuous_integration/docs/${DRONE_BRANCH}/mfserv ; if test -d html_doc; then cp -Rf html_doc/* /pub/metwork/continuous_integration/docs/${DRONE_BRANCH}/mfserv/ ; fi ; fi
     - touch "$${BUILDCACHE}/build_hash_`cat .build_hash`"
   volumes:
     - /pub:/pub
