@@ -48,11 +48,11 @@ export MFSERV_VERSION
 MODULE_VERSION=$("${MFEXT_HOME}/bin/guess_version.sh")
 export MODULE_VERSION
 
-PREFIX=$(get_abs_filename "$1")
-export PREFIX
-if ! test -d "${PREFIX}"; then
+MODULE_HOME=$(get_abs_filename "$1")
+export MODULE_HOME
+if ! test -d "${MODULE_HOME}"; then
     usage
-    echo "ERROR: ${PREFIX} is not a directory"
+    echo "ERROR: ${MODULE_HOME} is not a directory"
     exit 1
 fi
 
@@ -65,8 +65,6 @@ if ! test -f "${MFCOM_HOME}/bin/mfcom_wrapper"; then
     exit 1
 fi
 
-MODULE_HOME=$(get_abs_filename "${PREFIX}")
-export MODULE_HOME
 export MODULE=MFSERV
 export MODULE_LOWERCASE=mfserv
 SRC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -77,9 +75,9 @@ export MODULE_HAS_HOME_DIR=1
 rm -f adm/root.mk
 touch adm/root.mk
 
-ROOT_PATH=${MODULE_HOME}/bin:${MFCOM_HOME}/bin:${MFEXT_HOME}/bin:${PATH:-}
-ROOT_LD_LIBRARY_PATH=${MODULE_HOME}/lib:${MFCOM_HOME}/lib:${MFEXT_HOME}/lib
-ROOT_PKG_CONFIG_PATH=${MODULE_HOME}/lib/pkgconfig:${MFCOM_HOME}/lib/pkgconfig:${MFEXT_HOME}/lib/pkgconfig
+ROOT_PATH=${MFCOM_HOME}/bin:${MFEXT_HOME}/bin:${MFEXT_HOME}/opt/core/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ROOT_LD_LIBRARY_PATH=""
+ROOT_PKG_CONFIG_PATH=""
 ROOT_LAYERAPI2_LAYERS_PATH=${MODULE_HOME}/opt:${MODULE_HOME}:${MFCOM_HOME}/opt:${MFCOM_HOME}:${MFEXT_HOME}/opt:${MFEXT_HOME}
 
 echo "Making adm/root.mk..."
@@ -101,7 +99,7 @@ echo "export SRC_DIR := ${SRC_DIR}" >>adm/root.mk
 echo "ifeq (\$(FORCED_PATHS),)" >>adm/root.mk
 echo "  export PATH := ${ROOT_PATH}" >>adm/root.mk
 echo "  export LD_LIBRARY_PATH := ${ROOT_LD_LIBRARY_PATH}" >>adm/root.mk
-echo "  export PKG_CONFIG_PATH := ${ROOT_PKG_CONFIG_PATH}/lib/pkgconfig" >>adm/root.mk
+echo "  export PKG_CONFIG_PATH := ${ROOT_PKG_CONFIG_PATH}" >>adm/root.mk
 echo "  LAYER_ENVS:=\$(shell env |grep '^LAYERAPI2_LAYER_.*_LOADED=1\$\$' |awk -F '=' '{print \$\$1;}')" >>adm/root.mk
 echo "  \$(foreach LAYER_ENV, \$(LAYER_ENVS), \$(eval unexport \$(LAYER_ENV)))" >>adm/root.mk
 echo "endif" >>adm/root.mk
