@@ -1,13 +1,6 @@
 #!/bin/bash
 # automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/mfxxx_run_integration_tests.sh template
 
-cd integration_tests 2>/dev/null
-
-if test $? != 0; then
-    echo "Directory integration_tests is missing"
-    exit 0
-fi
-
 list_rep=`ls|grep -v data`
 if test -z "$list_rep"; then
     echo "There are no integration tests"
