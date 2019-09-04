@@ -51,4 +51,7 @@ libXrender.so.1
 libXt.so.6
 libXtst.so.6
 libz.so.1
-
+libgomp.so.1
+libpango-1.0.so.0
+libpangocairo-1.0.so.0
+libpangoft2-1.0.so.0

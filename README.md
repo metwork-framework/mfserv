@@ -41,8 +41,13 @@ All these technologies are managed in a "production ready" with:
 
 ## Reference documentation
 
-- (for **master** version), see [this dedicated site](http://metwork-framework.org/pub/metwork/continuous_integration/docs/master/mfserv/) for reference documentation.
-- (for **release_0.8** version), see [this dedicated site](http://metwork-framework.org/pub/metwork/releases/docs/release_0.8/mfserv/) for reference documentation.
+- (for **master (development)** version), see [this dedicated site](http://metwork-framework.org/pub/metwork/continuous_integration/docs/master/mfserv/) for reference documentation.
+- (for **latest released stable** version), see [this dedicated site](http://metwork-framework.org/pub/metwork/releases/docs/stable/mfserv/) for reference documentation.
+
+For very specific use cases, you might be interested in
+[reference documentation for integration branch](http://metwork-framework.org/pub/metwork/continuous_integration/docs/integration/mfserv/).
+
+And if you are looking for an old released version, you can search [here](http://metwork-framework.org/pub/metwork/releases/docs/).
 
 ## Installation guide
 
