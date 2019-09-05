@@ -39,5 +39,5 @@ done
 
 if test "${RET}" = "1"; then
     echo "extra dependencies found"
-    #exit 1
+    exit 1
 fi

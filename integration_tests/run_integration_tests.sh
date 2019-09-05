@@ -1,7 +1,7 @@
 #!/bin/bash
 # automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/mfxxx_run_integration_tests.sh template
 
-list_rep=`ls|grep -v data`
+list_rep=$(ls -d */|grep -v data)
 if test -z "$list_rep"; then
     echo "There are no integration tests"
     exit 0
