@@ -26,7 +26,7 @@ bootstrap_common: &bootstrap_common
 build_common: &build_common
   commands:
     - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
-    - export METWORK_BUILD_OS=${OS_VERSION}
+    - if test "${OS_VERSION}" = "centos6"; then export METWORK_BUILD_OS=generic; else export METWORK_BUILD_OS=${OS_VERSION}; fi
     - if test -d /buildcache; then export BUILDCACHE=/buildcache; fi
     - mkdir -p /opt/metwork-mfserv-$${TARGET_DIR}
     - if test -d /pub; then mkdir -p /pub/metwork/continuous_integration/buildlogs/${DRONE_BRANCH}/mfserv/${OS_VERSION}/${DRONE_BUILD_NUMBER}; fi
