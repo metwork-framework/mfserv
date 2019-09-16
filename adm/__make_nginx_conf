@@ -60,7 +60,8 @@ ALL_TYP_LIST = \
 LOGGER = get_logger("__make_nginx_conf")
 
 
-def get_nginx_conf_string(parser, plugin_directory, plugin_name, section, key):
+def get_nginx_conf_string(parser, plugin_directory, plugin_name, plugin_label,
+                          section, key):
     extra_nginx_conf_string = ""
     if parser.has_option(section, key):
         extra_nginx_conf_filename = parser.get(section, key)
@@ -72,7 +73,11 @@ def get_nginx_conf_string(parser, plugin_directory, plugin_name, section, key):
                 extra_nginx_conf_string = f.read()
     return envtpl.render_string(
         extra_nginx_conf_string,
-        extra_variables={"PLUGIN": {"name": plugin_name}},
+        # FIXME: drop PLUGIN var ?
+        extra_variables={"PLUGIN": {"name": plugin_name},
+                         "MFSERV_CURRENT_PLUGIN_NAME": plugin_name,
+                         "MFSERV_CURRENT_PLUGIN_DIR": plugin_directory,
+                         "MFSERV_CURRENT_PLUGIN_LABEL": plugin_label},
         keep_multi_blank_lines=False)
 
 
@@ -111,16 +116,16 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             if x.startswith("app_")]
 
     extra_general_nginx_http_conf_string = \
-        get_nginx_conf_string(parser, plugin_directory, plugin_name, "general",
-                              "extra_nginx_http_conf_filename")
+        get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
+                              "general", "extra_nginx_http_conf_filename")
     if extra_general_nginx_http_conf_string == "":
         # DEPRECATED (for compatibility)
         extra_general_nginx_http_conf_string = \
-            get_nginx_conf_string(parser, plugin_directory, plugin_name,
+            get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
                                   "general", "extra_nginx_conf_filename")
     extra_general_nginx_server_conf_string = \
         get_nginx_conf_string(parser, plugin_directory, plugin_name, "general",
-                              "extra_nginx_server_conf_filename")
+                              label, "extra_nginx_server_conf_filename")
 
     plugin_conf["name"] = plugin_name
     plugin_conf["extra_general_nginx_http_conf_string"] = \
@@ -144,10 +149,10 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             lua_package_path = os.path.join(plugin_directory, app, '?.lua')
             plugin_conf['lua_package_paths'].append(lua_package_path)
         extra_nginx_conf_string = \
-            get_nginx_conf_string(parser, plugin_directory, plugin_name,
+            get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
                                   section, "extra_nginx_conf_filename")
         extra_nginx_conf_static_string = \
-            get_nginx_conf_string(parser, plugin_directory, plugin_name,
+            get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
                                   section, "extra_nginx_conf_static_filename")
         static_routing = True
         if parser.has_option(section, "static_routing"):
