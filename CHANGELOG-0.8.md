@@ -2,6 +2,17 @@
 
 
 
+## v0.8.1 (2019-09-16)
+
+### New Features
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- introduce $extra_log_format nginx var
+
+
+
+
+
+
 ## v0.8.0 (2019-08-14)
 
 ### New Features
