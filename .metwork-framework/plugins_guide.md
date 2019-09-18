@@ -13,17 +13,17 @@ Every time you change the configuration file, you have to stop and start the Met
 
 - either
 ```bash
-{MODULE_RUNTIME_HOME}.stop
-{MODULE_RUNTIME_HOME}.start
+{MFMODULE_RUNTIME_HOME}.stop
+{MFMODULE_RUNTIME_HOME}.start
 ```
 - or (as root user)
 ```bash
-service metwork restart {MODULE_RUNTIME_HOME}
+service metwork restart {MFMODULE_RUNTIME_HOME}
 ```
 
-with {MODULE_RUNTIME_HOME} the Metwork module you are working with, e.g. mfdata.
+with {MFMODULE_RUNTIME_HOME} the Metwork module you are working with, e.g. mfdata.
 
-The configuration parameters are described and explained in the `${MODULE_RUNTIME_HOME}/config/config.ini` file.
+The configuration parameters are described and explained in the `${MFMODULE_RUNTIME_HOME}/config/config.ini` file.
 
 ## Plugins Commands
 
@@ -73,7 +73,7 @@ If you have a "normal" installed plugin, you can use `plugin_env {PLUGIN_NAME}`.
 
 When you are inside a plugin environment, you will find some extra environment variables:
 ```bash
-env | grep "^${MODULE}_" | grep CURRENT
+env | grep "^${MFMODULE}_" | grep CURRENT
 ```
 
 ```

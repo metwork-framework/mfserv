@@ -45,14 +45,14 @@ MFCOM_VERSION=$(cat "${MFCOM_HOME}/config/version")
 export MFCOM_VERSION
 MFSERV_VERSION=$("${MFEXT_HOME}/bin/guess_version.sh")
 export MFSERV_VERSION
-MODULE_VERSION=$("${MFEXT_HOME}/bin/guess_version.sh")
-export MODULE_VERSION
+MFMODULE_VERSION=$("${MFEXT_HOME}/bin/guess_version.sh")
+export MFMODULE_VERSION
 
-MODULE_HOME=$(get_abs_filename "$1")
-export MODULE_HOME
-if ! test -d "${MODULE_HOME}"; then
+MFMODULE_HOME=$(get_abs_filename "$1")
+export MFMODULE_HOME
+if ! test -d "${MFMODULE_HOME}"; then
     usage
-    echo "ERROR: ${MODULE_HOME} is not a directory"
+    echo "ERROR: ${MFMODULE_HOME} is not a directory"
     exit 1
 fi
 
@@ -65,8 +65,8 @@ if ! test -f "${MFCOM_HOME}/bin/mfcom_wrapper"; then
     exit 1
 fi
 
-export MODULE=MFSERV
-export MODULE_LOWERCASE=mfserv
+export MFMODULE=MFSERV
+export MFMODULE_LOWERCASE=mfserv
 SRC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export SRC_DIR
 
@@ -78,23 +78,23 @@ touch adm/root.mk
 ROOT_PATH=${MFCOM_HOME}/bin:${MFEXT_HOME}/bin:${MFEXT_HOME}/opt/core/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ROOT_LD_LIBRARY_PATH=""
 ROOT_PKG_CONFIG_PATH=""
-ROOT_LAYERAPI2_LAYERS_PATH=${MODULE_HOME}/opt:${MODULE_HOME}:${MFCOM_HOME}/opt:${MFCOM_HOME}:${MFEXT_HOME}/opt:${MFEXT_HOME}
+ROOT_LAYERAPI2_LAYERS_PATH=${MFMODULE_HOME}/opt:${MFMODULE_HOME}:${MFCOM_HOME}/opt:${MFCOM_HOME}:${MFEXT_HOME}/opt:${MFEXT_HOME}
 
 echo "Making adm/root.mk..."
 rm -f adm/root.mk
 touch adm/root.mk
 
-echo "unexport MODULE_RUNTIME_HOME" >>adm/root.mk
-echo "unexport MODULE_RUNTIME_SUFFIX" >>adm/root.mk
-echo "unexport MODULE_RUNTIME_USER" >>adm/root.mk
+echo "unexport MFMODULE_RUNTIME_HOME" >>adm/root.mk
+echo "unexport MFMODULE_RUNTIME_SUFFIX" >>adm/root.mk
+echo "unexport MFMODULE_RUNTIME_USER" >>adm/root.mk
 
-echo "export MODULE := ${MODULE}" >>adm/root.mk
-echo "export MODULE_LOWERCASE := $(echo ${MODULE} | tr '[:upper:]' '[:lower:]')" >>adm/root.mk
+echo "export MFMODULE := ${MFMODULE}" >>adm/root.mk
+echo "export MFMODULE_LOWERCASE := $(echo ${MFMODULE} | tr '[:upper:]' '[:lower:]')" >>adm/root.mk
 echo "export LAYERAPI2_LAYERS_PATH := ${ROOT_LAYERAPI2_LAYERS_PATH}" >>adm/root.mk
 echo "export MFEXT_HOME := ${MFEXT_HOME}" >>adm/root.mk
 echo "export MFEXT_VERSION := ${MFEXT_VERSION}" >>adm/root.mk
-echo "export MODULE_HOME := ${MODULE_HOME}" >>adm/root.mk
-echo "export MODULE_VERSION := ${MFSERV_VERSION}" >>adm/root.mk
+echo "export MFMODULE_HOME := ${MFMODULE_HOME}" >>adm/root.mk
+echo "export MFMODULE_VERSION := ${MFSERV_VERSION}" >>adm/root.mk
 echo "export SRC_DIR := ${SRC_DIR}" >>adm/root.mk
 echo "ifeq (\$(FORCED_PATHS),)" >>adm/root.mk
 echo "  export PATH := ${ROOT_PATH}" >>adm/root.mk
@@ -105,8 +105,8 @@ echo "  \$(foreach LAYER_ENV, \$(LAYER_ENVS), \$(eval unexport \$(LAYER_ENV)))" 
 echo "endif" >>adm/root.mk
 echo "export MFCOM_HOME := ${MFCOM_HOME}" >>adm/root.mk
 echo "export MFCOM_VERSION := ${MFCOM_VERSION}" >>adm/root.mk
-echo "export ${MODULE}_HOME := ${MODULE_HOME}" >>adm/root.mk
-echo "export ${MODULE}_VERSION := ${MFSERV_VERSION}" >>adm/root.mk
+echo "export ${MFMODULE}_HOME := ${MFMODULE_HOME}" >>adm/root.mk
+echo "export ${MFMODULE}_VERSION := ${MFSERV_VERSION}" >>adm/root.mk
 if test "${MODULE_HAS_HOME_DIR:-}" = "1"; then
     echo "export MODULE_HAS_HOME_DIR := 1" >>adm/root.mk
 fi

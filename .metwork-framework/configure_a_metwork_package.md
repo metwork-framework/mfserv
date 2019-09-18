@@ -20,9 +20,9 @@ Please read everything from the beginning to be sure to really understand the co
 
 #### Find the module configuration file `config.ini`
 
-You will find the module configuration file in `${MODULE_RUNTIME_HOME}/config/config.ini` path.
+You will find the module configuration file in `${MFMODULE_RUNTIME_HOME}/config/config.ini` path.
 
-If you are developing with a standard metwork installation using a standard metwork user like `mfserv`, `mfdata`..., `${MODULE_RUNTIME_HOME}`
+If you are developing with a standard metwork installation using a standard metwork user like `mfserv`, `mfdata`..., `${MFMODULE_RUNTIME_HOME}`
 is the home directory of the current user. So, if you are developing with `mfserv` user, you will find the module configuration file
 in `~/config/config.ini`.
 
@@ -44,14 +44,14 @@ The beginning of the file is something like that:
 [...]
 ```
 
-So this file overrides `${MODULE_HOME}/config/config.ini` (`${MODULE_HOME}` is in `/opt` in a standard metwork installation).
+So this file overrides `${MFMODULE_HOME}/config/config.ini` (`${MFMODULE_HOME}` is in `/opt` in a standard metwork installation).
 
-**never change anything in `${MODULE_HOME}/config/config.ini`**
+**never change anything in `${MFMODULE_HOME}/config/config.ini`**
 *(because this file is silently overriden after each metwork upgrade)*
 
-So, you have to do your modifications in `${MODULE_RUNTIME_HOME}/config/config.ini` file (probably hosted in `/home`).
+So, you have to do your modifications in `${MFMODULE_RUNTIME_HOME}/config/config.ini` file (probably hosted in `/home`).
 
-Note that, by default, all keys are commented. In that case, default values are read in `${MODULE_HOME}/config/config.ini`.
+Note that, by default, all keys are commented. In that case, default values are read in `${MFMODULE_HOME}/config/config.ini`.
 
 #### Override a key
 
@@ -59,7 +59,7 @@ To override a configuration option, select the corresponding key, uncomment it a
 
 For example, to override the listening port of nginx daemon for `mfserv` module:
 
-- edit `${MODULE_RUNTIME_HOME}/config/config.ini` as the user you use to run `mfserv` module
+- edit `${MFMODULE_RUNTIME_HOME}/config/config.ini` as the user you use to run `mfserv` module
 - find `[nginx]` section
 - uncomment `port=...` key below
 - change the value (for example `8080`)
@@ -73,7 +73,7 @@ Only this environment variable will be used by the rest of the module.
 To resume the previous example, the key `port` in `[nginx]` section of the `mfserv` configuration file is put into
 `MFSERV_NGINX_PORT` environment variable.
 
-In a more general way, every configuration option of module is stored in an environment variable: `{MODULE}_{SECTION}_{KEY}`.
+In a more general way, every configuration option of module is stored in an environment variable: `{MFMODULE}_{SECTION}_{KEY}`.
 
 And this environment variable is set **only during profile loading**.
 
@@ -88,32 +88,32 @@ newly restarted terminal or from a `root` user through `service metwork restart`
 To get current environment variables values for the current module, you can use for example:
 
 ```bash
-env |grep "^${MODULE}_"
+env |grep "^${MFMODULE}_"
 ```
 
 #### Understand what is overriden during module upgrades
 
 During a metwork module upgrade :
 
-- the default values file `${MODULE_HOME}/config/config.ini` (most of the time in `opt`) is silently overriden
-- the custom values file `${MODULE_RUNTIME_HOME}/config/config.ini` (most of the time in `home`) is overriden by a new default one **only if there is no change in it**
+- the default values file `${MFMODULE_HOME}/config/config.ini` (most of the time in `opt`) is silently overriden
+- the custom values file `${MFMODULE_RUNTIME_HOME}/config/config.ini` (most of the time in `home`) is overriden by a new default one **only if there is no change in it**
 
-So, if you changed some keys in `${MODULE_RUNTIME_HOME}/config/config.ini`, your change will never be overriden by a metwork upgrade.
+So, if you changed some keys in `${MFMODULE_RUNTIME_HOME}/config/config.ini`, your change will never be overriden by a metwork upgrade.
 
-But the upgrade add a new configuration option, the new configuration option will be (of course) visible in `${MODULE_HOME}/config/config.ini` but not in your `${MODULE_RUNTIME_HOME}/config/config.ini` (because we prefer to keep your changes). It's not a problem in itself but you can miss some configuration options.
+But the upgrade add a new configuration option, the new configuration option will be (of course) visible in `${MFMODULE_HOME}/config/config.ini` but not in your `${MFMODULE_RUNTIME_HOME}/config/config.ini` (because we prefer to keep your changes). It's not a problem in itself but you can miss some configuration options.
 
-So, when you do some metwork ugprades on a customized system, you should sometimes do a kind of diff/merge between `${MODULE_RUNTIME_HOME}/config/config.ini` and `${MODULE_HOME}/config/config.ini`.
+So, when you do some metwork ugprades on a customized system, you should sometimes do a kind of diff/merge between `${MFMODULE_RUNTIME_HOME}/config/config.ini` and `${MFMODULE_HOME}/config/config.ini`.
 
 But again: if you don't do this, it won't break anything. But you can just miss some new configuration features.
 
 ### How to configure plugins during development process ?
 
 If you are working on a plugin named `foo` which need extra configuration variables, add a section to
-`${MODULE_RUNTIME_HOME}/config/config.ini` named `[plugin_foo]`. For example, for a `mfserv` plugin:
+`${MFMODULE_RUNTIME_HOME}/config/config.ini` named `[plugin_foo]`. For example, for a `mfserv` plugin:
 
 ```cfg
 # [...]
-# At the end of ${MODULE_RUNTIME_HOME}/config/config.ini
+# At the end of ${MFMODULE_RUNTIME_HOME}/config/config.ini
 
 [plugin_foo]
 key1=value1
@@ -176,7 +176,7 @@ port=8080
 
 The file must be readable by metwork users.
 
-When this file is created and when you (re)load the `mfserv` profile, the file `${MODULE_RUNTIME_HOME}/config/config.ini` is silently replaced by a symbolic link: `${MODULE_RUNTIME_HOME}/config/config.ini -> /etc/metwork.config.d/mfserv/config.ini`.
+When this file is created and when you (re)load the `mfserv` profile, the file `${MFMODULE_RUNTIME_HOME}/config/config.ini` is silently replaced by a symbolic link: `${MFMODULE_RUNTIME_HOME}/config/config.ini -> /etc/metwork.config.d/mfserv/config.ini`.
 
 After that, you have to configure your module through this `/etc` file.
 

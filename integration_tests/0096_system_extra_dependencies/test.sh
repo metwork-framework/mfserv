@@ -13,7 +13,7 @@ export PATH=${PATH}:${PWD}/..
 RET=0
 
 
-cd "${MODULE_HOME}" || exit 1
+cd "${MFMODULE_HOME}" || exit 1
 DEPS1=$(external_dependencies.sh |awk -F '/' '{print $NF}' |xargs)
 DEPS2=$(external_dependencies_not_found.sh |xargs)
 DEPS=$(echo $DEPS1 $DEPS2)
