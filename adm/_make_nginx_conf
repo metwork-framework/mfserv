@@ -2,12 +2,12 @@
 
 set -eu
 
-TMPFILE="${MODULE_RUNTIME_HOME}/tmp/nginx_conf.$$"
-TMPFILE2="${MODULE_RUNTIME_HOME}/tmp/nginx_conf2.$$"
-TMPFILE3="${MODULE_RUNTIME_HOME}/tmp/nginx_conf3.$$"
+TMPFILE="${MFMODULE_RUNTIME_HOME}/tmp/nginx_conf.$$"
+TMPFILE2="${MFMODULE_RUNTIME_HOME}/tmp/nginx_conf2.$$"
+TMPFILE3="${MFMODULE_RUNTIME_HOME}/tmp/nginx_conf3.$$"
 
-if test -f "${MODULE_RUNTIME_HOME}/var/uuid"; then
-    UUID=$(cat "${MODULE_RUNTIME_HOME}/var/uuid")
+if test -f "${MFMODULE_RUNTIME_HOME}/var/uuid"; then
+    UUID=$(cat "${MFMODULE_RUNTIME_HOME}/var/uuid")
     if test "${UUID}" = ""; then
         UUID="unknown"
     fi
@@ -22,8 +22,8 @@ nginxfmt.py "${TMPFILE}"
 cat -s "${TMPFILE}" |sed 's/~~~1/{/g' |sed 's/~~~2/}/g' |grep -v 'FIXME: ugly hack' >"${TMPFILE2}"
 rm -f "${TMPFILE}"
 
-if ! test -f "${MODULE_RUNTIME_HOME}/tmp/config_auto/mime.types"; then
-    cp -f "${MFEXT_HOME}/opt/openresty/config/mime.types" "${MODULE_RUNTIME_HOME}/tmp/config_auto/mime.types"
+if ! test -f "${MFMODULE_RUNTIME_HOME}/tmp/config_auto/mime.types"; then
+    cp -f "${MFEXT_HOME}/opt/openresty/config/mime.types" "${MFMODULE_RUNTIME_HOME}/tmp/config_auto/mime.types"
 fi
 set +e
 "${MFEXT_HOME}/opt/openresty/nginx/sbin/nginx" -t -c "${TMPFILE2}" >"${TMPFILE3}" 2>&1

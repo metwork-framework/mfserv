@@ -1,9 +1,9 @@
 {% extends "mfxxx.start" %}
 
 {% block custom_before_circus %}
-    if test -d "${MODULE_RUNTIME_HOME}/tmp/plugins.hotswap"; then
-        echo_bold "WARNING: ${MODULE_RUNTIME_HOME}/tmp/plugins.hotswap found => let's delete it"
-        rm -Rf "${MODULE_RUNTIME_HOME}/tmp/plugins.hotswap"
+    if test -d "${MFMODULE_RUNTIME_HOME}/tmp/plugins.hotswap"; then
+        echo_bold "WARNING: ${MFMODULE_RUNTIME_HOME}/tmp/plugins.hotswap found => let's delete it"
+        rm -Rf "${MFMODULE_RUNTIME_HOME}/tmp/plugins.hotswap"
     fi
     _check_circus_conf || RES=1
 {% endblock %}

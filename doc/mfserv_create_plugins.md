@@ -26,7 +26,7 @@ You can also configure your plugin anytime by **editing the** `mfserv/{PLUGIN_NA
 
 You may need to customize the :index:configuration of your plugin (application). In order to do this, set your parameter(s) in the MFSERV module configuration file `config/config.ini`. This configuration file can contain a section per plugin. The section must be named `[plugin_{plugin_name}]`.
 
-Each parameter will be will transform into an environment variable whose pattern is `{MODULE}_{SECTION_NAME}_{PARAMETER_NAME}`.
+Each parameter will be will transform into an environment variable whose pattern is `{MFMODULE}_{SECTION_NAME}_{PARAMETER_NAME}`.
 
 .. note::
     - Environment variables are always in uppercase.

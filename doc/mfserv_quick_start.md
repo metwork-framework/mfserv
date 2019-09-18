@@ -185,10 +185,10 @@ To do this, go to the `foo_default` plugin directory and enter the command:
 make release
 ```
 
-This will create a `.plugin` file that will be used to deploy the plugin, e.g. `foo_default-[version]-1.metwork.mfserv.plugin` where `[version]` is the value of the `version` parameter of the move_image `config.ini` you enter when you create the plugin (default value is `${MODULE_VERSION}`). You may change it:
+This will create a `.plugin` file that will be used to deploy the plugin, e.g. `foo_default-[version]-1.metwork.mfserv.plugin` where `[version]` is the value of the `version` parameter of the move_image `config.ini` you enter when you create the plugin (default value is `${MFMODULE_VERSION}`). You may change it:
 ```cfg
 # Version of the plugin (X.Y.Z)
-# If the value is [MODULE_VERSION],
+# If the value is [MFMODULE_VERSION],
 # the current module version is used
 version=1.0.0
 ```

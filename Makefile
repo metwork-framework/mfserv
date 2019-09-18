@@ -1,5 +1,5 @@
-MODULE=MFSERV
-MODULE_LOWERCASE=mfserv
+MFMODULE=MFSERV
+MFMODULE_LOWERCASE=mfserv
 
 -include adm/root.mk
 -include $(MFEXT_HOME)/share/main_root.mk

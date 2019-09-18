@@ -7,19 +7,19 @@ from mfutil import BashWrapper, BashWrapperOrRaise
 from conf_monitor import ConfMonitorRunner, md5sumfile
 
 LOGGER = getLogger("conf_monitor")
-MODULE_RUNTIME_HOME = os.environ['MODULE_RUNTIME_HOME']
+MFMODULE_RUNTIME_HOME = os.environ['MFMODULE_RUNTIME_HOME']
 NGINX_FLAG = (int(os.environ['MFSERV_NGINX_FLAG']) == 1)
 
 
 def make_new_nginx_conf():
-    new_nginx_conf = "%s/tmp/tmp_nginx_conf2" % MODULE_RUNTIME_HOME
+    new_nginx_conf = "%s/tmp/tmp_nginx_conf2" % MFMODULE_RUNTIME_HOME
     cmd = "_make_nginx_conf >%s" % new_nginx_conf
     BashWrapperOrRaise(cmd)
     return (new_nginx_conf, md5sumfile(new_nginx_conf))
 
 
 def get_old_nginx_conf():
-    old_nginx_conf = "%s/tmp/config_auto/nginx.conf" % MODULE_RUNTIME_HOME
+    old_nginx_conf = "%s/tmp/config_auto/nginx.conf" % MFMODULE_RUNTIME_HOME
     return (old_nginx_conf, md5sumfile(old_nginx_conf))
 
 

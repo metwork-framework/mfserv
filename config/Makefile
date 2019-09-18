@@ -7,24 +7,24 @@ include $(MFCOM_HOME)/share/config_subdir.mk
 test:
 	layer_wrapper --layers=devtools@mfext noutf8.sh
 
-all:: $(MODULE_HOME)/config/circus.ini $(MODULE_HOME)/config/telegraf.conf
+all:: $(MFMODULE_HOME)/config/circus.ini $(MFMODULE_HOME)/config/telegraf.conf
 
-$(MODULE_HOME)/config/stats.lua: stats.lua
+$(MFMODULE_HOME)/config/stats.lua: stats.lua
 	layer_wrapper --layers=devtools@mfext -- test_globals_in_lua.sh $<
 	cp -f $< $@
 
-$(MODULE_HOME)/config/upstream_status.lua: upstream_status.lua
+$(MFMODULE_HOME)/config/upstream_status.lua: upstream_status.lua
 	layer_wrapper --layers=devtools@mfext -- test_globals_in_lua.sh $<
 	cp -f $< $@
 
-$(MODULE_HOME)/config/init_worker_by_lua.lua: init_worker_by_lua.lua
+$(MFMODULE_HOME)/config/init_worker_by_lua.lua: init_worker_by_lua.lua
 	layer_wrapper --layers=devtools@mfext -- test_globals_in_lua.sh $<
 	cp -f $< $@
 
-$(MODULE_HOME)/config/socket_updown.lua: socket_updown.lua
+$(MFMODULE_HOME)/config/socket_updown.lua: socket_updown.lua
 	layer_wrapper --layers=devtools@mfext -- test_globals_in_lua.sh $<
 	cp -f $< $@
 
-$(MODULE_HOME)/config/health.lua: health.lua
+$(MFMODULE_HOME)/config/health.lua: health.lua
 	layer_wrapper --layers=devtools@mfext -- test_globals_in_lua.sh $<
 	cp -f $< $@
