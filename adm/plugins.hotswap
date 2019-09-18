@@ -11,9 +11,9 @@ from mfutil.plugins import get_plugin_info, init_plugins_base, \
     install_plugin, uninstall_plugin
 
 CIRCUS_ENDPOINT = os.environ['MFSERV_CIRCUS_ENDPOINT']
-MODULE_RUNTIME_HOME = os.environ['MODULE_RUNTIME_HOME']
+MFMODULE_RUNTIME_HOME = os.environ['MFMODULE_RUNTIME_HOME']
 DESCRIPTION = "hotswap the current installed plugin with a newer version"
-HOTSWAP_PLUGINS_BASE = "%s/tmp/plugins.hotswap" % MODULE_RUNTIME_HOME
+HOTSWAP_PLUGINS_BASE = "%s/tmp/plugins.hotswap" % MFMODULE_RUNTIME_HOME
 
 
 def init_hotswap_plugins_base():
@@ -119,20 +119,20 @@ def wait(sleep):
 
 def block_autorestart():
     echo_running("Blocking mfserv.autorestart...")
-    BashWrapper("touch %s/var/block_autorestart" % MODULE_RUNTIME_HOME)
+    BashWrapper("touch %s/var/block_autorestart" % MFMODULE_RUNTIME_HOME)
     echo_ok()
 
 
 def unblock_autorestart():
     echo_running("Unblocking mfserv.autorestart...")
-    BashWrapper("rm -f %s/var/block_autorestart" % MODULE_RUNTIME_HOME)
+    BashWrapper("rm -f %s/var/block_autorestart" % MFMODULE_RUNTIME_HOME)
     echo_ok()
 
 
 def circus_reload():
     echo_running("Generating new circus conf...")
     x = BashWrapper("_make_circus_conf >%s/tmp/config_auto/circus.ini" %
-                    MODULE_RUNTIME_HOME)
+                    MFMODULE_RUNTIME_HOME)
     _bash_wrapper_to_diagnostic(x)
     echo_running("Reloading circus...")
     x = BashWrapper("_circus.reload")
@@ -142,7 +142,7 @@ def circus_reload():
 def nginx_reload():
     echo_running("Generating new nginx conf...")
     x = BashWrapper("_make_nginx_conf >%s/tmp/config_auto/nginx.conf" %
-                    MODULE_RUNTIME_HOME)
+                    MFMODULE_RUNTIME_HOME)
     _bash_wrapper_to_diagnostic(x)
     echo_running("Reloading nginx...")
     x = BashWrapper("_nginx.reload")

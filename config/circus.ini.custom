@@ -12,18 +12,18 @@ stop_children = True
 {% if MFSERV_NGINX_FLAG == "1" %}
 [watcher:nginx]
 cmd={{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx                               
-args=-p {{MODULE_RUNTIME_HOME}}/tmp/nginx_tmp_prefix -c {{MODULE_RUNTIME_HOME}}/tmp/config_auto/nginx.conf
+args=-p {{MFMODULE_RUNTIME_HOME}}/tmp/nginx_tmp_prefix -c {{MFMODULE_RUNTIME_HOME}}/tmp/config_auto/nginx.conf
 numprocesses = 1                                                                
 stdout_stream.class = FileStream                                                
-stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/nginx.log                  
+stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/nginx.log                  
 stderr_stream.class = FileStream                                                
-stderr_stream.filename = {{MODULE_RUNTIME_HOME}}/log/nginx.log                  
+stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/nginx.log                  
 copy_env = True                                                                 
 autostart = True                                                                
 respawn = True                                                                  
 hooks.before_start=circus_hooks.before_start_shell                              
 hooks.after_stop=circus_hooks.after_stop_shell          
-working_dir = {{MODULE_RUNTIME_HOME}}/tmp
+working_dir = {{MFMODULE_RUNTIME_HOME}}/tmp
 async_kill = True
 stop_signal = SIGQUIT
 
@@ -31,18 +31,18 @@ stop_signal = SIGQUIT
 {% if MFSERV_ADMIN_SEND_NGINX_LOGS == "1" %}
 [watcher:jsonlog2elasticsearch]
 cmd=layer_wrapper
-args=--layers=monitoring@mfext -- jsonlog2elasticsearch --transform-func=jsonlog2elasticsearch_metwork_addon.transform_func {{MFSERV_ADMIN_HOSTNAME_IP}} {{MFSERV_ADMIN_ELASTICSEARCH_HTTP_PORT}} nginx-%Y.%m.%d {{MODULE_RUNTIME_HOME}}/log/nginx_access.log
+args=--layers=monitoring@mfext -- jsonlog2elasticsearch --transform-func=jsonlog2elasticsearch_metwork_addon.transform_func {{MFSERV_ADMIN_HOSTNAME_IP}} {{MFSERV_ADMIN_ELASTICSEARCH_HTTP_PORT}} nginx-%Y.%m.%d {{MFMODULE_RUNTIME_HOME}}/log/nginx_access.log
 numprocesses = 1                                                                
 stdout_stream.class = FileStream                                                
-stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/jsonlog2elasticsearch_nginx.log                  
+stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/jsonlog2elasticsearch_nginx.log                  
 stderr_stream.class = FileStream                                                
-stderr_stream.filename = {{MODULE_RUNTIME_HOME}}/log/jsonlog2elasticsearch_nginx.log
+stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/jsonlog2elasticsearch_nginx.log
 copy_env = True                                                                 
 autostart = True                                                                
 respawn = True                                                                  
 hooks.before_start=circus_hooks.before_start_shell                              
 hooks.after_stop=circus_hooks.after_stop_shell          
-working_dir = {{MODULE_RUNTIME_HOME}}/tmp
+working_dir = {{MFMODULE_RUNTIME_HOME}}/tmp
 async_kill = True
 
 {% endif %}
@@ -51,17 +51,17 @@ async_kill = True
 
 {% if MFSERV_AUTORESTART_FLAG == "1" %}
 [watcher:conf_monitor]                                                          
-cmd={{MODULE_HOME}}/bin/mfserv_conf_monitor.py                                         
+cmd={{MFMODULE_HOME}}/bin/mfserv_conf_monitor.py                                         
 args=                                                                           
 numprocesses = 1                                                                
 stdout_stream.class = FileStream                                                
-stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/conf_monitor.stdout        
+stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/conf_monitor.stdout        
 stderr_stream.class = FileStream                                                
-stderr_stream.filename = {{MODULE_RUNTIME_HOME}}/log/conf_monitor.stderr        
+stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/conf_monitor.stderr        
 copy_env = True                                                                 
 autostart = True                                                                
 respawn = True           
-working_dir = {{MODULE_RUNTIME_HOME}}/tmp
+working_dir = {{MFMODULE_RUNTIME_HOME}}/tmp
 stop_signal = 9
 hooks.before_start=circus_hooks.before_start_shell                              
 hooks.after_stop=circus_hooks.after_stop_shell          
@@ -82,8 +82,8 @@ respawn = True
 graceful_timeout = {{APP.graceful_timeout}}
 stdout_stream.class = FileStream
 stderr_stream.class = FileStream
-stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/circus.log
-stderr_stream.filename = {{MODULE_RUNTIME_HOME}}/log/circus.log
+stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
+stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
 {% if APP.max_age > 0 -%}
 max_age = {{APP.max_age}}
 max_age_variance = {{APP.max_age}}
@@ -99,7 +99,7 @@ rlimit_{{key}} = {{value}}
 MFSERV_CURRENT_PLUGIN_DEBUG=1
 {% endif %}
 {% if PLUGIN.hot_swap_plugin %}
-MODULE_PLUGINS_BASE_DIR={{PLUGIN.hot_swap_home}}
+MFMODULE_PLUGINS_BASE_DIR={{PLUGIN.hot_swap_home}}
 {% endif %}
 {% endif %}
 
@@ -119,8 +119,8 @@ respawn = True
 graceful_timeout = {{EXTRA.graceful_timeout}}
 stdout_stream.class = FileStream
 stderr_stream.class = FileStream
-stdout_stream.filename = {{MODULE_RUNTIME_HOME}}/log/circus.log
-stderr_stream.filename = {{MODULE_RUNTIME_HOME}}/log/circus.log
+stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
+stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
 {% if EXTRA.max_age > 0 -%}
 max_age = {{EXTRA.max_age}}
 max_age_variance = {{EXTRA.max_age}}
@@ -136,7 +136,7 @@ rlimit_{{key}} = {{value}}
 MFSERV_CURRENT_PLUGIN_DEBUG=1
 {% endif %}
 {% if PLUGIN.hot_swap_plugin %}
-MODULE_PLUGINS_BASE_DIR={{PLUGIN.hot_swap_home}}
+MFMODULE_PLUGINS_BASE_DIR={{PLUGIN.hot_swap_home}}
 {% endif %}
 {% endif %}
 

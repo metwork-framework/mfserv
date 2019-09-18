@@ -9,7 +9,7 @@ def get_version():
     """
     :return: # The short X.Y version.
     """
-    return ".".join(os.environ.get('MODULE_VERSION',
+    return ".".join(os.environ.get('MFMODULE_VERSION',
                                    'unknown.unknown').split('.')[0:-1])
 
 
@@ -17,7 +17,7 @@ def get_release():
     """
     :return: the full version, including alpha/beta/rc tags
     """
-    return os.environ.get('MODULE_VERSION', 'unknown')
+    return os.environ.get('MFMODULE_VERSION', 'unknown')
 
 
 def build_intersphinx_mapping_url(current_module, module):

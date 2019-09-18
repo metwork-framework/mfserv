@@ -10,16 +10,16 @@ from configparser_extended import ExtendedConfigParser
 from mflog import get_logger
 from mfutil.plugins import layerapi2_label_to_plugin_name
 
-MODULE_RUNTIME_HOME = os.environ["MODULE_RUNTIME_HOME"]
-MFSERV_PLUGINS_HOME = os.path.join(MODULE_RUNTIME_HOME,
+MFMODULE_RUNTIME_HOME = os.environ["MFMODULE_RUNTIME_HOME"]
+MFSERV_PLUGINS_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
                                    "var", "plugins")
-MFSERV_PLUGINS_HOTSWAP_HOME = os.path.join(MODULE_RUNTIME_HOME,
+MFSERV_PLUGINS_HOTSWAP_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
                                            "tmp", "plugins.hotswap")
 MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
 CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
 HOSTNAME = os.environ.get('MFCOM_HOSTNAME')
 HOSTNAME_FULL = os.environ.get('MFCOM_HOSTNAME_FULL')
-MODULE = os.environ['MODULE']
+MFMODULE = os.environ['MFMODULE']
 
 '''
 Below are defined process types depending on the code language
@@ -216,21 +216,21 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                     "timeout": timeout + 2,  # kill the backend first
                     "static_routing": static_routing,
                     "sockets": ["%s/var/default_%s.socket" %
-                                (MODULE_RUNTIME_HOME, name)],
+                                (MFMODULE_RUNTIME_HOME, name)],
                     "type": typ}
         if typ in GUNICORN_TYP_LIST:
             app_conf["sockets"] = ["%s/var/gunicorn_%s%s.socket" %
-                                   (MODULE_RUNTIME_HOME,
+                                   (MFMODULE_RUNTIME_HOME,
                                     hot_swap_prefix, name)]
         elif typ not in GUNICORN_TYP_LIST:
             if typ == "node":
                 sockets = ["%s/var/%s_%s%s_%i.socket" %
-                           (MODULE_RUNTIME_HOME, typ, hot_swap_prefix,
+                           (MFMODULE_RUNTIME_HOME, typ, hot_swap_prefix,
                             plugin_name, i + 1)
                            for i in range(0, workers)]
             else:
                 sockets = ["%s/var/%s_%s%s_%s_%i.socket" %
-                           (MODULE_RUNTIME_HOME, typ, hot_swap_prefix,
+                           (MFMODULE_RUNTIME_HOME, typ, hot_swap_prefix,
                             plugin_name, app, i + 1)
                            for i in range(0, workers)]
             app_conf["sockets"] = sockets
@@ -280,16 +280,16 @@ lua_package_paths = \
                          "%s/config/?.lua" % os.environ['MFCOM_HOME'],
                          "%s/lib/?.lua" % os.environ['MFCOM_HOME']]
 
-nginx_conf_file = os.path.join(os.environ['MODULE_HOME'], 'config',
+nginx_conf_file = os.path.join(os.environ['MFMODULE_HOME'], 'config',
                                'nginx.conf')
 
 with open(nginx_conf_file, "r") as f:
     extra_variables = {
         "PLUGINS": plugins,
         "LUA_PACKAGE_PATH": ";".join(lua_package_paths) + ";;",
-        "MODULE_ENVIRONMENT": sorted([x for x in os.environ.keys()
-                                      if x.startswith(MODULE + "_") or
-                                      x.startswith("MODULE_")])
+        "MFMODULE_ENVIRONMENT": sorted([x for x in os.environ.keys()
+                                      if x.startswith(MFMODULE + "_") or
+                                      x.startswith("MFMODULE_")])
     }
     content = envtpl.render_string(f.read(), extra_variables=extra_variables,
                                    keep_multi_blank_lines=False)

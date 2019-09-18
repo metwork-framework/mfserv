@@ -4,8 +4,8 @@ from mflog import get_logger
 from async_timeout import timeout
 
 
-MODULE = os.environ['MODULE']
-CURRENT_PLUGIN_NAME_ENV_VAR = "%s_CURRENT_PLUGIN_NAME" % MODULE
+MFMODULE = os.environ['MFMODULE']
+CURRENT_PLUGIN_NAME_ENV_VAR = "%s_CURRENT_PLUGIN_NAME" % MFMODULE
 if CURRENT_PLUGIN_NAME_ENV_VAR in os.environ:
     PLUGIN = os.environ[CURRENT_PLUGIN_NAME_ENV_VAR]
 else:

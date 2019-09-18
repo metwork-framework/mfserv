@@ -1,4 +1,4 @@
-local status_file = os.getenv("MODULE_RUNTIME_HOME") .. "/var/status"
+local status_file = os.getenv("MFMODULE_RUNTIME_HOME") .. "/var/status"
 
 local function load_status()
     local f = io.open(status_file, "r")

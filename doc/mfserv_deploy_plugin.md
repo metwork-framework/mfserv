@@ -12,13 +12,13 @@ make release
 Then a `{plugin name}-{version}-1.metwork.mfserv.plugin` file is created, where:
 
 - {plugin name} is the name of the plugin
-- `{version}` is the value of the `version` parameter defined in the plugin `config.ini` file you enter when you create the plugin (default value is `${MODULE_VERSION}`)
+- `{version}` is the value of the `version` parameter defined in the plugin `config.ini` file you enter when you create the plugin (default value is `${MFMODULE_VERSION}`)
  
 
 You can change the `version` in  plugin `config.ini` file:
 ```cfg
 # Version of the plugin (X.Y.Z)
-# If the value is [MODULE_VERSION],
+# If the value is [MFMODULE_VERSION],
 # the current module version is used
 version=1.0.0
 ```

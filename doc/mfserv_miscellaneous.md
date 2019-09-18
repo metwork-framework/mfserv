@@ -152,9 +152,9 @@ In order to (re)load the contab file:
 If you need to execute your `cron` command in the Metwork context, you should use the cron wrapper script `${MFSERV_HOME}/bin/cronwrap.sh`, e.g. :
 ```cfg
 {% raw %}
-{{MFSERV_HOME}}/bin/cronwrap.sh --lock --low "find {{MODULE_RUNTIME_HOME}}/var/archive/ -type f -mtime +5 -exec rm -f {} \;" >/dev/null 2>&1
+{{MFSERV_HOME}}/bin/cronwrap.sh --lock --low "find {{MFMODULE_RUNTIME_HOME}}/var/archive/ -type f -mtime +5 -exec rm -f {} \;" >/dev/null 2>&1
 
-{{MFSERV_HOME}}/bin/cronwrap.sh -- plugin_wrapper [your_plugin_name]  [your_sh_command] >{{MODULE_RUNTIME_HOME}}/log/[your_log_filename] 2>&1
+{{MFSERV_HOME}}/bin/cronwrap.sh -- plugin_wrapper [your_plugin_name]  [your_sh_command] >{{MFMODULE_RUNTIME_HOME}}/log/[your_log_filename] 2>&1
 {% endraw %}
 ```
 
