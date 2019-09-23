@@ -21,6 +21,16 @@ HOSTNAME = os.environ.get('MFCOM_HOSTNAME')
 HOSTNAME_FULL = os.environ.get('MFCOM_HOSTNAME_FULL')
 MFMODULE = os.environ['MFMODULE']
 
+# FIXME: fix to ensure compatibility with existing plugins using
+# old variables names MODULE* (to be removed)
+for var in ["MODULE", "MODULE_HOME", "MODULE_LOWERCASE", "MODULE_VERSION",
+            "MODULE_STATUS", "MODULE_RUNTIME_HOME", "MODULE_RUNTIME_USER",
+            "MODULE_RUNTIME_SUFFIX", "MODULE_PLUGINS_BASE_DIR"]:
+    new_var = 'MF' + var
+    if var not in os.environ and new_var in os.environ:
+        os.environ[var] = os.environ[new_var]
+
+
 '''
 Below are defined process types depending on the code language
 '''
@@ -124,8 +134,8 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
                                   "general", "extra_nginx_conf_filename")
     extra_general_nginx_server_conf_string = \
-        get_nginx_conf_string(parser, plugin_directory, plugin_name, "general",
-                              label, "extra_nginx_server_conf_filename")
+        get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
+                              "general", "extra_nginx_server_conf_filename")
 
     plugin_conf["name"] = plugin_name
     plugin_conf["extra_general_nginx_http_conf_string"] = \
