@@ -194,8 +194,8 @@ yum install metwork-mfext-layer-scientific_core
 
 # To install python2 support
 # (including corresponding scientific and devtools addons)
-yum install metwork-mfext-python2
-yum install metwork-mfext-python2_devtools
+yum install metwork-mfext-layer-python2
+yum install metwork-mfext-layer-python2_devtools
 ```
 
 Note: you can also install some optional layers (provided by some mfext add-ons)
