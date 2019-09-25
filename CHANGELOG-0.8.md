@@ -1,6 +1,18 @@
 # release_0.8 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+- add an option to configure the nginx real_ip feature
+
+
+### Bug Fixes
+- fix security issue by updating django to latest 2.2 serie
+
+
+
+
 
 ## v0.8.1 (2019-09-16)
 
