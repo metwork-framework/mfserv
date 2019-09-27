@@ -4,6 +4,17 @@
 ## [Unreleased]
 
 ### New Features
+- add nginx/server_tokens option in config
+- load resty.core in nginx conf
+
+
+
+
+
+
+## v0.8.2 (2019-09-25)
+
+### New Features
 - add an option to configure the nginx real_ip feature
 
 
