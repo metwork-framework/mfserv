@@ -1,12 +1,16 @@
 # release_0.8 CHANGELOG
 
 
-## [Unreleased]
+
+## v0.8.3 (2019-09-30)
 
 ### New Features
 - add nginx/server_tokens option in config
 - load resty.core in nginx conf
 
+
+### Bug Fixes
+- fix extra_nginx_server_conf_filename usage
 
 
 
