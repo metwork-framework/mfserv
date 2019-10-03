@@ -363,15 +363,16 @@ circus_ini_file = os.path.join(os.environ['MFMODULE_HOME'], 'config',
 plugins = []
 if len(sys.argv) == 2:
     config_files = glob.glob(sys.argv[1] + "/config.ini")
+    config_files2 = []
 else:
     config_files1 = glob.glob(MFSERV_PLUGINS_HOME + "/*/config.ini")
     config_files2 = glob.glob(MFSERV_PLUGINS_HOTSWAP_HOME + "/*/config.ini")
     config_files = config_files1 + config_files2
-    for config_file in config_files:
-        plugin_conf = get_conf(config_file,
-                               hot_swap_plugin=(config_file in config_files2))
-        if plugin_conf:
-            plugins.append(plugin_conf)
+for config_file in config_files:
+    plugin_conf = get_conf(config_file,
+                           hot_swap_plugin=(config_file in config_files2))
+    if plugin_conf:
+        plugins.append(plugin_conf)
 
 with open(circus_ini_file, "r") as f:
     extra_variables = {
