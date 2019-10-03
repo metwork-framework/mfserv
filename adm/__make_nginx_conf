@@ -286,9 +286,7 @@ for config_file in config_files:
         plugins.append(plugin_conf)
 lua_package_paths = \
     lua_package_paths + ["%s/config/?.lua" % os.environ['MFSERV_HOME'],
-                         "%s/lib/?.lua" % os.environ['MFSERV_HOME'],
-                         "%s/config/?.lua" % os.environ['MFCOM_HOME'],
-                         "%s/lib/?.lua" % os.environ['MFCOM_HOME']]
+                         "%s/lib/?.lua" % os.environ['MFSERV_HOME']]
 
 nginx_conf_file = os.path.join(os.environ['MFMODULE_HOME'], 'config',
                                'nginx.conf')

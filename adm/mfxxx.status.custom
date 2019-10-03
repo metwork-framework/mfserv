@@ -11,7 +11,7 @@ if test "${MFSERV_NGINX_FLAG}" = "1"; then
     circus_status_watcher.sh nginx || RES=1
 
     if test "${RES}" = "0"; then
-        # FIXME: move to mfcom
+        # FIXME: move to mfext (misc)
         echo -n "- Checking nginx uuid..."
         echo_running
         nginx.status >/dev/null 2>&1
