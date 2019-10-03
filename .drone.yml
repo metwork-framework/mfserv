@@ -32,8 +32,8 @@ build_common: &build_common
     - mkdir -p /opt/metwork-mfserv-$${TARGET_DIR}
     - if test -d /pub; then mkdir -p /pub/metwork/continuous_integration/buildlogs/${DRONE_BRANCH}/mfserv/${OS_VERSION}/${DRONE_BUILD_NUMBER}; fi
     - if test -d /pub; then make >/pub/metwork/continuous_integration/buildlogs/${DRONE_BRANCH}/mfserv/${OS_VERSION}/${DRONE_BUILD_NUMBER}/make.log 2>&1 || ( tail -200 /pub/metwork/continuous_integration/buildlogs/${DRONE_BRANCH}/mfserv/${OS_VERSION}/${DRONE_BUILD_NUMBER}/make.log ; exit 1 ) else make; fi
-    - git status
-    - git diff
+    - OUTPUT=`git status --short`
+    - if test "$${OUTPUT}" != ""; then echo "ERROR non empty git status output $${OUTPUT}"; echo "git diff output"; git diff; exit 1; fi
     - MODULEHASH=`/opt/metwork-mfserv-$${TARGET_DIR}/bin/mfserv_wrapper module_hash 2>module_hash.debug` # FIXME: module_hash for addons ?
     - if test -f /opt/metwork-mfserv-$${TARGET_DIR}/.dhash; then cat /opt/metwork-mfserv-$${TARGET_DIR}/.dhash; fi
     - cat module_hash.debug |sort |uniq ; rm -f module_hash.debug
@@ -261,6 +261,7 @@ pipeline:
     volumes:
       - /pub:/pub
     commands:
+      - if test -f .drone_downstream_bypass; then echo "step bypass"; exit 0; fi
       - cd /pub/metwork/continuous_integration/rpms/${DRONE_BRANCH}/${OS_VERSION} && genhdlist2 --allow-empty-media .
     when:
       event: push
