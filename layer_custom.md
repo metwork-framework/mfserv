@@ -23,7 +23,7 @@ a python2 interpreter with following layers loaded :
 
 - `python2_core@mfext`
 - `python2@mfext` (if installed)
-- `python2@mfcom` (if installed)
+- `python2_misc@mfext` (if installed)
 - `python2@{current_module}` (if installed)
 
 So, if you want to execute a python2 script without any question about currently
@@ -54,7 +54,7 @@ a python3 interpreter with following layers loaded :
 
 - `python3_core@mfext`
 - `python3@mfext` (if installed)
-- `python3@mfcom` (if installed)
+- `python3_misc@mfext` (if installed)
 - `python3@{current_module}` (if installed)
 
 So, if you want to execute a python3 script without any question about currently

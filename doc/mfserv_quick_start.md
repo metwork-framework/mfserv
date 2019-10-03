@@ -199,7 +199,7 @@ Let's now deploy the `foo_default` plugin on a production environment.
 
 **Prerequisites**:
 
-- Metwork have to be installed on this environment (at least MFSERV and its dependencies MFEXT and MFCOM).
+- Metwork have to be installed on this environment (at least MFSERV and its dependencies MFEXT).
 - You be logged in as mfserv user
 
 In order to deploy the plugin on a production environment,  put down the `foo_default-[version]-1.metwork.mfserv.plugin` in a directory on this target environment, e.g. `/home/mfserv/released_plugins`

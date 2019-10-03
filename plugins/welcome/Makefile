@@ -1,1 +1,1 @@
-include $(MFCOM_HOME)/share/plugin.mk
+include $(MFEXT_HOME)/opt/misc/share/plugin.mk

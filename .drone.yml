@@ -18,7 +18,7 @@ bootstrap_common: &bootstrap_common
     - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
     - mkdir -p /opt/metwork-mfserv-$${TARGET_DIR}
 
-    - ./bootstrap.sh /opt/metwork-mfserv-$${TARGET_DIR} /opt/metwork-mfcom-$${DEP_DIR}
+    - ./bootstrap.sh /opt/metwork-mfserv-$${TARGET_DIR} /opt/metwork-mfext-$${DEP_DIR}
 
     - cat adm/root.mk
     - env |sort
@@ -66,7 +66,6 @@ publish_ci_common: &publish_ci_common
     - /private:/private
     - /buildcache:/buildcache
 
-
 integration_tests_common: &integration_tests_common
   commands:
     - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
@@ -83,7 +82,6 @@ integration_tests_common: &integration_tests_common
     - su --command="mfserv.status" - mfserv
     - if test -d "integration_tests"; then chown -R mfserv integration_tests; cd integration_tests; su --command="cd `pwd`; ./run_integration_tests.sh" - mfserv; cd ..; fi
     - su --command="mfserv.stop" - mfserv
-
 
 
 pipeline:
@@ -201,7 +199,6 @@ pipeline:
       event: tag
       ref: refs/tags/v*
 
-
   integration_tests_integration:
     <<: *integration_tests_common
     
@@ -226,7 +223,6 @@ pipeline:
       event: [push, pull_request]
 
       branch: [  master, release_*, experimental* ]
-
 
   publish_ci_integration:
     <<: *publish_ci_common
@@ -275,7 +271,6 @@ pipeline:
     when:
       event: tag
       ref: refs/tags/v*
-
 
 
 
