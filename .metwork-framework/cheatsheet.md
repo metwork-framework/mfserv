@@ -28,8 +28,6 @@ As `root` unix user:
 | `/etc/metwork.config.d/mfserv/external_plugins/` | put some `.plugin` files here and they will be installed during `mfserv` service startup |
 
 
-
-
 ## "load environment" commands
 
 As a "not metwork" unix user:
@@ -43,18 +41,18 @@ As a "not metwork" unix user:
 
 > Note: if you don't have `/opt/metwork-mfserv` symbolic link, use `/opt/metwork-mfserv-{BRANCH}` instead.
 
-
-
 ## module commands
 
+
 As `mfserv` user:
+
 
 | Command | Description |
 | --- | --- |
 | `mfserv.start` | start mfserv services |
 | `mfserv.stop` | stop mfserv services |
 | `mfserv.status` | check mfserv services |
-| `layers`| FIXME |
+| `layers` | FIXME |
 | `layer_load` | FIXME |
 | `layer_unload` | FIXME | 
 | `components` | FIXME | 
