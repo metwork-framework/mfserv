@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
 - add nginx/server_tokens option in config
 - load resty.core in nginx conf
 - add an option to configure the nginx real_ip feature
@@ -13,6 +14,7 @@
 
 
 ### Bug Fixes
+- fix circus generation test
 - fix security issue by updating django to latest 2.2 serie
 
 
