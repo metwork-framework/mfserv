@@ -30,14 +30,13 @@ As `root` unix user:
 
 ## "load environment" commands
 
-As a "not metwork" unix user:
+As a "not metwork" unix user (useless if you are logged as a "mfxxx" unix user as the "metwork environement" is already loaded):
 
 | Command | Description |
 | --- | --- |
-| `source /opt/metwork-mfserv/share/interactive_profile` | FIXME |
-| `source /opt/metwork-mfserv/share/profile` | FIXME |
-| `/opt/metwork-mfserv/bin/mfserv_wrapper {YOUR_COMMAND}`| FIXME |
-| `outside {YOUR_COMMAND}`| FIXME |
+| `source /opt/metwork-mfserv/share/interactive_profile` | load the mfserv metwork interactive environment |
+| `source /opt/metwork-mfserv/share/profile` | load the mfserv metwork environment (same as above but without fancy stuff about banner, colors and prompt) |
+| `/opt/metwork-mfserv/bin/mfserv_wrapper {YOUR_COMMAND}`| execute the given command in the mfserv metwork environment without changing anything to the current environment |
 
 > Note: if you don't have `/opt/metwork-mfserv` symbolic link, use `/opt/metwork-mfserv-{BRANCH}` instead.
 
@@ -52,11 +51,12 @@ As `mfserv` user:
 | `mfserv.start` | start mfserv services |
 | `mfserv.stop` | stop mfserv services |
 | `mfserv.status` | check mfserv services |
-| `layers` | FIXME |
-| `layer_load` | FIXME |
-| `layer_unload` | FIXME | 
-| `components` | FIXME | 
-| `metwork_debug` | FIXME |
+| `layers` | list installed layers (loaded layers are prefixed by `(*)`), `layers --help` for more details |
+| `layer_load {LAYER_NAME}` | load the given layer (which must be installed), example: `layer_load python2_devtools@mfext` |
+| `layer_unload` | unload the given layer (which must be loaded), example: `layer_load python2@mfext` | 
+| `components` | list installed software components (loaded components are prefixed by `(*)`, `components --help` for more details | 
+| `metwork_debug` | debug the current environment (layers, paths, versions...), useful for debugging or bug reporting |
+| `outside {YOUR_COMMAND}`| execute the given command outside the metwork environment without changing anything to to the current environment |
 
 
 ## plugins management commands
@@ -66,16 +66,16 @@ As `mfserv` unix user:
 | Command | Description |
 | --- | --- |
 | `plugins.list` | list installed plugins |
-| `plugins.install /full/path/file.plugin` | install the given plugin file |
-| `plugins.uninstall {plugin_name}` | uninstall the given plugin name |
+| `plugins.install {/full/path/file.plugin}` | install the given plugin file |
+| `plugins.uninstall {plugin_name}` | uninstall the given plugin name (the "plugin name" is given in the first column of the `plugins.list` output) |
 | `plugins.info {plugin_name}` | get some informations about the given plugin name (must be installed) |
-| `plugins.info /full/path/file.plugin` | get some informations about the given plugin file (does not need to be installed) |
+| `plugins.info {/full/path/file.plugin}` | get some informations about the given plugin file (does not need to be installed) |
 | `plugin_env {plugin_name}` | enter (interactively) in the given plugin environment |
-| `plugin_wrapper {plugin_name} {YOUR_COMMAND}` | execute the given command in the given plugin environment (without changing anything to your current environment) |
+| `plugin_wrapper {plugin_name} {YOUR_COMMAND}` | execute the given command in the given plugin environment (without changing anything to your current environment), useful for cron jobs |
 
 
 
-## plugins development commands
+## plugins development commands and files
 
 As `mfserv` unix user:
 
@@ -88,8 +88,31 @@ As `mfserv` unix user, inside a plugin directory (you must have a `Makefile` and
 
 | Command | Description |
 | --- | --- |
-| `make develop`| FIXME |
-| `make release`| FIXME |
-| `make`| FIXME |
+| `make develop`| install the current plugin in "development mode" (devlink)  |
+| `make release`| release the current plugin as a `.plugin` file |
+| `make`| refresh the `virtualenv` or `node_modules` from requirements file |
+| `make clean` | "clean" the current plugin and keep only "non generated" files and directories (you should commit the remaining ones to your favorite version control system) ; after that, use `make` to regenerate the `virtualenv` or `node_modules` |
+| `make superclean` | same as `clean` target but also drop `requirements2.txt`, `requirements3.txt` and/or `package-lock.json` which can lead to a dependencies update (they are not frozen anymore) during next `make` call |
+
+Interesting files inside the plugin directory:
+
+| Relative path | Description |
+| --- | --- |
+| **`config.ini`** | main plugin configuration file |
+| **`Makefile`** | build configuration file (you probably don't need to touch this unless you have specific build directives to add to the `custom::` target) |
+| `crontab` | plugin crontab (use something like `* * * * * {{MFSERV_HOME}}/bin/cronwrap.sh -l -e -- plugin_wrapper {YOUR_PLUGIN_NAME} {YOUR_COMMAND} >>{{MODULE_RUNTIME_HOME}}/log/your_command.log 2>&1` for each line to execute your command in your plugin environement) |
+| `local/` | local subdirectory (it mainly holds the python virtualenv), never touch this it's automatically generated) |
+| `bin/` | if you put an executable in this directory, it will be available in `PATH` (in your plugin environment) |
+| `lib/` | thie library directory will be available in `LD_LIBRARY_PATH` and in `PYTHONPATH` (in your plugin environment), so you can put here shared libraries or python files you want to include easily |
+| `postinstall` | if this executable file is present during plugin installation, it will be automatically executed in the plugin environment just after the installation |
+| `python{2,3}_virtualenv_sources/requirements-to-freeze.txt` | main requirements file for python2/python3 plugins (you shouldn't freeze versions here) |
+| `python{2,3}_virtualenv_sources/requirements{2,3}.txt` | frozen requirements file for python2/python3 plugins (generated from `requirements-to-freeze.txt` file, deleted by `make superclean`, commit this file to your VCS to freeze your dependencies) |
+| **`.layerapi2_label`** | layerapi2 file to hold the plugin name as `plugin_{plugin name}@module_in_lowercase` |
+| **`.layerapi2_dependencies`** | layerapi2 file to hold the layers to load when entering the plugin environment (you can also put some plugins with the syntax `plugin_{other plugin name}@module_in_lowercase` to inherit from another plugin |
+| `.layerapi2_extra_env` | can be used to define extra environment variables in your plugin environment (see layerapi2 documentation) |
+| `.autorestart_includes` | file patterns (`gitignore` syntax) scanned for changes to trigger a plugin autorestart |
+| `.autorestart_excludes` | file patterns (`gitignore` syntax) to exclude for scanning (see above) |
+> Note: mandatory files are in **bold**, all these files are not created by default (it mainly depends on the template you used) but you can create them afterwards.
+
 
 
