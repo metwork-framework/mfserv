@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- add nodejs mflog lib
 - build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
 - add nginx/server_tokens option in config
 - load resty.core in nginx conf
