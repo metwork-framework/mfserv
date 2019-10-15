@@ -26,6 +26,7 @@ hooks.after_stop=circus_hooks.after_stop_shell
 working_dir = {{MFMODULE_RUNTIME_HOME}}/tmp
 async_kill = True
 stop_signal = SIGQUIT
+max_retry = -1
 
 {% if MFSERV_ADMIN_HOSTNAME_IP != "null" %}
 {% if MFSERV_ADMIN_SEND_NGINX_LOGS == "1" %}
@@ -44,6 +45,7 @@ hooks.before_start=circus_hooks.before_start_shell
 hooks.after_stop=circus_hooks.after_stop_shell          
 working_dir = {{MFMODULE_RUNTIME_HOME}}/tmp
 async_kill = True
+max_retry = -1
 
 {% endif %}
 {% endif %}
@@ -65,6 +67,7 @@ working_dir = {{MFMODULE_RUNTIME_HOME}}/tmp
 stop_signal = 9
 hooks.before_start=circus_hooks.before_start_shell                              
 hooks.after_stop=circus_hooks.after_stop_shell          
+max_retry = -1
 {% endif %}
 
 {% for PLUGIN in PLUGINS %}
@@ -84,6 +87,7 @@ stdout_stream.class = FileStream
 stderr_stream.class = FileStream
 stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
 stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
+max_retry = -1
 {% if APP.max_age > 0 -%}
 max_age = {{APP.max_age}}
 max_age_variance = {{APP.max_age}}
@@ -121,6 +125,7 @@ stdout_stream.class = FileStream
 stderr_stream.class = FileStream
 stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
 stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
+max_retry = -1
 {% if EXTRA.max_age > 0 -%}
 max_age = {{EXTRA.max_age}}
 max_age_variance = {{EXTRA.max_age}}
