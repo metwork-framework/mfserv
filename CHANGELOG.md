@@ -2,6 +2,17 @@
 
 
 
+## v0.8.4 (2019-10-15)
+
+### New Features
+- add nodejs mflog lib
+- add an option for x_forwarded headers
+
+
+
+
+
+
 ## v0.8.3 (2019-09-30)
 
 ### New Features
