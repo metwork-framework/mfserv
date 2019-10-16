@@ -4,6 +4,9 @@
 ## [Unreleased]
 
 ### New Features
+- add a warning if nginx/port is < 1024
+- add an option for x_forwarded headers
+- infinite max_retry for circus (#258)
 - add nodejs mflog lib
 - build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
 - add nginx/server_tokens option in config
