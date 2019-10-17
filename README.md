@@ -66,7 +66,7 @@ All these technologies are managed in a "production ready" with:
 
 
 
-## Cheatsheet
+## Cheatsheet
 
 A cheatsheet for this module is available [here](.metwork-framework/cheatsheet.md)
 
