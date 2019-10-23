@@ -244,7 +244,7 @@ pipeline:
     commands:
       - if test "$${FORCED_OS_VERSION}" != ""; then if test "$${FORCED_OS_VERSION}" != "${OS_VERSION}"; then echo "step bypass"; exit 0; fi; fi
       - mkdir -p /pub/metwork/releases/rpms/${DRONE_BRANCH}/${OS_VERSION}/
-       - if ! test -L /pub/metwork/releases/rpms/${DRONE_BRANCH}/portable; then ln -s centos6 /pub/metwork/releases/rpms/${DRONE_BRANCH}/portable; fi
+      - if ! test -L /pub/metwork/releases/rpms/${DRONE_BRANCH}/portable; then ln -s centos6 /pub/metwork/releases/rpms/${DRONE_BRANCH}/portable; fi
       - cp *.rpm /pub/metwork/releases/rpms/${DRONE_BRANCH}/${OS_VERSION}/
 
       - createrepo --update /pub/metwork/releases/rpms/${DRONE_BRANCH}/${OS_VERSION}
