@@ -22,6 +22,8 @@ local function get_conns(socket_path)
         for _, v in ipairs(ppeers) do
             if v['name'] == "unix:" .. socket_path then
                 conns = conns + v['conns']
+            elseif v['name'] == socket_path then
+                conns = conns + v['conns']
             end
         end
     end
@@ -45,6 +47,9 @@ local function process(b64_socket, down)
         local ppeers = upstream.get_primary_peers(u)
         for _, v in ipairs(ppeers) do
             if v['name'] == "unix:" .. decoded then
+                _set(u, v['id'], down)
+                found = true
+            elseif v['name'] == decoded then
                 _set(u, v['id'], down)
                 found = true
             end
