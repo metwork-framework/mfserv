@@ -136,12 +136,18 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
     extra_general_nginx_server_conf_string = \
         get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
                               "general", "extra_nginx_server_conf_filename")
+    extra_general_nginx_init_worker_by_lua_block_string = \
+        get_nginx_conf_string(
+            parser, plugin_directory, plugin_name, label,
+            "general", "extra_nginx_init_worker_by_lua_block_filename")
 
     plugin_conf["name"] = plugin_name
     plugin_conf["extra_general_nginx_http_conf_string"] = \
         extra_general_nginx_http_conf_string
     plugin_conf["extra_general_nginx_server_conf_string"] = \
         extra_general_nginx_server_conf_string
+    plugin_conf["extra_general_nginx_init_worker_by_lua_block_string"] = \
+        extra_general_nginx_init_worker_by_lua_block_string
     plugin_conf['lua_package_paths'] = []
     plugin_conf["apps"] = []
 

@@ -17,11 +17,17 @@ parser = ExtendedConfigParser(config=CONFIG, strict=False,
                               inheritance='im')
 parser.read(config_ini)
 dangerous = False
-if parser.has_option("general", "extra_nginx_conf_filename"):
-    tmp = parser.get("general", "extra_nginx_conf_filename").strip()
-    if tmp != "null":
-        print("WARNING: this plugin has a general extra nginx configuration")
-        dangerous = True
+for option in ("extra_nginx_conf_filename",
+               "extra_nginx_http_conf_filename",
+               "extra_nginx_server_conf_filename",
+               "extra_nginx_init_worker_by_lua_block_filename"):
+    if parser.has_option("general", option):
+        tmp = parser.get("general", option).strip()
+        if tmp != "null":
+            print("WARNING: this plugin has a general "
+                  "extra nginx configuration")
+            dangerous = True
+            break
 app_sections = [x.strip() for x in parser.sections() if x.startswith("app_")]
 for app_section in app_sections:
     if parser.has_option(app_section, "debug"):
