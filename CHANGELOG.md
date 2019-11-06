@@ -1,7 +1,8 @@
 # release_0.9 CHANGELOG
 
 
-## [Unreleased]
+
+## v0.9.2 (2019-10-31)
 
 ### New Features
 - little improvment in socket up/down feature
