@@ -1,6 +1,16 @@
 # release_0.9 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+- add a new configuration key for plugins
+- add extra nginx configuration keys for empty plugins
+
+
+
+
+
 
 ## v0.9.2 (2019-10-31)
 
