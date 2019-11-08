@@ -18,7 +18,7 @@ with open("foobar/config.ini", "a") as f:
     f.write("\n\n[extra_daemon_foo]\n")
     f.write("cmd_and_args = foo.sh %s\n" % UNIQUE)
     f.write("numprocesses=1\n")
-BashWrapperOrRaise("mkdir foobar/bin")
+BashWrapperOrRaise("mkdir -p foobar/bin")
 BashWrapperOrRaise("cp -f foo.sh foobar/bin/")
 BashWrapperOrRaise("chmod +x foobar/bin/foo.sh")
 
