@@ -2,7 +2,7 @@
 # How to create custom plugins
 In order to use MFSERV and create your custom plugin, one of the first thing, you have to load the "MFSERV environment" in your shell session. There are several ways to do that: check :doc:`the related documentation <mfserv_load_env>`.
 
-Plugins can be custom made quickly and easily by using existing templates. Making plugins with mfserv is as simple as editing a configuration file. You just have to create a plugin using an existing template, then edit the configuration file so that the plugin fulfills your need, and finally release the plugin. 
+Plugins can be custom made quickly and easily by using existing templates. Making plugins with mfserv is as simple as editing a configuration file. You just have to create a plugin using an existing template, then edit the configuration file so that the plugin fulfills your need, and finally release the plugin.
 
 Predefined templates are available in order to create your plugin (see [Plugin templates section](#plugin-templates)).
 
@@ -15,7 +15,7 @@ where `{TEMPLATE}` is the tmplate you want to use and `{PLUGIN_NAME}` the name o
 
 Notice if you omit the `--template` argument, [the default template](#id1) will be used.
 
-Once you have entered this command, you will be asked to fill in some fields to configure and customize your plugin. 
+Once you have entered this command, you will be asked to fill in some fields to configure and customize your plugin.
 You can also configure your plugin anytime by **editing the** `mfserv/{PLUGIN_NAME}/config.ini` **config file**. For more details about each field, check the documentation in the `mfserv/{PLUGIN_NAME}/config.ini` file.
 
 
@@ -52,8 +52,8 @@ List of available plugin templates:
      * empty
      * node
      * django
-     * static  
-     * flask  
+     * static
+     * flask
 ```
 
 .. index:: default template, python3_sync, python2_sync, aiohttp
@@ -85,7 +85,7 @@ When you create a plugin with this template, we will asked what kind (type) of p
     | `debug`: if you set debug=1, then you will get an **interactive debugger** in your browser when you got an exception in your code and mflog minimal level will be set to DEBUG. See :ref:`Interactive debugger section <mfserv_debug_plugin:Interactive debugger>`
 
 .. note::
-    | If you have created an MFSERV plugin with MetwWork version < 0.7, all these new features won’t be available. 
+    | If you have created an MFSERV plugin with MetWork version < 0.7, all these new features won’t be available.
     | To take advantage of these new features, create a new plugin with MetWork version >= 0.7 and migrate your code inside (it’s easy). Of course, this is not mandatory.
 
 .. seealso::
@@ -113,24 +113,24 @@ The Django version provided by MetWork can be check in the `python3_virtualenv_s
 The :index:`Django secret key` of your first project is randomly generated during the  process. Your project will own a secret key similar to the one that is set when you
 create a new Django project with the Django command `django-admin startproject` (see [Django secret key documentation](https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-SECRET_KEY)).
 
-Once you bootstrapped a plugin with the Django template, a **postinstall** script is create in the plugin directory. It is executed when you launch the `make develop` or `plugins.install` command. 
-    
+Once you bootstrapped a plugin with the Django template, a **postinstall** script is create in the plugin directory. It is executed when you launch the `make develop` or `plugins.install` command.
+
 The **postinstall** script do the following:
 - Create the Django project `django-admin startproject {PLUGIN_NAME}` (see [django-admin startproject documentation](https://docs.djangoproject.com/en/stable/ref/django-admin/#startproject))
 - Create the "Hello World!" application `django-admin startapp hello` (see [django-admin startapp documentation](https://docs.djangoproject.com/en/stable/ref/django-admin/#startapp))
-- Configure the project 
+- Configure the project
 - Run `python manage.py migrate` (see [Django migrate documentation](https://docs.djangoproject.com/en/stable/ref/django-admin/#django-admin-migrate))
 - Run `python manage.py collectstatic` (see [Django collectstatic documentation](https://docs.djangoproject.com/en/stable/ref/contrib/staticfiles/#collectstatic))
 
 You may modify **postinstall** script, for example if you want to do the same for other Django projects inside your plugin.
- 
+
 .. note::
     | The **postinstall** script does not run `python manage.py createsuperuser`. You have to run the command by yourself if you want to create a superuser (see [Django createsuperuser documentation](https://docs.djangoproject.com/en/stable/ref/django-admin/#createsuperuser)).
 
 .. danger::
-    | Each time the **postinstall** script is executed, it remove project directories. 
+    | Each time the **postinstall** script is executed, it remove project directories.
     | **It's highly recommended** to rename (or delete) this script otherwise you will loose source and code you added or changed if you build again or install the plugin.
-    
+
 .. important::
     | Django has a security :index:`ALLOWED_HOSTS` parameter in order to prevent HTTP Host header attacks.
     | By default, the template set ALLOWED_HOSTS=['localhost', '127.0.0.1', '[::1]']. You will definitely need to change this setting. In order to do this, change it:
@@ -145,7 +145,7 @@ You may modify **postinstall** script, for example if you want to do the same fo
     |           mflog.set_config(minimal_level="DEBUG")
     |       else:
     |           mflog.set_config()
-    |       
+    |
     |       **ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']**
     |       EOF
     |   ...
@@ -160,7 +160,7 @@ You may modify **postinstall** script, for example if you want to do the same fo
     |           mflog.set_config(minimal_level="DEBUG")
     |       else:
     |           mflog.set_config()
-    |       
+    |
     |       **ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']**
     |   ...
     |
@@ -209,7 +209,7 @@ The template generate an `main` directory with just contains a `index.html`. The
 
 This template is a special template that must be used as a container e.g. a crontab container (by selecting `crontab_support=yes`) or one or more daemons (it doesn't create any web application)
 
-If you need to only run daemon(s), you have to configure an `[extra_daemon_xxx] per daemon in the `config.ini` file in the plugin directory.
+If you need to only run daemon(s), you have to configure an `[extra_daemon_xxx]` per daemon in the `config.ini` file in the plugin directory and add the daemons under the `bin` subdirectory. You also have to choose between `python3`, `python2`, `node` and `nothing` for the type of your plugin, according to what you need for your daemon(s).
 
 .. seealso::
     | :ref:`mfserv_miscellaneous:Extra daemon` section
@@ -220,4 +220,4 @@ If you need to only run daemon(s), you have to configure an `[extra_daemon_xxx] 
 
 <!--
 Intentional comment to prevent m2r from generating bad rst statements when the file ends with a block .. xxx ::
--->    
+-->

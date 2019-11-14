@@ -6,5 +6,5 @@
     "url": "http://yourpluginhomepage",
     "maintainer": "Firstname FAMILYNAME <email>",
     "vendor": "MetWork",
-    "type": ["python3", "python2", "node"]
+    "type": ["python3", "python2", "node", "nothing"]
 }
