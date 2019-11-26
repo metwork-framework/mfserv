@@ -12,7 +12,7 @@ if test $# -ne 3; then
     exit 1
 fi
 
-"${MFEXT_HOME}/opt/misc/bin/_plugins.postinstall" "${1}" "${2}" "${3}"
+"${MFEXT_HOME}/bin/_plugins.postinstall" "${1}" "${2}" "${3}"
 
 PHOME=$(plugins.info --just-home "${1}")
 

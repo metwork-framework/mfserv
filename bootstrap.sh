@@ -60,7 +60,7 @@ export MODULE_HAS_HOME_DIR=1
 rm -f adm/root.mk
 touch adm/root.mk
 
-ROOT_PATH=${MFEXT_HOME}/opt/misc/bin:${MFEXT_HOME}/bin:${MFEXT_HOME}/opt/core/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ROOT_PATH=${MFEXT_HOME}/bin:${MFEXT_HOME}/opt/core/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ROOT_LD_LIBRARY_PATH=""
 ROOT_PKG_CONFIG_PATH=""
 ROOT_LAYERAPI2_LAYERS_PATH=${MFMODULE_HOME}/opt:${MFMODULE_HOME}:${MFEXT_HOME}/opt:${MFEXT_HOME}

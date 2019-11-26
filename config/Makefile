@@ -2,7 +2,7 @@ CONFIGS=config.ini nginx.conf redis_plugin_xxx.conf mflog_override.conf stats.lu
 
 include ../adm/root.mk
 include $(MFEXT_HOME)/share/subdir_root.mk
-include $(MFEXT_HOME)/opt/misc/share/config_subdir.mk
+include $(MFEXT_HOME)/share/config_subdir.mk
 
 test:
 	layer_wrapper --layers=devtools@mfext noutf8.sh
