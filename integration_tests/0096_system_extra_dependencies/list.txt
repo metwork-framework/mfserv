@@ -56,3 +56,4 @@ libpango-1.0.so.0
 libpangocairo-1.0.so.0
 libpangoft2-1.0.so.0
 libform.so.5
+libdw.so.1
