@@ -2,8 +2,7 @@
     "name": "{{cookiecutter.name}}",
     "version": "{{cookiecutter.version}}",
     "dependencies": {
-        "express": "^4.16.4",
-        "base64url": "^3.0.1"
+        "express": "^4.16.4"
     },
     "devDependencies": {},
     "workspaces" :[]
