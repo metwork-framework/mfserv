@@ -60,11 +60,13 @@ local function process(b64_socket, down)
     end
     if wait then
         while true do
+            -- we wait a little bit first to be sure that socket down order
+            -- is received by all workers (read every 0.1 second)
+            ngx.sleep(0.5)
             local conns = get_conns(decoded)
             if conns == 0 then
                 break
             end
-            ngx.sleep(0.5)
         end
     end
 end
