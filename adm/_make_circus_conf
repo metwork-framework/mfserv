@@ -258,10 +258,11 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                 original_plugin_name, plugin_dir, app,
                 apdtpp=add_plugin_dir_to_python_path,
                 aadtpp=add_app_dir_to_python_path)
-            cmd_args = "%s -- plugin_wrapper %s -- python %s %s %i" % (
-                std_redirect_extra_args,
-                layer_wrapper_extra_args, main_arg,
-                bind, timeout)
+            cmd_args = "%s -- plugin_wrapper %s -- signal_wrapper.py " \
+                "--timeout=%i %s -- python %s %s %i" % (
+                    std_redirect_extra_args,
+                    layer_wrapper_extra_args, timeout, bind, main_arg,
+                    bind, timeout)
 
         elif typ in ("python3_sync", "python2_sync"):
             bind = "%s/var/%s_%s_%s_$(circus.wid).socket" % (
