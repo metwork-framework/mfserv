@@ -8,6 +8,9 @@
 - add extra nginx configuration keys for empty plugins
 
 
+### Bug Fixes
+- important fix about max_age feature
+
 
 
 

@@ -12,6 +12,9 @@
 - better default dependencies
 
 
+### Bug Fixes
+- important fix about max_age feature
+
 
 
 
