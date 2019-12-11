@@ -288,9 +288,10 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             node_opts = ""
             if parser.has_option(section, "node_extra_opts"):
                 node_opts = parser.get(section, "node_extra_opts")
-            cmd_args = "%s -- plugin_wrapper %s -- node %s %s %s %i" % (
-                std_redirect_extra_args, layer_wrapper_extra_args, node_opts,
-                node_server, bind, timeout)
+            cmd_args = "%s -- plugin_wrapper %s -- signal_wrapper.py " \
+                "--timeout=%i %s -- node %s %s %s %i" % (
+                    std_redirect_extra_args, layer_wrapper_extra_args,
+                    timeout, bind, node_opts, node_server, bind, timeout)
 
         app_conf["max_age"] = max_age
         app_conf["name"] = app
