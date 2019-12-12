@@ -1,7 +1,8 @@
 # release_0.9 CHANGELOG
 
 
-## [Unreleased]
+
+## v0.9.3 (2019-12-11)
 
 ### New Features
 - add a new configuration key for plugins
