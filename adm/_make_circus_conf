@@ -24,18 +24,9 @@ Below are defined process types depending on the code language
 
 # Available types
 PYTHON_TYP_LIST = [
-    "gunicorn3_sync",
-    "gunicorn2_sync",
-    "gunicorn3_asyncio",
     "python3_sync",
     "aiohttp",
     "python2_sync"
-]
-
-GUNICORN_TYP_LIST = [
-    "gunicorn3_sync",
-    "gunicorn2_sync",
-    "gunicorn3_asyncio"
 ]
 
 # Available types for watching js (i.e node)
@@ -140,11 +131,6 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
     if parser.has_option("general", "redis_service"):
         redis_service = parser.getboolean("general", "redis_service")
 
-    # gunicorn_log_level
-    gunicorn_log_level = LOG_LEVEL.lower()
-    if gunicorn_log_level not in ('debug', 'info', 'warning', 'error',
-                                  'critical'):
-        gunicorn_log_level = "debug"
     plugin_conf["name"] = plugin_name
     plugin_conf["dir"] = plugin_dir
     plugin_conf["apps"] = []
@@ -179,17 +165,12 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             continue
 
         if typ in PYTHON_TYP_LIST:
-            if parser.has_option(section, "gunicorn_arg"):
-                logger.warning("gunicorn_arg option is deprecated, "
-                               "use 'main_arg' instead")
-                main_arg = parser.get(section, "gunicorn_arg")
+            if not parser.has_option(section, "main_arg"):
+                logger.warning("main_arg option is missing => "
+                               "ignoring app")
+                continue
             else:
-                if not parser.has_option(section, "main_arg"):
-                    logger.warning("main_arg option is missing => "
-                                   "ignoring app")
-                    continue
-                else:
-                    main_arg = parser.get(section, "main_arg")
+                main_arg = parser.get(section, "main_arg")
 
             add_plugin_dir_to_python_path = True
             if parser.has_option(section, "add_plugin_dir_to_python_path"):
@@ -225,33 +206,11 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         if parser.has_option(section, "graceful_timeout"):
             graceful_timeout = parser.getint(section, "graceful_timeout")
 
-        fof = (workers == "1" or typ in GUNICORN_TYP_LIST)
+        fof = (workers == "1")
         std_redirect_extra_args = \
             get_std_redirect_args("app", plugin_name, app, force_one_file=fof)
 
-        if typ in GUNICORN_TYP_LIST:
-            bind = "unix:%s/var/gunicorn_app_%s_%s.socket" % (
-                MFMODULE_RUNTIME_HOME, plugin_name, app)
-            if typ == "gunicorn3_asyncio":
-                worker_class = "aiohttp.worker.GunicornWebWorker"
-            else:
-                worker_class = "sync"
-            layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-                original_plugin_name, plugin_dir, app,
-                apdtpp=add_plugin_dir_to_python_path,
-                aadtpp=add_app_dir_to_python_path)
-            gunicorn_extra_opts = "--timeout %i" % timeout
-            cmd_args = "%s -- plugin_wrapper %s -- gunicorn --workers=%s " \
-                "--logger-class=gunicorn_custom_log.CustomLogger " \
-                "--bind=%s --worker-class=%s %s " \
-                "--log-level=%s %s" % (
-                    std_redirect_extra_args, layer_wrapper_extra_args,
-                    workers, bind, worker_class, gunicorn_extra_opts,
-                    gunicorn_log_level, main_arg)
-            # we force 1 here because gunicorn master deals with x workers
-            workers = 1
-
-        elif typ == "aiohttp":
+        if typ == "aiohttp":
             bind = "%s/var/aiohttp_%s_%s_$(circus.wid).socket" % (
                 MFMODULE_RUNTIME_HOME, plugin_name, app)
             layer_wrapper_extra_args = get_layer_wrapper_extra_args(

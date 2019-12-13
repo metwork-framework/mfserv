@@ -35,20 +35,11 @@ for var in ["MODULE", "MODULE_HOME", "MODULE_LOWERCASE", "MODULE_VERSION",
 Below are defined process types depending on the code language
 '''
 
-# Available types for watching python (i.e gunicorn)
+# Available types for watching python
 PYTHON_TYP_LIST = [
-    "gunicorn3_sync",
-    "gunicorn2_sync",
-    "gunicorn3_asyncio",
     "python3_sync",
     "aiohttp",
     "python2_sync"
-]
-
-GUNICORN_TYP_LIST = [
-    "gunicorn3_sync",
-    "gunicorn2_sync",
-    "gunicorn3_asyncio"
 ]
 
 # Available types for watching js (i.e node)
@@ -234,24 +225,19 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                     "sockets": ["%s/var/default_%s.socket" %
                                 (MFMODULE_RUNTIME_HOME, name)],
                     "type": typ}
-        if typ in GUNICORN_TYP_LIST:
-            app_conf["sockets"] = ["%s/var/gunicorn_%s%s.socket" %
-                                   (MFMODULE_RUNTIME_HOME,
-                                    hot_swap_prefix, name)]
-        elif typ not in GUNICORN_TYP_LIST:
-            if typ == "node":
-                sockets = ["%s/var/%s_%s%s_%i.socket" %
-                           (MFMODULE_RUNTIME_HOME, typ, hot_swap_prefix,
-                            plugin_name, i + 1)
-                           for i in range(0, workers)]
-            else:
-                sockets = ["%s/var/%s_%s%s_%s_%i.socket" %
-                           (MFMODULE_RUNTIME_HOME, typ, hot_swap_prefix,
-                            plugin_name, app, i + 1)
-                           for i in range(0, workers)]
-            app_conf["sockets"] = sockets
-        elif typ in STATIC_TYP_LIST:
-            app_conf["sockets"] = None
+        if typ in STATIC_TYP_LIST:
+            sockets = None
+        elif typ == "node":
+            sockets = ["%s/var/%s_%s%s_%i.socket" %
+                       (MFMODULE_RUNTIME_HOME, typ, hot_swap_prefix,
+                        plugin_name, i + 1)
+                        for i in range(0, workers)]
+        else:
+            sockets = ["%s/var/%s_%s%s_%s_%i.socket" %
+                       (MFMODULE_RUNTIME_HOME, typ, hot_swap_prefix,
+                        plugin_name, app, i + 1)
+                        for i in range(0, workers)]
+        app_conf["sockets"] = sockets
         app_conf['extra_nginx_conf_string'] = \
             envtpl.render_string(extra_nginx_conf_string,
                                  extra_variables={"APP": app_conf},
