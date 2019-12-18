@@ -18,26 +18,61 @@ MFMODULE_RUNTIME_HOME = os.environ["MFMODULE_RUNTIME_HOME"]
 MFMODULE_HOME = os.environ["MFMODULE_HOME"]
 MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
 
-'''
-Below are defined process types depending on the code language
-'''
 
-# Available types
-PYTHON_TYP_LIST = [
-    "python3_sync",
-    "aiohttp",
-    "python2_sync"
-]
+def is_typ_valid(typ):
+    return typ in ["python3_sync", "python2_sync", "aiohttp", "static", "node",
+                   "empty"]
 
-# Available types for watching js (i.e node)
-JS_TYP_LIST = [
-    "node"
-]
 
-# All types
-ALL_TYP_LIST = \
-    PYTHON_TYP_LIST + \
-    JS_TYP_LIST
+def typ_to_cmd_args(typ, plugin_conf, app_conf):
+    fof = (app_conf["numprocesses"] == "1")
+    std_redirect_extra_args = \
+        get_std_redirect_args("app", plugin_conf['name'], app_conf['name'],
+                              force_one_file=fof)
+    if typ == "aiohttp":
+        bind = "%s/var/aiohttp_%s_%s_$(circus.wid).socket" % (
+            MFMODULE_RUNTIME_HOME, plugin_conf['name'], app_conf['name'])
+        layer_wrapper_extra_args = get_layer_wrapper_extra_args(
+            plugin_conf['original_name'], plugin_conf['dir'],
+            app_conf['name'],
+            apdtpp=app_conf["add_plugin_dir_to_python_path"],
+            aadtpp=app_conf["add_app_dir_to_python_path"]
+        )
+        return "%s -- plugin_wrapper %s -- signal_wrapper.py " \
+            "--timeout=%i %s -- python %s %s %i" % (
+                std_redirect_extra_args,
+                layer_wrapper_extra_args, app_conf["timeout"], bind,
+                app_conf["main_arg"], bind, app_conf["timeout"])
+    elif typ in ['python3_sync', 'python2_sync']:
+        bind = "%s/var/%s_%s_%s_$(circus.wid).socket" % (
+            MFMODULE_RUNTIME_HOME, typ, plugin_conf['name'], app_conf['name'])
+        layer_wrapper_extra_args = get_layer_wrapper_extra_args(
+            plugin_conf['original_name'], plugin_conf['dir'], app_conf['name'],
+            apdtpp=app_conf['add_plugin_dir_to_python_path'],
+            aadtpp=app_conf['add_app_dir_to_python_path'])
+        debug_arg = ""
+        if app_conf['debug']:
+            debug_arg = "--debug --debug-evalex"
+        return "%s -- plugin_wrapper %s -- bjoern_wrapper.py %s " \
+            "--timeout %i %s %s" % (std_redirect_extra_args,
+                                    layer_wrapper_extra_args, debug_arg,
+                                    app_conf['timeout'], app_conf['main_arg'],
+                                    bind)
+    elif typ == "node":
+        bind = "%s/var/node_%s_$(circus.wid).socket" % (
+            MFMODULE_RUNTIME_HOME, plugin_conf['name'])
+        layer_wrapper_extra_args = get_layer_wrapper_extra_args(
+            plugin_conf['original_name'], plugin_conf['dir'])
+        node_server = "%s/%s/%s" % (plugin_conf['dir'], app_conf['name'],
+                                    app_conf['main_arg'])
+        return "%s -- plugin_wrapper %s -- signal_wrapper.py " \
+            "--timeout=%i %s -- node %s %s %s %i" % (
+                std_redirect_extra_args, layer_wrapper_extra_args,
+                app_conf['timeout'], bind, app_conf['node_opts'], node_server,
+                bind, app_conf['timeout'])
+    else:
+        raise Exception("unknown type: %s", typ)
+
 
 LOGGER = get_logger("_make_circus_conf")
 
@@ -137,6 +172,7 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
     plugin_conf["extra_daemons"] = []
     plugin_conf["hot_swap_plugin"] = hot_swap_plugin
     plugin_conf["hot_swap_home"] = MFSERV_PLUGINS_HOTSWAP_HOME
+    plugin_conf["original_name"] = original_plugin_name
 
     for app in apps:
         logger = logger.bind(app=app)
@@ -160,40 +196,25 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                         timeout = parser.getint(section, "timeout")
         if typ in ("empty", "static"):
             continue
-        if typ not in ALL_TYP_LIST:
+        if not is_typ_valid(typ):
             logger.warning("unknown type: %s => ignoring app", typ)
             continue
 
-        if typ in PYTHON_TYP_LIST:
-            if not parser.has_option(section, "main_arg"):
-                logger.warning("main_arg option is missing => "
-                               "ignoring app")
-                continue
-            else:
-                main_arg = parser.get(section, "main_arg")
+        add_plugin_dir_to_python_path = True
+        if parser.has_option(section, "add_plugin_dir_to_python_path"):
+            add_plugin_dir_to_python_path = \
+                parser.getboolean(section, "add_plugin_dir_to_python_path")
 
-            add_plugin_dir_to_python_path = True
-            if parser.has_option(section, "add_plugin_dir_to_python_path"):
-                add_plugin_dir_to_python_path = \
-                    parser.getboolean(section, "add_plugin_dir_to_python_path")
+        add_app_dir_to_python_path = False
+        if parser.has_option(section, "add_app_dir_to_python_path"):
+            add_app_dir_to_python_path = \
+                parser.getboolean(section, "add_app_dir_to_python_path")
 
-            add_app_dir_to_python_path = False
-            if parser.has_option(section, "add_app_dir_to_python_path"):
-                add_app_dir_to_python_path = \
-                    parser.getboolean(section, "add_app_dir_to_python_path")
-
-        elif typ in JS_TYP_LIST:
-            if parser.has_option(section, "node_arg"):
-                logger.warning("node_arg option is deprecated, "
-                               "use 'main_arg' instead")
-                main_arg = parser.get(section, "node_arg")
-            else:
-                if not parser.has_option(section, "main_arg"):
-                    logger.warning("main_arg option is missing => "
-                                   "ignoring app")
-                    continue
-                else:
-                    main_arg = parser.get(section, "main_arg")
+        if not parser.has_option(section, "main_arg"):
+            logger.warning("main_arg option is missing => ignoring app")
+            continue
+        else:
+            main_arg = parser.get(section, "main_arg")
 
         workers = parser.get(section, "workers")
 
@@ -206,59 +227,22 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         if parser.has_option(section, "graceful_timeout"):
             graceful_timeout = parser.getint(section, "graceful_timeout")
 
-        fof = (workers == "1")
-        std_redirect_extra_args = \
-            get_std_redirect_args("app", plugin_name, app, force_one_file=fof)
-
-        if typ == "aiohttp":
-            bind = "%s/var/aiohttp_%s_%s_$(circus.wid).socket" % (
-                MFMODULE_RUNTIME_HOME, plugin_name, app)
-            layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-                original_plugin_name, plugin_dir, app,
-                apdtpp=add_plugin_dir_to_python_path,
-                aadtpp=add_app_dir_to_python_path)
-            cmd_args = "%s -- plugin_wrapper %s -- signal_wrapper.py " \
-                "--timeout=%i %s -- python %s %s %i" % (
-                    std_redirect_extra_args,
-                    layer_wrapper_extra_args, timeout, bind, main_arg,
-                    bind, timeout)
-
-        elif typ in ("python3_sync", "python2_sync"):
-            bind = "%s/var/%s_%s_%s_$(circus.wid).socket" % (
-                MFMODULE_RUNTIME_HOME, typ, plugin_name, app)
-            layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-                original_plugin_name, plugin_dir, app,
-                apdtpp=add_plugin_dir_to_python_path,
-                aadtpp=add_app_dir_to_python_path)
-            debug_arg = ""
-            if debug:
-                debug_arg = "--debug --debug-evalex"
-            cmd_args = "%s -- plugin_wrapper %s -- bjoern_wrapper.py %s " \
-                "--timeout %i %s %s" % (std_redirect_extra_args,
-                                        layer_wrapper_extra_args, debug_arg,
-                                        timeout, main_arg, bind)
-
-        elif typ in JS_TYP_LIST:
-            bind = "%s/var/node_%s_$(circus.wid).socket" % (
-                MFMODULE_RUNTIME_HOME, plugin_name)
-            layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-                original_plugin_name, plugin_dir)
-            node_server = "%s/%s/%s" % (plugin_dir, app, main_arg)
-            node_opts = ""
-            if parser.has_option(section, "node_extra_opts"):
-                node_opts = parser.get(section, "node_extra_opts")
-            cmd_args = "%s -- plugin_wrapper %s -- signal_wrapper.py " \
-                "--timeout=%i %s -- node %s %s %s %i" % (
-                    std_redirect_extra_args, layer_wrapper_extra_args,
-                    timeout, bind, node_opts, node_server, bind, timeout)
-
         app_conf["max_age"] = max_age
         app_conf["name"] = app
+        app_conf["main_arg"] = main_arg
         app_conf["debug"] = debug
         app_conf["numprocesses"] = workers
-        app_conf["cmd_args"] = cmd_args
+        app_conf["timeout"] = timeout
+        app_conf["add_plugin_dir_to_python_path"] = \
+            add_plugin_dir_to_python_path
+        app_conf["add_app_dir_to_python_path"] = add_app_dir_to_python_path
+        if parser.has_option(section, "node_extra_opts"):
+            app_conf["node_opts"] = parser.get(section, "node_extra_opts")
+        else:
+            app_conf["node_opts"] = ""
         app_conf["graceful_timeout"] = graceful_timeout
         app_conf["rlimits"] = get_rlimit_conf(parser, section)
+        app_conf["cmd_args"] = typ_to_cmd_args(typ, plugin_conf, app_conf)
         plugin_conf["apps"].append(app_conf)
 
     for extra_daemon in extra_daemons:

@@ -31,34 +31,35 @@ for var in ["MODULE", "MODULE_HOME", "MODULE_LOWERCASE", "MODULE_VERSION",
         os.environ[var] = os.environ[new_var]
 
 
-'''
-Below are defined process types depending on the code language
-'''
+def is_typ_valid(typ):
+    return typ in ["python3_sync", "python2_sync", "aiohttp", "static", "node"]
 
-# Available types for watching python
-PYTHON_TYP_LIST = [
-    "python3_sync",
-    "aiohttp",
-    "python2_sync"
-]
 
-# Available types for watching js (i.e node)
-JS_TYP_LIST = [
-    "node"
-]
+def typ_to_sockets(typ, app_conf):
+    if app_conf['workers'] == 0:
+        return None
+    else:
+        if typ == "node":
+            return [
+                "%s/var/%s_%s%s_%i.socket" %
+                (MFMODULE_RUNTIME_HOME, typ, app_conf['hot_swap_prefix'],
+                 app_conf['plugin_name'], i + 1)
+                for i in range(0, app_conf['workers'])
+            ]
+        else:
+            return [
+                "%s/var/%s_%s%s_%s_%i.socket" %
+                (MFMODULE_RUNTIME_HOME, typ, app_conf['hot_swap_prefix'],
+                 app_conf['plugin_name'], app_conf['app_name'], i + 1)
+                for i in range(0, app_conf['workers'])
+            ]
 
-# Static type plugin
-STATIC_TYP_LIST = [
-    "static"
-]
-
-# All types
-ALL_TYP_LIST = \
-    PYTHON_TYP_LIST + \
-    JS_TYP_LIST + \
-    STATIC_TYP_LIST
 
 LOGGER = get_logger("__make_nginx_conf")
+
+
+def is_valid_extra_route(x):
+    return x.startswith('/') and (x == '/' or not x.endswith('/'))
 
 
 def get_nginx_conf_string(parser, plugin_directory, plugin_name, plugin_label,
@@ -150,7 +151,8 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         logger = logger.bind(app=app)
         section = "app_%s" % app
         typ = parser.get(section, "type")
-        if typ not in ALL_TYP_LIST:
+        if not is_typ_valid(typ):
+            logger.warning("unknown typ: %s => ignoring app", typ)
             continue
         if len(glob.glob(os.path.join(plugin_directory, app, '*.lua'))) > 0:
             lua_package_path = os.path.join(plugin_directory, app, '?.lua')
@@ -164,7 +166,7 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         static_routing = True
         if parser.has_option(section, "static_routing"):
             static_routing = parser.getboolean(section, "static_routing")
-        workers = 1
+        workers = 0
         if parser.has_option(section, "workers"):
             workers = int(envtpl.render_string(parser.get(section, "workers"),
                                                keep_multi_blank_lines=False))
@@ -188,8 +190,7 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                 if tmp.strip() != "null":
                     prefix_based_routing_extra_routes = \
                         [x.strip() for x in tmp.strip().split(';')
-                         if x.startswith('/') and
-                         (x == '/' or not x.endswith('/'))]
+                         if is_valid_extra_route(x)]
         workdir = os.path.join(plugin_directory, app)
         timeout = MFSERV_NGINX_TIMEOUT
         if parser.has_option(section, "proxy_timeout"):
@@ -213,6 +214,7 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                     "alias": "no",
                     "debug": debug,
                     "app_name": app,
+                    "workers": workers,
                     "plugin_name": plugin_name,
                     "hash": hashlib.md5(name.encode('utf8')).hexdigest(),
                     "virtualdomain_based_routing": virtualdomain_based_routing,
@@ -222,22 +224,9 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                     "workdir": workdir,
                     "timeout": timeout + 2,  # kill the backend first
                     "static_routing": static_routing,
-                    "sockets": ["%s/var/default_%s.socket" %
-                                (MFMODULE_RUNTIME_HOME, name)],
+                    "hot_swap_prefix": hot_swap_prefix,
                     "type": typ}
-        if typ in STATIC_TYP_LIST:
-            sockets = None
-        elif typ == "node":
-            sockets = ["%s/var/%s_%s%s_%i.socket" %
-                       (MFMODULE_RUNTIME_HOME, typ, hot_swap_prefix,
-                        plugin_name, i + 1)
-                        for i in range(0, workers)]
-        else:
-            sockets = ["%s/var/%s_%s%s_%s_%i.socket" %
-                       (MFMODULE_RUNTIME_HOME, typ, hot_swap_prefix,
-                        plugin_name, app, i + 1)
-                        for i in range(0, workers)]
-        app_conf["sockets"] = sockets
+        app_conf["sockets"] = typ_to_sockets(typ, app_conf)
         app_conf['extra_nginx_conf_string'] = \
             envtpl.render_string(extra_nginx_conf_string,
                                  extra_variables={"APP": app_conf},
@@ -284,12 +273,14 @@ nginx_conf_file = os.path.join(os.environ['MFMODULE_HOME'], 'config',
                                'nginx.conf')
 
 with open(nginx_conf_file, "r") as f:
+    mfmodule_env = sorted(
+        [x for x in os.environ.keys()
+         if x.startswith(MFMODULE + "_") or x.startswith("MFMODULE_")]
+    )
     extra_variables = {
         "PLUGINS": plugins,
         "LUA_PACKAGE_PATH": ";".join(lua_package_paths) + ";;",
-        "MFMODULE_ENVIRONMENT": sorted([x for x in os.environ.keys()
-                                      if x.startswith(MFMODULE + "_") or
-                                      x.startswith("MFMODULE_")])
+        "MFMODULE_ENVIRONMENT": mfmodule_env
     }
     content = envtpl.render_string(f.read(), extra_variables=extra_variables,
                                    keep_multi_blank_lines=False)
