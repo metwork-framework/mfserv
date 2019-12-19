@@ -21,7 +21,7 @@ The plugin is created in the current directory, inside the directory named
 
 If you answered to create an application in your django project, it will be a
 "hello-world" application. You can check that it works by invoking the following
-URL : 
+URL :
 http://localhost:18868/name_of_your_plugin/name_of_your_project/name_of_your_app
 
 
@@ -34,7 +34,6 @@ value for each of these variables :
 with this name
   - **version**: version number of your plugin
   - **one_line_summary**: a short description of your plugin
-  - **crontab_support**: whether you need to use the crontab inside your plugin
   - **license**: type of license attached to your plugin
   - **url**: the URL of the home page of your plugin
   - **maintainer**: your e-mail, something like "Firstname FAMILYNAME <email>"
