@@ -221,7 +221,8 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         if parser.has_option(section, "max_age") and workers != "1" and \
                 not debug:
             max_age = parser.getint(section, "max_age")
-            max_age = max(60, max_age)
+            if max_age != 0:
+                max_age = max(60, max_age)
         if parser.has_option(section, "graceful_timeout"):
             graceful_timeout = parser.getint(section, "graceful_timeout")
 
