@@ -1,3 +1,7 @@
+{% extends "config.ini" %}
+
+{% block custom %}
+{% raw -%}
 #################
 ##### NGINX #####
 #################
@@ -92,30 +96,6 @@ real_ip_set_from=172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
 server_tokens=1
 
 
-########################
-##### ADMIN MODULE #####
-########################
-[admin]
-
-# Hostname hosting the mfadmin module (if any)
-# null => no monitoring
-hostname=null
-
-# Influxdb HTTP port on mfadmin host
-# (change this only if you changed influxdb http port on mfadmin host)
-influxdb_http_port=18086
-
-# ElasticSearch HTTP port on mfadmin host
-# (change this only if you changed elasticsearch http port on mfadmin host)
-elasticsearch_http_port=15603
-
-# If send_nginx_logs=1, send nginx access logs to the configured admin hostname
-send_nginx_logs=0
-
-# If send_mflog_logs=1, send mflog logs to the configured admin hostname
-send_mflog_logs=1
-
-
 ###################
 ##### PLUGINS #####
 ###################
@@ -123,58 +103,6 @@ send_mflog_logs=1
 
 # if install_welcome=1, install the welcome plugin during init
 install_welcome=1
-
-
-###################
-##### STARTUP #####
-###################
-[startup]
-
-# If flag=0, block the start of the module
-flag=1
-
-
-#######################
-##### AUTORESTART #####
-#######################
-[autorestart]
-
-# If flag=1, then the autorestart feature is on
-flag=1
-
-
-###############
-##### LOG #####
-###############
-[log]
-
-# log retention (in days)
-retention=5
-retention[DEV]=1
-
-# log minimal level
-# (DEBUG => everything,
-#  INFO => everything but not DEBUG,
-#  WARNING => everything but not DEBUG and INFO,
-#  ERROR => everything but not DEBU, INFO and WARNING,
-#  CRITICAL => everything but not DEBUG, INFO, WARNING AND ERROR)
-minimal_level=INFO
-minimal_level[DEV]=DEBUG
-
-# duplicate some log messages in JSON to a specific file (for external monitoring tool)
-# If json_file value is:
-# null => the feature is desactivated
-# AUTO => the json_file is @@@MFMODULE_RUNTIME_HOME@@@/log/json_logs.log if
-#         [admin]/hostname != null else null (desactivated)
-json_file=AUTO
-
-# Minimal level for this json log file
-# (DEBUG => everything,
-#  INFO => everything but not DEBUG,
-#  WARNING => everything but not DEBUG and INFO,
-#  ERROR => everything but not DEBU, INFO and WARNING,
-#  CRITICAL => everything but not DEBUG, INFO, WARNING AND ERROR)
-json_minimal_level=WARNING
 
 
 ##################
@@ -200,3 +128,5 @@ statsd_port=18127
 
 # if debug=1, put telegraf in trace mode (WARNING: produce a lot of logs)
 debug=0
+{% endraw %}
+{% endblock %}
