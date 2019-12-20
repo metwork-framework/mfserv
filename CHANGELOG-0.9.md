@@ -2,6 +2,11 @@
 
 
 
+## v0.9.4 (2019-12-12)
+
+- No interesting change
+
+
 ## v0.9.3 (2019-12-11)
 
 ### New Features
