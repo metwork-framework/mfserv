@@ -1,1 +1,0 @@
-REDIS_SOCKET_UNIX_SOCKET_PATH={MFMODULE_RUNTIME_HOME}/var/redis_plugin_{{cookiecutter.name}}.socket

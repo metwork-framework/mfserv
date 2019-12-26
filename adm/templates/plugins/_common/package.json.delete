@@ -1,3 +1,0 @@
-{% if cookiecutter.type|default("unknown") != "node" %}
-yes
-{% endif %}

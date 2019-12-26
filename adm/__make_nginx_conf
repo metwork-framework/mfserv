@@ -10,7 +10,7 @@ from configparser_extended import ExtendedConfigParser
 from mflog import get_logger
 from mfutil.plugins import layerapi2_label_to_plugin_name
 from mfserv.plugins_common import get_unix_sockets, get_hot_swap_prefix, \
-    get_plugin_format_version
+    get_plugin_format_version, get_workers
 from mfserv.plugins_deprecated import test_deprecated_options, is_typ_valid
 
 MFMODULE_RUNTIME_HOME = os.environ["MFMODULE_RUNTIME_HOME"]
@@ -122,8 +122,8 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
     for app in apps:
         logger = logger.bind(app=app)
         section = "app_%s" % app
-        typ = parser.get(section, "type")
         if version < 1:
+            typ = parser.get(section, "type")
             if not is_typ_valid(typ):
                 logger.warning("unknown typ: %s => ignoring app", typ)
                 continue
@@ -139,10 +139,15 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         static_routing = True
         if parser.has_option(section, "static_routing"):
             static_routing = parser.getboolean(section, "static_routing")
-        workers = 0
-        if parser.has_option(section, "workers"):
-            workers = int(envtpl.render_string(parser.get(section, "workers"),
-                                               keep_multi_blank_lines=False))
+        static_url_prefix = "/static"
+        if parser.has_option(section, "static_url_prefix"):
+            static_url_prefix = parser.get(section, "static_url_prefix")
+        static_directory = "/static"
+        if parser.has_option(section, "static_directory"):
+            static_directory = parser.get(section, "static_directory")
+
+        workers = get_workers(logger, parser, section)
+
         debug = False
         if parser.has_option(section, "debug"):
             debug = (parser.getint(section, "debug") == 1)
@@ -176,6 +181,8 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             if app == "main" or len(apps) == 1:
                 virtualdomains.add("%s.%s" % (plugin_name, host))
         name = "app_%s_%s" % (plugin_name, app)
+        if debug:
+            workers = 1
         app_conf = {"name": name,
                     "alias": "no",
                     "debug": debug,
@@ -190,8 +197,9 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                     "workdir": workdir,
                     "timeout": timeout + 2,  # kill the backend first
                     "static_routing": static_routing,
-                    "hot_swap_prefix": get_hot_swap_prefix(hot_swap_plugin),
-                    "type": typ}
+                    "static_directory": static_directory,
+                    "static_url_prefix": static_url_prefix,
+                    "hot_swap_prefix": get_hot_swap_prefix(hot_swap_plugin)}
         app_conf["sockets"] = \
             get_unix_sockets(plugin_name, app, workers,
                              app_conf["hot_swap_prefix"])

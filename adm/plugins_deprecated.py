@@ -6,19 +6,34 @@ from mfserv.plugins_common import get_unix_socket_name, \
 
 MFMODULE_RUNTIME_HOME = os.environ["MFMODULE_RUNTIME_HOME"]
 DEPRECATED_IGNORED_GENERAL_OPTIONS = ["extra_nginx_conf_filename", "name"]
-DEPRECATED_IGNORED_APP_OPTIONS = ["proxy_timeout", "extra_nginx_conf_filename"]
+DEPRECATED_IGNORED_APP_OPTIONS = ["proxy_timeout"]
+DEPRECATED_GENERAL_OPTIONS = ["redis_service"]
+DEPRECATED_APP_OPTIONS = []
 
 
 def test_deprecated_options(logger, parser, section=None):
     if section is None:
-        options = DEPRECATED_IGNORED_GENERAL_OPTIONS
+        ignored_options = DEPRECATED_IGNORED_GENERAL_OPTIONS
+        options = DEPRECATED_GENERAL_OPTIONS
         section = "general"
     else:
-        options = DEPRECATED_IGNORED_APP_OPTIONS
-    for option in options:
+        ignored_options = DEPRECATED_IGNORED_APP_OPTIONS
+        options = DEPRECATED_APP_OPTIONS
+    for option in ignored_options:
         if parser.has_option(section, option):
             logger.warning(
                 "%s option in [%s] section is DEPRECATED => ignoring" %
+                (option, section))
+    for option in ignored_options:
+        if parser.has_option(section, option):
+            logger.warning(
+                "%s option in [%s] section is DEPRECATED => ignoring" %
+                (option, section))
+    for option in options:
+        if parser.has_option(section, option):
+            logger.warning(
+                "%s option in [%s] section is DEPRECATED => "
+                "it will be removed in next release" %
                 (option, section))
 
 

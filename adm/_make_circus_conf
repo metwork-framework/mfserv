@@ -8,7 +8,7 @@ from configparser_extended import ExtendedConfigParser
 from mflog import get_logger
 from mfutil.plugins import layerapi2_label_to_plugin_name
 from mfserv.plugins_common import get_hot_swap_prefix, get_std_redirect_args, \
-    get_plugin_format_version
+    get_plugin_format_version, get_cmd_and_args, get_workers
 from mfserv.plugins_deprecated import test_deprecated_options, is_typ_valid, \
     typ_to_cmd_args
 
@@ -89,7 +89,6 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         logger = logger.bind(app=app)
         section = "app_%s" % app
         app_conf = {}
-        typ = parser.get(section, "type")
         timeout = MFSERV_NGINX_TIMEOUT
         debug = False
         test_deprecated_options(logger, parser, section)
@@ -99,9 +98,10 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             if parser.get(section, "timeout") != "null":
                 if parser.getint(section, "timeout") > 0:
                     timeout = parser.getint(section, "timeout")
-        if typ in ("empty", "static"):
-            continue
         if version < 1:
+            typ = parser.get(section, "type")
+            if typ in ("empty", "static"):
+                continue
             if not is_typ_valid(typ):
                 logger.warning("unknown type: %s => ignoring app", typ)
                 continue
@@ -113,26 +113,31 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         if parser.has_option(section, "add_app_dir_to_python_path"):
             add_app_dir_to_python_path = \
                 parser.getboolean(section, "add_app_dir_to_python_path")
-        if not parser.has_option(section, "main_arg"):
-            logger.warning("main_arg option is missing => ignoring app")
-            continue
-        else:
-            main_arg = parser.get(section, "main_arg")
-        workers = parser.get(section, "workers")
+        workers = get_workers(logger, parser, section)
         max_age = 0
         graceful_timeout = 30
-        if parser.has_option(section, "max_age") and workers != "1" and \
-                not debug:
+        if parser.has_option(section, "max_age") and workers != 1:
             max_age = parser.getint(section, "max_age")
-            max_age = max(60, max_age)
+            if max_age != 0:
+                max_age = max(60, max_age)
         if parser.has_option(section, "graceful_timeout"):
             graceful_timeout = parser.getint(section, "graceful_timeout")
+        debug_extra_options = ""
+        if parser.has_option(section, "debug_extra_options"):
+            debug_extra_options = parser.get(section, "debug_extra_options")
+            if debug_extra_options == "null":
+                debug_extra_options = ""
+        if debug:
+            max_age = 0
+            workers = 1
+        else:
+            debug_extra_options = ""
         app_conf["max_age"] = max_age
         app_conf["name"] = app
-        app_conf["main_arg"] = main_arg
         app_conf["debug"] = debug
         app_conf["numprocesses"] = workers
         app_conf["timeout"] = timeout
+        app_conf["debug_extra_options"] = debug_extra_options
         app_conf["add_plugin_dir_to_python_path"] = \
             add_plugin_dir_to_python_path
         app_conf["add_app_dir_to_python_path"] = add_app_dir_to_python_path
@@ -145,8 +150,14 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         if version < 1:
             app_conf["cmd_args"] = typ_to_cmd_args(typ, plugin_conf, app_conf)
         else:
-            cmd_and_args = parser.get(section, "cmd_and_args")
-            app_conf["cmd_args"] = FIXME
+            tmp = "null"
+            if parser.has_option(section, "cmd_and_args"):
+                tmp = parser.get(section, "cmd_and_args")
+            tmp2 = False
+            if parser.has_option(section, "use_signal_wrapper"):
+                tmp2 = parser.getboolean(section, "use_signal_wrapper")
+            cmd_and_args = get_cmd_and_args(tmp, plugin_conf, app_conf, tmp2)
+            app_conf["cmd_args"] = cmd_and_args
         plugin_conf["apps"].append(app_conf)
 
     for extra_daemon in extra_daemons:

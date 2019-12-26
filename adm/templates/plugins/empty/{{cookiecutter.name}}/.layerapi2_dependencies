@@ -1,6 +1,0 @@
-{% if cookiecutter.type == "python2" %}python2@mfserv{% elif cookiecutter.type == 'python3' %}python3@mfserv{% elif cookiecutter.type == 'node' %}nodejs@mfserv{% endif %}
-{% if cookiecutter.type == "python2" %}-python2_devtools@mfext{% else %}-python3_devtools@mfext{% endif %}
-{% if cookiecutter.type == "python3" %}-python3_ia@mfext{% endif %}
-{% if cookiecutter.type == "python2" %}-python2_vim@mfext{% else %}-python3_vim@mfext{% endif %}
--scientific_core@mfext
-{% if cookiecutter.type == "python2" %}-python2_scientific@mfext{% else %}-python3_scientific@mfext{% endif %}
