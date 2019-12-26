@@ -73,7 +73,7 @@ max_retry = -1
 {% for PLUGIN in PLUGINS %}
     {% for APP in PLUGIN.apps %}
 
-[watcher:app.{{PLUGIN.name}}.{{APP.name}}]
+[watcher:app.{{PLUGIN.hot_swap_prefix}}{{PLUGIN.name}}.{{APP.name}}]
 cmd = std_redirect
 args = {{APP.cmd_args}}
 numprocesses = {{APP.numprocesses}}
@@ -97,12 +97,12 @@ max_age_variance = {{APP.max_age}}
 rlimit_{{key}} = {{value}}
 {% endfor %}
 
-{% if APP.debug or PLUGIN.hot_swap_plugin %}
-[env:app.{{PLUGIN.name}}.{{APP.name}}]
+{% if APP.debug or PLUGIN.hot_swap_prefix != "" %}
+[env:app.{{PLUGIN.hot_swap_prefix}}{{PLUGIN.name}}.{{APP.name}}]
 {% if APP.debug %}
 MFSERV_CURRENT_PLUGIN_DEBUG=1
 {% endif %}
-{% if PLUGIN.hot_swap_plugin %}
+{% if PLUGIN.hot_swap_prefix != "" %}
 MFMODULE_PLUGINS_BASE_DIR={{PLUGIN.hot_swap_home}}
 {% endif %}
 {% endif %}

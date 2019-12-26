@@ -9,6 +9,9 @@ import copy
 from configparser_extended import ExtendedConfigParser
 from mflog import get_logger
 from mfutil.plugins import layerapi2_label_to_plugin_name
+from mfserv.plugins_common import get_unix_sockets, get_hot_swap_prefix, \
+    get_plugin_format_version
+from mfserv.plugins_deprecated import test_deprecated_options, is_typ_valid
 
 MFMODULE_RUNTIME_HOME = os.environ["MFMODULE_RUNTIME_HOME"]
 MFSERV_PLUGINS_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
@@ -29,30 +32,6 @@ for var in ["MODULE", "MODULE_HOME", "MODULE_LOWERCASE", "MODULE_VERSION",
     new_var = 'MF' + var
     if var not in os.environ and new_var in os.environ:
         os.environ[var] = os.environ[new_var]
-
-
-def is_typ_valid(typ):
-    return typ in ["python3_sync", "python2_sync", "aiohttp", "static", "node"]
-
-
-def typ_to_sockets(typ, app_conf):
-    if app_conf['workers'] == 0:
-        return None
-    else:
-        if typ == "node":
-            return [
-                "%s/var/%s_%s%s_%i.socket" %
-                (MFMODULE_RUNTIME_HOME, typ, app_conf['hot_swap_prefix'],
-                 app_conf['plugin_name'], i + 1)
-                for i in range(0, app_conf['workers'])
-            ]
-        else:
-            return [
-                "%s/var/%s_%s%s_%s_%i.socket" %
-                (MFMODULE_RUNTIME_HOME, typ, app_conf['hot_swap_prefix'],
-                 app_conf['plugin_name'], app_conf['app_name'], i + 1)
-                for i in range(0, app_conf['workers'])
-            ]
 
 
 LOGGER = get_logger("__make_nginx_conf")
@@ -104,27 +83,20 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                        "ignoring this plugin", plugin_directory, e)
         return None
     logger = LOGGER.bind(plugin_name=plugin_name)
-    if hot_swap_plugin:
-        hot_swap_prefix = "__hs_"
-    else:
-        hot_swap_prefix = ""
-
     parser.read(plugin_configuration_file)
     if parser.has_option("__advanced", "disable_nginx_conf"):
         if parser.getboolean("__advanced", "disable_nginx_conf"):
             logger.warning("disabled plugin => ignoring")
             return None
+    version = get_plugin_format_version(logger, parser)
+    logger = logger.bind(version=version)
+    test_deprecated_options(logger, parser)
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
 
     extra_general_nginx_http_conf_string = \
         get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
                               "general", "extra_nginx_http_conf_filename")
-    if extra_general_nginx_http_conf_string == "":
-        # DEPRECATED (for compatibility)
-        extra_general_nginx_http_conf_string = \
-            get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
-                                  "general", "extra_nginx_conf_filename")
     extra_general_nginx_server_conf_string = \
         get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
                               "general", "extra_nginx_server_conf_filename")
@@ -151,9 +123,10 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         logger = logger.bind(app=app)
         section = "app_%s" % app
         typ = parser.get(section, "type")
-        if not is_typ_valid(typ):
-            logger.warning("unknown typ: %s => ignoring app", typ)
-            continue
+        if version < 1:
+            if not is_typ_valid(typ):
+                logger.warning("unknown typ: %s => ignoring app", typ)
+                continue
         if len(glob.glob(os.path.join(plugin_directory, app, '*.lua'))) > 0:
             lua_package_path = os.path.join(plugin_directory, app, '?.lua')
             plugin_conf['lua_package_paths'].append(lua_package_path)
@@ -193,17 +166,10 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                          if is_valid_extra_route(x)]
         workdir = os.path.join(plugin_directory, app)
         timeout = MFSERV_NGINX_TIMEOUT
-        if parser.has_option(section, "proxy_timeout"):
-            logger.warning("proxy_timeout arg is deprecated, use 'timeout' "
-                           "instead")
-            if parser.get(section, "proxy_timeout") != "null":
+        if parser.has_option(section, "timeout"):
+            if parser.get(section, "timeout") != "null":
                 if parser.getint(section, "timeout") > 0:
-                    timeout = parser.getint(section, "proxy_timeout")
-        else:
-            if parser.has_option(section, "timeout"):
-                if parser.get(section, "timeout") != "null":
-                    if parser.getint(section, "timeout") > 0:
-                        timeout = parser.getint(section, "timeout")
+                    timeout = parser.getint(section, "timeout")
         virtualdomains = set()
         for host in (HOSTNAME, HOSTNAME_FULL, "localhost"):
             virtualdomains.add("%s.%s.%s" % (app, plugin_name, host))
@@ -224,9 +190,11 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                     "workdir": workdir,
                     "timeout": timeout + 2,  # kill the backend first
                     "static_routing": static_routing,
-                    "hot_swap_prefix": hot_swap_prefix,
+                    "hot_swap_prefix": get_hot_swap_prefix(hot_swap_plugin),
                     "type": typ}
-        app_conf["sockets"] = typ_to_sockets(typ, app_conf)
+        app_conf["sockets"] = \
+            get_unix_sockets(plugin_name, app, workers,
+                             app_conf["hot_swap_prefix"])
         app_conf['extra_nginx_conf_string'] = \
             envtpl.render_string(extra_nginx_conf_string,
                                  extra_variables={"APP": app_conf},

@@ -7,6 +7,10 @@ import envtpl
 from configparser_extended import ExtendedConfigParser
 from mflog import get_logger
 from mfutil.plugins import layerapi2_label_to_plugin_name
+from mfserv.plugins_common import get_hot_swap_prefix, get_std_redirect_args, \
+    get_plugin_format_version
+from mfserv.plugins_deprecated import test_deprecated_options, is_typ_valid, \
+    typ_to_cmd_args
 
 MFSERV_PLUGINS_HOME = os.path.join(os.environ["MFMODULE_RUNTIME_HOME"],
                                    "var", "plugins")
@@ -17,61 +21,6 @@ CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
 MFMODULE_RUNTIME_HOME = os.environ["MFMODULE_RUNTIME_HOME"]
 MFMODULE_HOME = os.environ["MFMODULE_HOME"]
 MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
-
-
-def is_typ_valid(typ):
-    return typ in ["python3_sync", "python2_sync", "aiohttp", "static", "node",
-                   "empty"]
-
-
-def typ_to_cmd_args(typ, plugin_conf, app_conf):
-    fof = (app_conf["numprocesses"] == "1")
-    std_redirect_extra_args = \
-        get_std_redirect_args("app", plugin_conf['name'], app_conf['name'],
-                              force_one_file=fof)
-    if typ == "aiohttp":
-        bind = "%s/var/aiohttp_%s_%s_$(circus.wid).socket" % (
-            MFMODULE_RUNTIME_HOME, plugin_conf['name'], app_conf['name'])
-        layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-            plugin_conf['original_name'], plugin_conf['dir'],
-            app_conf['name'],
-            apdtpp=app_conf["add_plugin_dir_to_python_path"],
-            aadtpp=app_conf["add_app_dir_to_python_path"]
-        )
-        return "%s -- plugin_wrapper %s -- signal_wrapper.py " \
-            "--timeout=%i %s -- python %s %s %i" % (
-                std_redirect_extra_args,
-                layer_wrapper_extra_args, app_conf["timeout"], bind,
-                app_conf["main_arg"], bind, app_conf["timeout"])
-    elif typ in ['python3_sync', 'python2_sync']:
-        bind = "%s/var/%s_%s_%s_$(circus.wid).socket" % (
-            MFMODULE_RUNTIME_HOME, typ, plugin_conf['name'], app_conf['name'])
-        layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-            plugin_conf['original_name'], plugin_conf['dir'], app_conf['name'],
-            apdtpp=app_conf['add_plugin_dir_to_python_path'],
-            aadtpp=app_conf['add_app_dir_to_python_path'])
-        debug_arg = ""
-        if app_conf['debug']:
-            debug_arg = "--debug --debug-evalex"
-        return "%s -- plugin_wrapper %s -- bjoern_wrapper.py %s " \
-            "--timeout %i %s %s" % (std_redirect_extra_args,
-                                    layer_wrapper_extra_args, debug_arg,
-                                    app_conf['timeout'], app_conf['main_arg'],
-                                    bind)
-    elif typ == "node":
-        bind = "%s/var/node_%s_$(circus.wid).socket" % (
-            MFMODULE_RUNTIME_HOME, plugin_conf['name'])
-        layer_wrapper_extra_args = get_layer_wrapper_extra_args(
-            plugin_conf['original_name'], plugin_conf['dir'])
-        node_server = "%s/%s/%s" % (plugin_conf['dir'], app_conf['name'],
-                                    app_conf['main_arg'])
-        return "%s -- plugin_wrapper %s -- signal_wrapper.py " \
-            "--timeout=%i %s -- node %s %s %s %i" % (
-                std_redirect_extra_args, layer_wrapper_extra_args,
-                app_conf['timeout'], bind, app_conf['node_opts'], node_server,
-                bind, app_conf['timeout'])
-    else:
-        raise Exception("unknown type: %s", typ)
 
 
 LOGGER = get_logger("_make_circus_conf")
@@ -94,44 +43,6 @@ def get_rlimit_conf(parser, section):
     return conf
 
 
-def get_layer_wrapper_extra_args(plugin_name, plugin_dir, app=None,
-                                 apdtpp=False, aadtpp=False):
-    layer_wrapper_extra_args = plugin_name
-    if not apdtpp:
-        layer_wrapper_extra_args = layer_wrapper_extra_args + \
-            " --do-not-add-plugin-dir-to-python-path"
-    if aadtpp and app:
-        app_dir = os.path.join(plugin_dir, app)
-        layer_wrapper_extra_args = layer_wrapper_extra_args + \
-            " --add-extra-dir-to-python-path=%s" % app_dir
-    return layer_wrapper_extra_args
-
-
-def get_std_redirect_args(prefix, plugin_name, app=None,
-                          force_one_file=False,
-                          split_stdout_sterr=True):
-    if not force_one_file:
-        if app:
-            std_prefix = \
-                "%s/log/%s_%s_%s_worker$(circus.wid)" % \
-                (MFMODULE_RUNTIME_HOME, prefix, plugin_name, app)
-        else:
-            std_prefix = \
-                "%s/log/%s_%s_worker$(circus.wid)" % \
-                (MFMODULE_RUNTIME_HOME, prefix, plugin_name)
-    else:
-        if app:
-            std_prefix = "%s/log/%s_%s_%s" % \
-                (MFMODULE_RUNTIME_HOME, prefix, plugin_name, app)
-        else:
-            std_prefix = "%s/log/%s_%s" % \
-                (MFMODULE_RUNTIME_HOME, prefix, plugin_name)
-    if split_stdout_sterr:
-        return "-o %s.stdout -e %s.stderr" % (std_prefix, std_prefix)
-    else:
-        return "-o %s.log -e %s.log" % (std_prefix, std_prefix)
-
-
 def get_conf(plugin_configuration_file, hot_swap_plugin=False):
     plugin_conf = {}
     plugin_dir = os.path.dirname(plugin_configuration_file)
@@ -149,13 +60,12 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         LOGGER.warning("can't read %s/.layerapi2_label with error: %s => "
                        "ignoring this plugin", plugin_dir, e)
         return None
-    original_plugin_name = plugin_name
-    if hot_swap_plugin:
-        plugin_name = "__hs_" + plugin_name
     logger = LOGGER.bind(plugin_name=plugin_name)
     parser = ExtendedConfigParser(config=CONFIG, strict=False,
                                   inheritance='im', interpolation=None)
     parser.read(plugin_configuration_file)
+    version = get_plugin_format_version(logger, parser)
+    logger = logger.bind(version=version)
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
     extra_daemons = [x.replace("extra_daemon_", "", 1).split(':')[0]
@@ -165,14 +75,15 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
     redis_service = False
     if parser.has_option("general", "redis_service"):
         redis_service = parser.getboolean("general", "redis_service")
+    test_deprecated_options(logger, parser)
 
     plugin_conf["name"] = plugin_name
     plugin_conf["dir"] = plugin_dir
     plugin_conf["apps"] = []
     plugin_conf["extra_daemons"] = []
     plugin_conf["hot_swap_plugin"] = hot_swap_plugin
+    plugin_conf["hot_swap_prefix"] = get_hot_swap_prefix(hot_swap_plugin)
     plugin_conf["hot_swap_home"] = MFSERV_PLUGINS_HOTSWAP_HOME
-    plugin_conf["original_name"] = original_plugin_name
 
     for app in apps:
         logger = logger.bind(app=app)
@@ -181,43 +92,33 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         typ = parser.get(section, "type")
         timeout = MFSERV_NGINX_TIMEOUT
         debug = False
+        test_deprecated_options(logger, parser, section)
         if parser.has_option(section, "debug"):
             debug = (parser.getint(section, "debug") == 1)
-        if parser.has_option(section, "proxy_timeout"):
-            logger.warning("proxy_timeout arg is deprecated, use 'timeout' "
-                           "instead")
-            if parser.get(section, "proxy_timeout") != "null":
-                if parser.getint(section, "proxy_timeout") > 0:
-                    timeout = parser.getint(section, "proxy_timeout")
-        else:
-            if parser.has_option(section, "timeout"):
-                if parser.get(section, "timeout") != "null":
-                    if parser.getint(section, "timeout") > 0:
-                        timeout = parser.getint(section, "timeout")
+        if parser.has_option(section, "timeout"):
+            if parser.get(section, "timeout") != "null":
+                if parser.getint(section, "timeout") > 0:
+                    timeout = parser.getint(section, "timeout")
         if typ in ("empty", "static"):
             continue
-        if not is_typ_valid(typ):
-            logger.warning("unknown type: %s => ignoring app", typ)
-            continue
-
+        if version < 1:
+            if not is_typ_valid(typ):
+                logger.warning("unknown type: %s => ignoring app", typ)
+                continue
         add_plugin_dir_to_python_path = True
         if parser.has_option(section, "add_plugin_dir_to_python_path"):
             add_plugin_dir_to_python_path = \
                 parser.getboolean(section, "add_plugin_dir_to_python_path")
-
         add_app_dir_to_python_path = False
         if parser.has_option(section, "add_app_dir_to_python_path"):
             add_app_dir_to_python_path = \
                 parser.getboolean(section, "add_app_dir_to_python_path")
-
         if not parser.has_option(section, "main_arg"):
             logger.warning("main_arg option is missing => ignoring app")
             continue
         else:
             main_arg = parser.get(section, "main_arg")
-
         workers = parser.get(section, "workers")
-
         max_age = 0
         graceful_timeout = 30
         if parser.has_option(section, "max_age") and workers != "1" and \
@@ -226,7 +127,6 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             max_age = max(60, max_age)
         if parser.has_option(section, "graceful_timeout"):
             graceful_timeout = parser.getint(section, "graceful_timeout")
-
         app_conf["max_age"] = max_age
         app_conf["name"] = app
         app_conf["main_arg"] = main_arg
@@ -242,7 +142,11 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             app_conf["node_opts"] = ""
         app_conf["graceful_timeout"] = graceful_timeout
         app_conf["rlimits"] = get_rlimit_conf(parser, section)
-        app_conf["cmd_args"] = typ_to_cmd_args(typ, plugin_conf, app_conf)
+        if version < 1:
+            app_conf["cmd_args"] = typ_to_cmd_args(typ, plugin_conf, app_conf)
+        else:
+            cmd_and_args = parser.get(section, "cmd_and_args")
+            app_conf["cmd_args"] = FIXME
         plugin_conf["apps"].append(app_conf)
 
     for extra_daemon in extra_daemons:
@@ -257,7 +161,7 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         extra_conf["name"] = "extra_daemon_%s_for_plugin_%s" % (extra_daemon,
                                                                 plugin_name)
         extra_conf["cmd_args"] = "%s -- plugin_wrapper %s -- %s" % (
-            std_redirect_extra_args, original_plugin_name, cmd_and_args)
+            std_redirect_extra_args, plugin_name, cmd_and_args)
         extra_conf["numprocesses"] = numprocesses
         extra_conf["rlimits"] = get_rlimit_conf(parser, section)
         debug = False
@@ -281,9 +185,9 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         extra_conf = {}
         extra_conf["name"] = "redis_service_for_plugin_%s" % plugin_name
         extra_conf["cmd_args"] = "%s -- plugin_wrapper %s -- %s" % (
-            std_redirect_extra_args, original_plugin_name,
+            std_redirect_extra_args, plugin_name,
             "redis-server %s/tmp/config_auto/redis_plugin_%s.conf" % (
-                MFMODULE_RUNTIME_HOME, original_plugin_name))
+                MFMODULE_RUNTIME_HOME, plugin_name))
         extra_conf["numprocesses"] = 1
         extra_conf["max_age"] = 0
         extra_conf["graceful_timeout"] = 10
