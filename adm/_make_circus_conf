@@ -230,6 +230,7 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         std_redirect_extra_args = \
             get_std_redirect_args("app", plugin_name, app, force_one_file=fof)
 
+        use_signal_wrapper = 0
         if typ in GUNICORN_TYP_LIST:
             bind = "unix:%s/var/gunicorn_app_%s_%s.socket" % (
                 MFMODULE_RUNTIME_HOME, plugin_name, app)
@@ -259,6 +260,7 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                 original_plugin_name, plugin_dir, app,
                 apdtpp=add_plugin_dir_to_python_path,
                 aadtpp=add_app_dir_to_python_path)
+            use_signal_wrapper = 1
             cmd_args = "%s -- plugin_wrapper %s -- signal_wrapper.py " \
                 "--timeout=%i %s -- python %s %s %i" % (
                     std_redirect_extra_args,
@@ -289,13 +291,22 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             node_opts = ""
             if parser.has_option(section, "node_extra_opts"):
                 node_opts = parser.get(section, "node_extra_opts")
+<<<<<<< HEAD
             cmd_args = "%s -- plugin_wrapper %s -- node %s %s %s %i" % (
                 std_redirect_extra_args, layer_wrapper_extra_args, node_opts,
                 node_server, bind, timeout)
+=======
+            use_signal_wrapper = 1
+            cmd_args = "%s -- plugin_wrapper %s -- signal_wrapper.py " \
+                "--timeout=%i %s -- node %s %s %s %i" % (
+                    std_redirect_extra_args, layer_wrapper_extra_args,
+                    timeout, bind, node_opts, node_server, bind, timeout)
+>>>>>>> 4d52748... fix: change the stop signal with autorestart dev feature
 
         app_conf["max_age"] = max_age
         app_conf["name"] = app
         app_conf["debug"] = debug
+        app_conf["use_signal_wrapper"] = use_signal_wrapper
         app_conf["numprocesses"] = workers
         app_conf["cmd_args"] = cmd_args
         app_conf["graceful_timeout"] = graceful_timeout
