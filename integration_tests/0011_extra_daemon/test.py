@@ -12,7 +12,7 @@ UNIQUE = get_unique_hexa_identifier()
 BashWrapperOrRaise("rm -Rf foobar")
 BashWrapperOrRaise("plugins.uninstall foobar || true")
 
-print(BashWrapperOrRaise("bootstrap_plugin.py create --template=empty "
+print(BashWrapperOrRaise("bootstrap_plugin.py create --template=python3_noweb "
                          "--no-input foobar"))
 with open("foobar/config.ini", "a") as f:
     f.write("\n\n[extra_daemon_foo]\n")

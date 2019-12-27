@@ -114,6 +114,8 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             add_app_dir_to_python_path = \
                 parser.getboolean(section, "add_app_dir_to_python_path")
         workers = get_workers(logger, parser, section)
+        if workers == 0:
+            continue
         max_age = 0
         if parser.has_option(section, "max_age") and workers != 1:
             max_age = parser.getint(section, "max_age")

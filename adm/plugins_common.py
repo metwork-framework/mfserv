@@ -8,10 +8,10 @@ MFMODULE_RUNTIME_HOME = os.environ['MFMODULE_RUNTIME_HOME']
 
 def get_plugin_format_version(logger, parser):
     if not parser.has_option("general", "__version"):
-        # if logger is not None:
-        #    logger.warning("Deprecated config.ini format for plugin: %s => "
-        #                   "it's still ok for this release but it won't work "
-        #                   "anymore with mfserv 0.11 release")
+        if logger is not None:
+            logger.warning("Deprecated config.ini format for plugin: %s => "
+                           "it's still ok for this release but it won't work "
+                           "anymore with mfserv 0.11 release")
         return 0
     else:
         return int(parser.get("general", "__version"))

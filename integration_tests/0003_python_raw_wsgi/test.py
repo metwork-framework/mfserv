@@ -13,8 +13,9 @@ for VERSION in (3, 2):
     BashWrapperOrRaise("rm -Rf foobar")
     BashWrapperOrRaise("plugins.uninstall foobar || true")
 
-    print(BashWrapperOrRaise("bootstrap_plugin.py create --template=default "
-                             "foobar <stdin_python%i" % VERSION))
+    print(BashWrapperOrRaise("bootstrap_plugin.py create --no-input "
+                             "--template=python%i_raw_wsgi "
+                             "foobar" % VERSION))
     with open("foobar/python%i_virtualenv_sources/"
               "requirements-to-freeze.txt" % VERSION, "w") as f:
         f.write("falcon\n")
