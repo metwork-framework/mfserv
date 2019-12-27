@@ -120,10 +120,10 @@ def main():
     parser.add_argument("--timeout", default=0, type=int,
                         help="number of seconds to wait for gracefull "
                         "shutdown (0 (default) means no timeout)")
-    parser.add_argument("--timeout-after-signal", default=10, type=int,
+    parser.add_argument("--timeout-after-signal", default=3, type=int,
                         help="number of seconds to wait for child exit after "
-                        "signal (0 means no timeout), "
-                        "after that SIGKILL")
+                        "signal (0 means no timeout), after that delay "
+                        "=> SIGKILL (default: 3)")
     parser.add_argument("--signal", default=15, type=int,
                         help="signal to send to child process if the "
                         "gracefull process was ok")

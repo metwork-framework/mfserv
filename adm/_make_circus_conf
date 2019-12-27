@@ -126,22 +126,15 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             debug_extra_options = parser.get(section, "debug_extra_options")
             if debug_extra_options == "null":
                 debug_extra_options = ""
-        use_signal_wrapper = True
-        if parser.has_option(section, "use_signal_wrapper"):
-            use_signal_wrapper = parser.getboolean(section,
-                                                   "use_signal_wrapper")
-        signal_wrapper_socket_up_after = 3
-        if parser.has_option(section, "signal_wrapper_socket_up_after"):
-            signal_wrapper_socket_up_after = \
-                parser.getint(section, "signal_wrapper_socket_up_after")
-        signal_wrapper_signal = 15
-        if parser.has_option(section, "signal_wrapper_signal"):
-            signal_wrapper_signal = \
-                parser.getint(section, "signal_wrapper_signal")
-        signal_wrapper_timeout_after_signal = 5
-        if parser.has_option(section, "signal_wrapper_timeout_after_signal"):
-            signal_wrapper_timeout_after_signal = \
-                parser.getint(section, "signal_wrapper_timeout_after_signal")
+        smart_start_delay = 3
+        if parser.has_option(section, "smart_start_delay"):
+            smart_start_delay = parser.getint(section, "smart_start_delay")
+        smart_stop_signal = 15
+        if parser.has_option(section, "smart_stop_signal"):
+            smart_stop_signal = parser.getint(section, "smart_stop_signal")
+        smart_stop_delay = 3
+        if parser.has_option(section, "smart_stop_delay"):
+            smart_stop_delay = parser.getint(section, "smart_stop_delay")
         if debug:
             max_age = 0
             workers = 1
@@ -150,12 +143,9 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         app_conf["max_age"] = max_age
         app_conf["name"] = app
         app_conf["debug"] = debug
-        app_conf["use_signal_wrapper"] = use_signal_wrapper
-        app_conf["signal_wrapper_socket_up_after"] = \
-            signal_wrapper_socket_up_after
-        app_conf["signal_wrapper_signal"] = signal_wrapper_signal
-        app_conf["signal_wrapper_timeout_after_signal"] = \
-            signal_wrapper_timeout_after_signal
+        app_conf["smart_start_delay"] = smart_start_delay
+        app_conf["smart_stop_delay"] = smart_stop_delay
+        app_conf["smart_stop_signal"] = smart_stop_signal
         app_conf["numprocesses"] = workers
         app_conf["timeout"] = timeout
         app_conf["debug_extra_options"] = debug_extra_options

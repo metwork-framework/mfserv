@@ -96,12 +96,11 @@ def get_cmd_and_args(cmd_and_args, plugin_conf, app_conf):
         plugin_conf['name'], plugin_conf['dir'], app_conf['name'],
         apdtpp=app_conf['add_plugin_dir_to_python_path'],
         aadtpp=app_conf['add_app_dir_to_python_path'])
-    if app_conf['use_signal_wrapper']:
-        tmp = "signal_wrapper.py --timeout=%i --signal=%i " \
-            "--timeout-after-signal=%i %s -- %s" % (
-                app_conf["timeout"], app_conf["signal_wrapper_signal"],
-                app_conf["signal_wrapper_timeout_after_signal"],
-                unix_socket, tmp)
+    tmp = "signal_wrapper.py --timeout=%i --signal=%i " \
+        "--timeout-after-signal=%i --socket-up-after=%i %s -- %s" % (
+            app_conf["timeout"], app_conf["smart_stop_signal"],
+            app_conf["smart_stop_delay"], app_conf["smart_start_delay"],
+            unix_socket, tmp)
     return (
         f"{std_redirect_extra_args} -- plugin_wrapper "
         f"{layer_wrapper_extra_args} -- {tmp}"
