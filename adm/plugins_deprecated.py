@@ -6,7 +6,7 @@ from mfserv.plugins_common import get_unix_socket_name, \
 
 MFMODULE_RUNTIME_HOME = os.environ["MFMODULE_RUNTIME_HOME"]
 DEPRECATED_IGNORED_GENERAL_OPTIONS = ["extra_nginx_conf_filename", "name"]
-DEPRECATED_IGNORED_APP_OPTIONS = ["proxy_timeout"]
+DEPRECATED_IGNORED_APP_OPTIONS = ["proxy_timeout", "graceful_timeout"]
 DEPRECATED_GENERAL_OPTIONS = ["redis_service"]
 DEPRECATED_APP_OPTIONS = []
 

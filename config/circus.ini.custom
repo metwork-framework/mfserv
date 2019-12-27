@@ -82,7 +82,10 @@ copy_env = True
 async_kill = False
 autostart = True
 respawn = True
-graceful_timeout = {{APP.graceful_timeout}}
+{% if APP.use_signal_wrapper -%}
+autorestart_kill_signal=2
+{% endif -%}
+graceful_timeout = {{APP.timeout}}
 stdout_stream.class = FileStream
 stderr_stream.class = FileStream
 stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
