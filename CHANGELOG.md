@@ -13,6 +13,7 @@
 
 
 ### Bug Fixes
+- change the stop signal with autorestart dev feature
 - important fix about max_age feature
 
 
