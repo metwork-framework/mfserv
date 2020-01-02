@@ -89,6 +89,7 @@ stderr_stream.class = FileStream
 stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
 stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
 max_retry = -1
+mfserv_plugin = {{PLUGIN.name}}
 {% if APP.max_age > 0 -%}
 max_age = {{APP.max_age}}
 max_age_variance = {{APP.max_age}}
@@ -122,6 +123,7 @@ async_kill = True
 autostart = True
 respawn = True
 graceful_timeout = {{EXTRA.graceful_timeout}}
+mfserv_plugin = {{PLUGIN.name}}
 stdout_stream.class = FileStream
 stderr_stream.class = FileStream
 stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
