@@ -1,6 +1,0 @@
-{% if cookiecutter.type == "gunicorn2_sync" or cookiecutter.type == "python2_sync" %}python2@mfserv{% else %}python3@mfserv{% endif %}
-{% if cookiecutter.type == "gunicorn2_sync" or cookiecutter.type == "python2_sync" %}-python2_devtools@mfext{% else %}-python3_devtools@mfext{% endif %}
-{% if cookiecutter.type != "gunicorn2_sync" and cookiecutter.type != "python2_sync" %}-python3_ia@mfext{% endif %}
-{% if cookiecutter.type == "gunicorn2_sync" or cookiecutter.type == "python2_sync" %}-python2_vim@mfext{% else %}-python3_vim@mfext{% endif %}
--scientific_core@mfext
-{% if cookiecutter.type == "gunicorn2_sync" or cookiecutter.type == "python2_sync" %}-python2_scientific@mfext{% else %}-python3_scientific@mfext{% endif %}

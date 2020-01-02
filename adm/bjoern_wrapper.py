@@ -6,73 +6,14 @@ import bjoern
 import importlib
 import signal
 import datetime
-import functools
-import base64
 import time
 import os
-import requests
 import threading
 import mflog
 import mfutil
 
 
 LOGGER = mflog.get_logger("bjoern_wrapper")
-MFSERV_NGINX_PORT = int(os.environ['MFSERV_NGINX_PORT'])
-MFMODULE = os.environ['MFMODULE']
-CURRENT_PLUGIN_NAME_ENV_VAR = "%s_CURRENT_PLUGIN_NAME" % MFMODULE
-if CURRENT_PLUGIN_NAME_ENV_VAR in os.environ:
-    PLUGIN = os.environ[CURRENT_PLUGIN_NAME_ENV_VAR]
-else:
-    PLUGIN = None
-
-
-def unix_socket_encode(unix_socket):
-    return base64.urlsafe_b64encode(unix_socket.encode('utf8')).decode('ascii')
-
-
-def send_sigint(pid):
-    LOGGER.debug("sending SIGINT to %i", pid)
-    os.kill(pid, signal.SIGINT)
-
-
-def get_socket_conns(unix_socket):
-    url = "http://127.0.0.1:%i/__upstream_status" % MFSERV_NGINX_PORT
-    try:
-        res = requests.get(url, timeout=10).json()
-        for peers in res.values():
-            for peer in peers:
-                if peer.get('name', None) == 'unix:' + unix_socket:
-                    return peer.get('conns', None)
-    except Exception:
-        return None
-
-
-def send_sigint_when_no_connection(pid, unix_socket, timeout):
-    try:
-        params = {"wait": "1"}
-        requests.get(
-            "http://127.0.0.1:%i/__socket_down/%s" % (
-                MFSERV_NGINX_PORT, unix_socket_encode(unix_socket)),
-            params=params)
-    except Exception:
-        pass
-    send_sigint(os.getpid())
-
-
-def on_signal(unix_socket, timeout, signum, frame):
-    if signum == 15:
-        LOGGER.debug("received SIGTERM => smart closing...")
-        x = threading.Thread(target=send_sigint_when_no_connection,
-                             args=(os.getpid(), unix_socket, timeout))
-        x.daemon = True
-        x.start()
-
-
-def socket_up_after(unix_socket, after):
-    time.sleep(after)
-    LOGGER.debug("socket_up on nginx")
-    requests.get("http://127.0.0.1:%i/__socket_up/%s" % (
-        MFSERV_NGINX_PORT, unix_socket_encode(unix_socket)), timeout=10)
 
 
 def get_wsgi_application(path):
@@ -201,16 +142,11 @@ def main():
                         help="if set, you can interactively debug your app in "
                         "your brower (never use it in production!)")
     args = parser.parse_args()
-    signal.signal(signal.SIGTERM,
-                  functools.partial(on_signal, args.unix_socket, args.timeout))
     wsgi_app = get_wsgi_application(args.main_arg)
     try:
         os.unlink(args.unix_socket)
     except Exception:
         pass
-    x = threading.Thread(target=socket_up_after, args=(args.unix_socket, 1))
-    x.daemon = True
-    x.start()
     try:
         app = MflogWsgiMiddleware(
             TimeoutWsgiMiddleware(wsgi_app, args.timeout), args.debug,

@@ -12,7 +12,8 @@ NGINX_PORT = int(os.environ['MFSERV_NGINX_PORT'])
 BashWrapperOrRaise("rm -Rf foobar")
 BashWrapperOrRaise("plugins.uninstall foobar || true")
 
-print(BashWrapperOrRaise("bootstrap_plugin.py create --template=django "
+print(BashWrapperOrRaise("bootstrap_plugin.py create "
+                         "--template=python3_django "
                          "--no-input foobar"))
 print(BashWrapperOrRaise("cd foobar && make release"))
 print(BashWrapperOrRaise('cd foobar && plugins.install "$(ls *.plugin)"'))

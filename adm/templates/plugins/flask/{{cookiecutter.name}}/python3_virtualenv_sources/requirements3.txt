@@ -1,4 +1,0 @@
-certifi==2018.10.15
-Flask==1.0.3
-itsdangerous==1.1.0
-Werkzeug==0.15.4

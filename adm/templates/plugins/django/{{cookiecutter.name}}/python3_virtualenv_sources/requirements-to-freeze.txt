@@ -1,5 +1,0 @@
-{% if cookiecutter.type == "gunicorn3_sync" or cookiecutter.type == "python3_sync" %}
-# python3 requirements.txt file
-# see https://pip.readthedocs.io/en/1.1/requirements.html
-django>=2.2,<2.3
-{% endif %}

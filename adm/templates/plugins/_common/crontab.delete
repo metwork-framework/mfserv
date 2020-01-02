@@ -1,3 +1,0 @@
-{% if cookiecutter.crontab_support|default('unknown') != 'yes' %}
-yes
-{% endif %}
