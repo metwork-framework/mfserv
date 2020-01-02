@@ -1,0 +1,1 @@
+-- code inserted in init_worker_by_lua configuration block
