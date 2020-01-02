@@ -73,7 +73,7 @@ max_retry = -1
 {% for PLUGIN in PLUGINS %}
     {% for APP in PLUGIN.apps %}
 
-[watcher:app.{{PLUGIN.name}}.{{APP.name}}]
+[watcher:app.{{PLUGIN.hot_swap_prefix}}{{PLUGIN.name}}.{{APP.name}}]
 cmd = std_redirect
 args = {{APP.cmd_args}}
 numprocesses = {{APP.numprocesses}}
@@ -82,12 +82,14 @@ copy_env = True
 async_kill = False
 autostart = True
 respawn = True
-graceful_timeout = {{APP.graceful_timeout}}
+autorestart_kill_signal=2
+graceful_timeout = {{APP.timeout}}
 stdout_stream.class = FileStream
 stderr_stream.class = FileStream
 stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
 stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
 max_retry = -1
+mfserv_plugin = {{PLUGIN.name}}
 {% if APP.max_age > 0 -%}
 max_age = {{APP.max_age}}
 max_age_variance = {{APP.max_age}}
@@ -97,12 +99,12 @@ max_age_variance = {{APP.max_age}}
 rlimit_{{key}} = {{value}}
 {% endfor %}
 
-{% if APP.debug or PLUGIN.hot_swap_plugin %}
-[env:app.{{PLUGIN.name}}.{{APP.name}}]
+{% if APP.debug or PLUGIN.hot_swap_prefix != "" %}
+[env:app.{{PLUGIN.hot_swap_prefix}}{{PLUGIN.name}}.{{APP.name}}]
 {% if APP.debug %}
 MFSERV_CURRENT_PLUGIN_DEBUG=1
 {% endif %}
-{% if PLUGIN.hot_swap_plugin %}
+{% if PLUGIN.hot_swap_prefix != "" %}
 MFMODULE_PLUGINS_BASE_DIR={{PLUGIN.hot_swap_home}}
 {% endif %}
 {% endif %}
@@ -121,6 +123,7 @@ async_kill = True
 autostart = True
 respawn = True
 graceful_timeout = {{EXTRA.graceful_timeout}}
+mfserv_plugin = {{PLUGIN.name}}
 stdout_stream.class = FileStream
 stderr_stream.class = FileStream
 stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log

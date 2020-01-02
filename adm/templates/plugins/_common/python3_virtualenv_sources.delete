@@ -1,3 +1,3 @@
-{% if cookiecutter.type|default('unknown') != "gunicorn3_sync" and cookiecutter.type|default('unknown') != "python3_sync" and cookiecutter.type|default('unknown') != "python3" %}
+{% if cookiecutter.type|default('unknown') != "python3_sync" and cookiecutter.type|default('unknown') != "python3" %}
 yes
 {% endif %}
