@@ -82,6 +82,9 @@ copy_env = True
 async_kill = False
 autostart = True
 respawn = True
+{% if APP.use_signal_wrapper %}
+autorestart_kill_signal=2
+{% endif %}
 graceful_timeout = {{APP.graceful_timeout}}
 stdout_stream.class = FileStream
 stderr_stream.class = FileStream
