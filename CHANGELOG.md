@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- mfserv backends refactoring
 - adaptation to removal of layer misc@mfext (#284)
 - improve empty plugin template and update documentation
 - add a new configuration key for plugins
@@ -13,7 +14,6 @@
 
 
 ### Bug Fixes
-- change the stop signal with autorestart dev feature
 - important fix about max_age feature
 
 
