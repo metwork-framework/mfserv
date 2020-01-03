@@ -95,6 +95,10 @@ real_ip_set_from=172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
 # (1 => enabled, 0 => disabled)
 server_tokens=1
 
+# If >0, override the global setting [log]/max_size_before_rotation
+# for the nginx daemon (only)
+max_size_before_rotation=-1
+
 
 ###################
 ##### PLUGINS #####

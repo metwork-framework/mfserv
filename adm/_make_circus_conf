@@ -7,10 +7,12 @@ import envtpl
 from configparser_extended import ExtendedConfigParser
 from mflog import get_logger
 from mfutil.plugins import layerapi2_label_to_plugin_name
-from mfserv.plugins_common import get_hot_swap_prefix, get_std_redirect_args, \
-    get_plugin_format_version, get_cmd_and_args, get_workers
-from mfserv.plugins_deprecated import test_deprecated_options, is_typ_valid, \
-    typ_to_cmd_args
+from mfext.plugins_common import get_workers, get_cmd_and_args, \
+    get_plugin_format_version, get_split_conf, get_rlimit_conf, \
+    test_deprecated_options, get_extra_daemon_conf, \
+    get_redis_service_extra_conf
+from mfserv.plugins_common import get_hot_swap_prefix
+from mfserv.plugins_deprecated import is_typ_valid, typ_to_cmd_args
 
 MFSERV_PLUGINS_HOME = os.path.join(os.environ["MFMODULE_RUNTIME_HOME"],
                                    "var", "plugins")
@@ -24,23 +26,6 @@ MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
 
 
 LOGGER = get_logger("_make_circus_conf")
-
-
-def get_rlimit_conf(parser, section):
-    conf = {}
-    if parser.has_option(section, "rlimit_as"):
-        conf["as"] = parser.getint(section, "rlimit_as")
-    if parser.has_option(section, "rlimit_nofile"):
-        conf["nofile"] = parser.getint(section, "rlimit_nofile")
-    if parser.has_option(section, "rlimit_nproc"):
-        conf["nproc"] = parser.getint(section, "rlimit_nproc")
-    if parser.has_option(section, "rlimit_stack"):
-        conf["stack"] = parser.getint(section, "rlimit_stack")
-    if parser.has_option(section, "rlimit_core"):
-        conf["core"] = parser.getint(section, "rlimit_core")
-    if parser.has_option(section, "rlimit_fsize"):
-        conf["fsize"] = parser.getint(section, "rlimit_fsize")
-    return conf
 
 
 def get_conf(plugin_configuration_file, hot_swap_plugin=False):
@@ -140,6 +125,7 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             workers = 1
         else:
             debug_extra_options = ""
+        app_conf.update(get_split_conf(logger, parser, section))
         app_conf["max_age"] = max_age
         app_conf["name"] = app
         app_conf["debug"] = debug
@@ -170,58 +156,13 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
 
     for extra_daemon in extra_daemons:
         section = "extra_daemon_%s" % extra_daemon
-        extra_conf = {}
-        numprocesses = parser.get(section, "numprocesses")
-        std_redirect_extra_args = \
-            get_std_redirect_args("extra_daemon_%s_plugin" % extra_daemon,
-                                  plugin_name, split_stdout_sterr=True,
-                                  force_one_file=(numprocesses == "1"))
-        cmd_and_args = parser.get(section, "cmd_and_args")
-        extra_conf["name"] = "extra_daemon_%s_for_plugin_%s" % (extra_daemon,
-                                                                plugin_name)
-        extra_conf["cmd_args"] = "%s -- plugin_wrapper %s -- %s" % (
-            std_redirect_extra_args, plugin_name, cmd_and_args)
-        extra_conf["numprocesses"] = numprocesses
-        extra_conf["rlimits"] = get_rlimit_conf(parser, section)
-        debug = False
-        if parser.has_option(section, "debug"):
-            debug = (parser.getint(section, "debug") == 1)
-        extra_conf["graceful_timeout"] = 30
-        extra_conf["max_age"] = 0
-        extra_conf["debug"] = debug
-        if parser.has_option(section, "graceful_timeout"):
-            extra_conf["graceful_timeout"] = parser.getint(section,
-                                                           "graceful_timeout")
-        if parser.has_option(section, "max_age"):
-            extra_conf["max_age"] = parser.getint(section, "max_age")
+        extra_conf = get_extra_daemon_conf(logger, parser, section,
+                                           extra_daemon, plugin_conf)
         plugin_conf["extra_daemons"].append(extra_conf)
 
     if redis_service:
-        std_redirect_extra_args = \
-            get_std_redirect_args("redis_plugin", plugin_name,
-                                  force_one_file=True,
-                                  split_stdout_sterr=False)
-        extra_conf = {}
-        extra_conf["name"] = "redis_service_for_plugin_%s" % plugin_name
-        extra_conf["cmd_args"] = "%s -- plugin_wrapper %s -- %s" % (
-            std_redirect_extra_args, plugin_name,
-            "redis-server %s/tmp/config_auto/redis_plugin_%s.conf" % (
-                MFMODULE_RUNTIME_HOME, plugin_name))
-        extra_conf["numprocesses"] = 1
-        extra_conf["max_age"] = 0
-        extra_conf["graceful_timeout"] = 10
-        extra_conf["rlimits"] = {}
-        extra_conf["debug"] = False
+        extra_conf = get_redis_service_extra_conf(logger, parser, plugin_conf)
         plugin_conf["extra_daemons"].append(extra_conf)
-        with open("%s/tmp/config_auto/redis_plugin_%s.conf" %
-                  (MFMODULE_RUNTIME_HOME, plugin_name), "w+") as f:
-            with open("%s/config/redis_plugin_xxx.conf" % MFMODULE_HOME,
-                      "r") as f2:
-                content = f2.read()
-            new_content = envtpl.render_string(content,
-                                               {"PLUGIN_NAME": plugin_name},
-                                               keep_multi_blank_lines=False)
-            f.write(new_content)
 
     return plugin_conf
 
