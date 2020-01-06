@@ -11,13 +11,9 @@ stop_children = True
 
 {% if MFSERV_NGINX_FLAG == "1" %}
 [watcher:nginx]
-cmd={{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx                               
-args=-p {{MFMODULE_RUNTIME_HOME}}/tmp/nginx_tmp_prefix -c {{MFMODULE_RUNTIME_HOME}}/tmp/config_auto/nginx.conf
+cmd=log_proxy_wrapper
+args={% if MFSERV_NGINX_MAX_SIZE_BEFORE_ROTATION|int > 0 %}--rotation-size {{MFSERV_NGINX_MAX_SIZE_BEFORE_ROTATION}} {% endif %}--stdout {{MFMODULE_RUNTIME_HOME}}/log/nginx_access.log --stderr {{MFMODULE_RUNTIME_HOME}}/log/nginx_error.log -- {{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx -p {{MFMODULE_RUNTIME_HOME}}/tmp/nginx_tmp_prefix -c {{MFMODULE_RUNTIME_HOME}}/tmp/config_auto/nginx.conf
 numprocesses = 1                                                                
-stdout_stream.class = FileStream                                                
-stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/nginx.log                  
-stderr_stream.class = FileStream                                                
-stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/nginx.log                  
 copy_env = True                                                                 
 autostart = True                                                                
 respawn = True                                                                  
@@ -27,39 +23,13 @@ working_dir = {{MFMODULE_RUNTIME_HOME}}/tmp
 async_kill = True
 stop_signal = SIGQUIT
 max_retry = -1
-
-{% if MFSERV_ADMIN_HOSTNAME_IP != "null" %}
-{% if MFSERV_ADMIN_SEND_NGINX_LOGS == "1" %}
-[watcher:jsonlog2elasticsearch]
-cmd=layer_wrapper
-args=--layers=monitoring@mfext -- jsonlog2elasticsearch --transform-func=jsonlog2elasticsearch_metwork_addon.transform_func {{MFSERV_ADMIN_HOSTNAME_IP}} {{MFSERV_ADMIN_ELASTICSEARCH_HTTP_PORT}} nginx-%Y.%m.%d {{MFMODULE_RUNTIME_HOME}}/log/nginx_access.log
-numprocesses = 1                                                                
-stdout_stream.class = FileStream                                                
-stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/jsonlog2elasticsearch_nginx.log                  
-stderr_stream.class = FileStream                                                
-stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/jsonlog2elasticsearch_nginx.log
-copy_env = True                                                                 
-autostart = True                                                                
-respawn = True                                                                  
-hooks.before_start=circus_hooks.before_start_shell                              
-hooks.after_stop=circus_hooks.after_stop_shell          
-working_dir = {{MFMODULE_RUNTIME_HOME}}/tmp
-async_kill = True
-max_retry = -1
-
-{% endif %}
-{% endif %}
 {% endif %}
 
 {% if MFSERV_AUTORESTART_FLAG == "1" %}
 [watcher:conf_monitor]                                                          
-cmd={{MFMODULE_HOME}}/bin/mfserv_conf_monitor.py                                         
-args=                                                                           
+cmd=log_proxy_wrapper
+args=--stdout {{MFMODULE_RUNTIME_HOME}}/log/conf_monitor.log --stderr STDOUT -- {{MFMODULE_HOME}}/bin/mfserv_conf_monitor.py
 numprocesses = 1                                                                
-stdout_stream.class = FileStream                                                
-stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/conf_monitor.stdout        
-stderr_stream.class = FileStream                                                
-stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/conf_monitor.stderr        
 copy_env = True                                                                 
 autostart = True                                                                
 respawn = True           
@@ -74,7 +44,7 @@ max_retry = -1
     {% for APP in PLUGIN.apps %}
 
 [watcher:app.{{PLUGIN.hot_swap_prefix}}{{PLUGIN.name}}.{{APP.name}}]
-cmd = std_redirect
+cmd = log_proxy_wrapper
 args = {{APP.cmd_args}}
 numprocesses = {{APP.numprocesses}}
 working_dir = {{PLUGIN.dir}}
@@ -84,10 +54,6 @@ autostart = True
 respawn = True
 autorestart_kill_signal=2
 graceful_timeout = {{APP.timeout}}
-stdout_stream.class = FileStream
-stderr_stream.class = FileStream
-stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
-stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
 max_retry = -1
 mfserv_plugin = {{PLUGIN.name}}
 {% if APP.max_age > 0 -%}
@@ -114,7 +80,7 @@ MFMODULE_PLUGINS_BASE_DIR={{PLUGIN.hot_swap_home}}
     {% for EXTRA in PLUGIN.extra_daemons %}
 
 [watcher:{{EXTRA.name}}]
-cmd = std_redirect
+cmd = log_proxy_wrapper
 args = {{EXTRA.cmd_args}}
 numprocesses = {{EXTRA.numprocesses}}
 working_dir = {{PLUGIN.dir}}
@@ -124,10 +90,6 @@ autostart = True
 respawn = True
 graceful_timeout = {{EXTRA.graceful_timeout}}
 mfserv_plugin = {{PLUGIN.name}}
-stdout_stream.class = FileStream
-stderr_stream.class = FileStream
-stdout_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
-stderr_stream.filename = {{MFMODULE_RUNTIME_HOME}}/log/circus.log
 max_retry = -1
 {% if EXTRA.max_age > 0 -%}
 max_age = {{EXTRA.max_age}}
@@ -138,11 +100,8 @@ max_age_variance = {{EXTRA.max_age}}
 rlimit_{{key}} = {{value}}
 {% endfor %}
 
-{% if EXTRA.debug or PLUGIN.hot_swap_plugin %}
+{% if PLUGIN.hot_swap_plugin %}
 [env:{{EXTRA.name}}]
-{% if EXTRA.debug %}
-MFSERV_CURRENT_PLUGIN_DEBUG=1
-{% endif %}
 {% if PLUGIN.hot_swap_plugin %}
 MFMODULE_PLUGINS_BASE_DIR={{PLUGIN.hot_swap_home}}
 {% endif %}

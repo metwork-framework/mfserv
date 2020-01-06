@@ -9,9 +9,10 @@ import copy
 from configparser_extended import ExtendedConfigParser
 from mflog import get_logger
 from mfutil.plugins import layerapi2_label_to_plugin_name
-from mfserv.plugins_common import get_unix_sockets, get_hot_swap_prefix, \
-    get_plugin_format_version, get_workers
-from mfserv.plugins_deprecated import test_deprecated_options, is_typ_valid
+from mfext.plugins_common import get_plugin_format_version, get_workers, \
+    test_deprecated_options
+from mfserv.plugins_common import get_unix_sockets, get_hot_swap_prefix
+from mfserv.plugins_deprecated import is_typ_valid
 
 MFMODULE_RUNTIME_HOME = os.environ["MFMODULE_RUNTIME_HOME"]
 MFSERV_PLUGINS_HOME = os.path.join(MFMODULE_RUNTIME_HOME,

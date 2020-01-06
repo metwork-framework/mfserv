@@ -1,4 +1,4 @@
-CONFIGS=config.ini nginx.conf redis_plugin_xxx.conf mflog_override.conf stats.lua upstream_status.lua init_worker_by_lua.lua socket_updown.lua health.lua
+CONFIGS=config.ini nginx.conf mflog_override.conf stats.lua upstream_status.lua init_worker_by_lua.lua socket_updown.lua health.lua
 
 include ../adm/root.mk
 include $(MFEXT_HOME)/share/subdir_root.mk
