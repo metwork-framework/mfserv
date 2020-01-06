@@ -2,6 +2,18 @@
 
 
 
+## v0.9.6 (2020-01-02)
+
+### New Features
+
+
+### Bug Fixes
+- change the stop signal with autorestart dev feature
+
+
+
+
+
 ## v0.9.5 (2019-12-26)
 
 - No interesting change
