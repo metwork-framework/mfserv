@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- log refactoring
 - mfserv backends refactoring
 - adaptation to removal of layer misc@mfext (#284)
 - improve empty plugin template and update documentation
