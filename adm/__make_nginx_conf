@@ -152,7 +152,7 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
         debug = False
         if parser.has_option(section, "debug"):
             debug = (parser.getint(section, "debug") == 1)
-        virtualdomain_based_routing = True
+        virtualdomain_based_routing = False
         if parser.has_option(section, "virtualdomain_based_routing"):
             virtualdomain_based_routing = \
                 parser.getboolean(section,
