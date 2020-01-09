@@ -2,6 +2,7 @@
 
 import argparse
 import signal
+import six
 import functools
 import base64
 import time
@@ -21,6 +22,14 @@ NGINX_TIMEOUT = 10
 SMART_SHUTDOWN = None
 SIG_SHUTDOWN = None
 HARD_SHUTDOWN = None
+
+class DummyPyTimeoutException(Exception):
+    pass
+
+if six.PY2:
+    TIMEOUT_EXCEPTION_CLASS = DummyPyTimeoutException
+else:
+    TIMEOUT_EXCEPTION_CLASS = subprocess.TimeoutExpired
 
 
 def unix_socket_encode(unix_socket):
@@ -65,8 +74,11 @@ def send_signal_when_no_connection(pid, unix_socket, sig, timeout):
                 (unix_socket, timeout))
     if socket_down(unix_socket, True, timeout):
         SIG_SHUTDOWN = datetime.datetime.now()
-        LOGGER.info("sending %s to %i",
-                    signal.Signals(sig).name, pid)  # pylint: disable=E1101
+        if six.PY2:
+            LOGGER.info("sending %i to %i", sig, pid)
+        else:
+            LOGGER.info("sending %s to %i",
+                        signal.Signals(sig).name, pid)  # pylint: disable=E1101
         os.kill(pid, sig)
     else:
         HARD_SHUTDOWN = datetime.datetime.now()
@@ -152,7 +164,13 @@ def main():
     x.start()
     while True:
         try:
-            p.wait(timeout=1)
+            if six.PY2:
+                # emulate python3 subprocess python3 behaviour
+                if p.poll() is None:
+                    time.sleep(1)
+                    raise TIMEOUT_EXCEPTION_CLASS
+            else:
+                p.wait(timeout=1)
             if SMART_SHUTDOWN:
                 LOGGER.info("process: %i (smart) stopped" % pid)
             elif HARD_SHUTDOWN:
@@ -166,7 +184,7 @@ def main():
                 # record that the socket is closed
                 time.sleep(0.5)
             break
-        except subprocess.TimeoutExpired:
+        except TIMEOUT_EXCEPTION_CLASS:
             pass
         except Exception:
             LOGGER.exception("Exception during process waiting => exiting")
