@@ -6,7 +6,7 @@ import envtpl
 import sys
 import hashlib
 import copy
-from configparser_extended import ExtendedConfigParser
+from opinionated_configparser import OpinionatedConfigParser
 from mflog import get_logger
 from mfutil.plugins import layerapi2_label_to_plugin_name
 from mfext.plugins_common import get_plugin_format_version, get_workers, \
@@ -20,7 +20,6 @@ MFSERV_PLUGINS_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
 MFSERV_PLUGINS_HOTSWAP_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
                                            "tmp", "plugins.hotswap")
 MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
-CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
 HOSTNAME = os.environ.get('MFCOM_HOSTNAME')
 HOSTNAME_FULL = os.environ.get('MFCOM_HOSTNAME_FULL')
 MFMODULE = os.environ['MFMODULE']
@@ -66,8 +65,7 @@ def get_nginx_conf_string(parser, plugin_directory, plugin_name, plugin_label,
 def get_conf(plugin_configuration_file, hot_swap_plugin=False):
     plugin_conf = {}
     plugin_directory = os.path.dirname(plugin_configuration_file)
-    parser = ExtendedConfigParser(config=CONFIG, strict=False,
-                                  inheritance='im', interpolation=None)
+    parser = OpinionatedConfigParser()
     try:
         with open(os.path.join(plugin_directory,
                                ".layerapi2_label"), "r") as f:
