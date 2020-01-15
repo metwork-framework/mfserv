@@ -4,7 +4,7 @@ import os
 import glob
 import sys
 import envtpl
-from configparser_extended import ExtendedConfigParser
+from opinionated_configparser import OpinionatedConfigParser
 from mflog import get_logger
 from mfutil.plugins import layerapi2_label_to_plugin_name
 from mfext.plugins_common import get_workers, get_cmd_and_args, \
@@ -46,8 +46,7 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
                        "ignoring this plugin", plugin_dir, e)
         return None
     logger = LOGGER.bind(plugin_name=plugin_name)
-    parser = ExtendedConfigParser(config=CONFIG, strict=False,
-                                  inheritance='im', interpolation=None)
+    parser = OpinionatedConfigParser()
     parser.read(plugin_configuration_file)
     version = get_plugin_format_version(logger, parser)
     logger = logger.bind(version=version)
