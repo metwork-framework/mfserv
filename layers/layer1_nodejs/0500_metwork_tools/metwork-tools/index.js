@@ -1,7 +1,6 @@
 const process = require('process')
-const fs = require('fs')
-const fsext = require('fs-ext')
 const util = require('util')
+const syslog = require("syslog-client");
 
 const LOG_LEVELS = {
     DEBUG: 1,
@@ -11,29 +10,31 @@ const LOG_LEVELS = {
     CRITICAL: 5
 }
 const LOG_MINIMAL_LEVEL = LOG_LEVELS[process.env.MFSERV_LOG_MINIMAL_LEVEL]
-const LOG_JSON_MINIMAL_LEVEL = LOG_LEVELS[process.env.MFSERV_LOG_JSON_MINIMAL_LEVEL]
-const LOG_JSON_FILE = process.env.MFSERV_LOG_JSON_FILE || "null"
+const LOG_SYSLOG_MINIMAL_LEVEL = LOG_LEVELS[process.env.MFSERV_LOG_SYSLOG_MINIMAL_LEVEL]
+const LOG_SYSLOG_ADDRESS = process.env.MFSERV_LOG_SYSLOG_ADDRESS || "null"
 const PID = process.pid
 const PLUGIN = process.env.MFSERV_CURRENT_PLUGIN_NAME || "unknown"
 
+
+
 function before_start(unix_socket_path) {
-    // DEPRECATED
+    // FIXME: DEPRECATED
     process.stdout.write("metwork_tooks.before_start() is deprecated => remove this call from your code")
 }
 
 function after_start(unix_socket_path) {
-    // DEPRECATED
+    // FIXME: DEPRECATED
     process.stdout.write("ok: process #" + process.pid + " is listening on " + unix_socket_path + "\n")
 }
 
 function before_stop(unix_socket_path) {
-    // DEPRECATED
+    // FIXME: DEPRECATED
     process.stdout.write("metwork_tooks.before_stop() is deprecated => remove this call from your code")
     server.close()
 }
 
 function after_stop(unix_socket_path) {
-    // DEPRECATED
+    // FIXME: DEPRECATED
     process.stdout.write("exiting !\n")
 }
 
@@ -48,78 +49,49 @@ function _console_log(level, data, ...args) {
     }
 }
 
-function _json_lock_log_then_close(fd, record) {
-    fsext.flock(fd, 'exnb', function(err4) {
-        if (err4) {
-            if (err4.code == "EAGAIN") {
-                setTimeout(function() {
-                    _json_lock_log_then_close(fd, record)
-                }, 1)
-                return
-            }
-            if (err4.code == "EWOULDBLOCK") {
-                setTimeout(function() {
-                    _json_lock_log_then_close(fd, record)
-                }, 1)
-                return
-            }
-            console.error("WARNING: can't get lock to %s with error: %s", LOG_JSON_FILE, err4.message)
-            return
-        }
-        fs.write(fd, JSON.stringify(record) + "\n", function(err, bytesWritten, str) {
-            if (err) {
-                console.error("WARNING: can't log to %s with error: %s", LOG_JSON_FILE, err.message)
-            }
-            fs.close(fd, function(err3) {
-                if (err3) {
-                    console.error("WARNING: can't close: %s with message: %s", LOG_JSON_FILE, err3.message)
-                }
-            })
-        })
-    })
-}
-
 function _json_log(level, data, ...args) {
-    if (level < LOG_JSON_MINIMAL_LEVEL) {
+    if (level < LOG_SYSLOG_MINIMAL_LEVEL) {
         return
     }
-    if (LOG_JSON_FILE == "null") {
+    if (LOG_SYSLOG_ADDRESS == "null") {
         return
     }
-    fs.open(LOG_JSON_FILE, 'a', (err, fd) => {
-        if (err) {
-            console.error("can't log to %s with error: %s", LOG_JSON_FILE, err.message)
-            return
+    if (typeof _json_log.syslog_client_instance == 'undefined') {
+        var options = {
+            syslogHostname: os.hostname(),
+            transport: syslog.Transport.Udp,
+            port: parseInt(LOG_SYSLOG_ADDRESS.split(":")[1])
         }
-        var timestamp = (new Date()).toISOString()
-        var level_str = "unknown"
-        switch (level) {
-            case 1:
-                level_str = "debug"
-                break
-            case 2:
-                level_str = "info"
-                break
-            case 3:
-                level_str = "warning"
-                break
-            case 4:
-                level_str = "error"
-                break
-            case 5:
-                level_str = "critical"
-                break
-        }
-        var record = {
-            name: "default",
-            event: util.format(data, ...args),
-            level: level_str,
-            pid: PID,
-            plugin: PLUGIN,
-            timestamp: timestamp
-        }
-        _json_lock_log_then_close(fd, record)
-    })
+        _json_log.syslog_client_instance = syslog.createClient(LOG_SYSLOG_ADDRESS.split(":")[0], options)
+    }
+    var timestamp = (new Date()).toISOString()
+    var level_str = "unknown"
+    switch (level) {
+        case 1:
+            level_str = "debug"
+            break
+        case 2:
+            level_str = "info"
+            break
+        case 3:
+            level_str = "warning"
+            break
+        case 4:
+            level_str = "error"
+            break
+        case 5:
+            level_str = "critical"
+            break
+    }
+    var record = {
+        name: "default",
+        event: util.format(data, ...args),
+        level: level_str,
+        pid: PID,
+        plugin: PLUGIN,
+        timestamp: timestamp
+    }
+    _json_log.syslog_client_instance.log(JSON.stringify(record))
 }
 
 function console_debug(data, ...args) {
