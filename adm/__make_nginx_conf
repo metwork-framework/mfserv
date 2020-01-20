@@ -65,7 +65,7 @@ def get_nginx_conf_string(parser, plugin_directory, plugin_name, plugin_label,
 def get_conf(plugin_configuration_file, hot_swap_plugin=False):
     plugin_conf = {}
     plugin_directory = os.path.dirname(plugin_configuration_file)
-    parser = OpinionatedConfigParser()
+    parser = OpinionatedConfigParser(ignore_sections_starting_with=None)
     try:
         with open(os.path.join(plugin_directory,
                                ".layerapi2_label"), "r") as f:
