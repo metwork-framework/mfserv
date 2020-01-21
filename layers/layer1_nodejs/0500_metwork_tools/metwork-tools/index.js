@@ -1,4 +1,5 @@
 const process = require('process')
+const os = require('os')
 const util = require('util')
 const syslog = require("syslog-client");
 
@@ -9,9 +10,9 @@ const LOG_LEVELS = {
     ERROR: 4,
     CRITICAL: 5
 }
-const LOG_MINIMAL_LEVEL = LOG_LEVELS[process.env.MFSERV_LOG_MINIMAL_LEVEL]
-const LOG_SYSLOG_MINIMAL_LEVEL = LOG_LEVELS[process.env.MFSERV_LOG_SYSLOG_MINIMAL_LEVEL]
-const LOG_SYSLOG_ADDRESS = process.env.MFSERV_LOG_SYSLOG_ADDRESS || "null"
+const LOG_MINIMAL_LEVEL = LOG_LEVELS[process.env.MFLOG_MINIMAL_LEVEL]
+const LOG_SYSLOG_MINIMAL_LEVEL = LOG_LEVELS[process.env.MFLOG_SYSLOG_MINIMAL_LEVEL]
+const LOG_SYSLOG_ADDRESS = process.env.MFLOG_SYSLOG_ADDRESS || "null"
 const PID = process.pid
 const PLUGIN = process.env.MFSERV_CURRENT_PLUGIN_NAME || "unknown"
 
@@ -38,14 +39,44 @@ function after_stop(unix_socket_path) {
     process.stdout.write("exiting !\n")
 }
 
+function _get_console_args(level, data, ...args) {
+    var new_args = [];
+    var d = new Date();
+    new_args.push(d.toISOString());
+    switch (level) {
+        case 1:
+            new_args.push("   [DEBUG]")
+            break
+        case 2:
+            new_args.push("    [INFO]")
+            break
+        case 3:
+            new_args.push(" [WARNING]")
+            break
+        case 4:
+            new_args.push("   [ERROR]")
+            break
+        case 5:
+            new_args.push("[CRITICAL]")
+            break
+    }
+    new_args.push("(" + PLUGIN + "#" + process.pid + ")")
+    new_args.push(data);
+    for( var i = 0; i < args.length; i++ ) {
+        new_args.push(args[i]);
+    }
+    return new_args;
+}
+
 function _console_log(level, data, ...args) {
     if (level < LOG_MINIMAL_LEVEL) {
         return
     }
+    var new_args = _get_console_args(level, data, ...args)
     if (level <= 2) {
-        console.log(data, ...args)
+        console.log(...new_args)
     } else {
-        console.error(data, ...args)
+        console.error(...new_args)
     }
 }
 
