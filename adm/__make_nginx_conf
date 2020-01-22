@@ -210,6 +210,11 @@ def get_conf(plugin_configuration_file, hot_swap_plugin=False):
             envtpl.render_string(extra_nginx_conf_static_string,
                                  extra_variables={"APP": app_conf},
                                  keep_multi_blank_lines=False)
+        if version < 1 and typ == "static":
+            # compatibility fix (FIXME: will be removed for 0.11)
+            app_conf["static_url_prefix"] = ""
+            app_conf["static_directory"] = ""
+            app_conf["static_routing"] = True
         plugin_conf["apps"].append(app_conf)
         if app == "main" or len(apps) == 1:
             copy_conf = copy.deepcopy(app_conf)
