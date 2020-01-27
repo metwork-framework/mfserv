@@ -17,8 +17,8 @@ numprocesses = 1
 copy_env = True                                                                 
 autostart = True                                                                
 respawn = True                                                                  
-hooks.before_start=circus_hooks.before_start_shell                              
-hooks.after_stop=circus_hooks.after_stop_shell          
+hooks.before_start=mfext.circus_hooks.before_start_shell                              
+hooks.after_stop=mfext.circus_hooks.after_stop_shell          
 working_dir = {{MFMODULE_RUNTIME_HOME}}/tmp
 async_kill = True
 stop_signal = SIGQUIT
@@ -35,8 +35,8 @@ autostart = True
 respawn = True           
 working_dir = {{MFMODULE_RUNTIME_HOME}}/tmp
 stop_signal = 9
-hooks.before_start=circus_hooks.before_start_shell                              
-hooks.after_stop=circus_hooks.after_stop_shell          
+hooks.before_start=mfext.circus_hooks.before_start_shell                              
+hooks.after_stop=mfext.circus_hooks.after_stop_shell          
 max_retry = -1
 {% endif %}
 
@@ -50,7 +50,7 @@ numprocesses = {{APP.numprocesses}}
 working_dir = {{PLUGIN.dir}}
 copy_env = True
 async_kill = False
-autostart = True
+autostart = {% if METWORK_STARTING|default("0") == "1" %}False{% else %}True{% endif %}
 respawn = True
 autorestart_kill_signal=2
 graceful_timeout = {{APP.timeout}}
@@ -86,7 +86,7 @@ numprocesses = {{EXTRA.numprocesses}}
 working_dir = {{PLUGIN.dir}}
 copy_env = True
 async_kill = True
-autostart = True
+autostart = {% if METWORK_STARTING|default("0") == "1" %}False{% else %}True{% endif %}
 respawn = True
 graceful_timeout = {{EXTRA.graceful_timeout}}
 mfserv_plugin = {{PLUGIN.name}}

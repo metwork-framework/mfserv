@@ -4,7 +4,7 @@ import os
 import time
 from mflog import getLogger
 from mfutil import BashWrapper, BashWrapperOrRaise
-from conf_monitor import ConfMonitorRunner, md5sumfile
+from mfext.conf_monitor import ConfMonitorRunner, md5sumfile
 
 LOGGER = getLogger("conf_monitor")
 MFMODULE_RUNTIME_HOME = os.environ['MFMODULE_RUNTIME_HOME']
