@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- port of mflog changes about syslog to node
 - log refactoring
 - mfserv backends refactoring
 - adaptation to removal of layer misc@mfext (#284)
@@ -15,6 +16,8 @@
 
 
 ### Bug Fixes
+- fix a compatibility issue with old static plugins
+- fix signal_wrapper in python2
 - important fix about max_age feature
 
 
