@@ -2,6 +2,18 @@
 
 
 
+## v0.9.7 (2020-01-09)
+
+### New Features
+
+
+### Bug Fixes
+- fix signal_wrapper in python2
+
+
+
+
+
 ## v0.9.6 (2020-01-02)
 
 ### New Features
