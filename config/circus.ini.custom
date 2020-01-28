@@ -62,7 +62,9 @@ max_age_variance = {{APP.max_age}}
 
 {% endif -%}
 {% for key, value in APP.rlimits.items()|sort() %}
+{% if key != "core" -%}
 rlimit_{{key}} = {{value}}
+{% endif -%}
 {% endfor %}
 
 {% if APP.debug or PLUGIN.hot_swap_prefix != "" %}
@@ -97,7 +99,9 @@ max_age_variance = {{EXTRA.max_age}}
 
 {% endif -%}
 {% for key, value in EXTRA.rlimits.items()|sort() %}
+{% if key != "core" -%}
 rlimit_{{key}} = {{value}}
+{% endif -%}
 {% endfor %}
 
 {% if PLUGIN.hot_swap_plugin %}
