@@ -16,6 +16,7 @@
 
 
 ### Bug Fixes
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
 - fix a compatibility issue with old static plugins
 - fix signal_wrapper in python2
 - important fix about max_age feature
