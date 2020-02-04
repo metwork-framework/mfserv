@@ -68,10 +68,15 @@ def start_autorestart_plugin():
 def disable_nginx_conf(home, label):
     echo_running("Disable nginx conf for %s" % label)
     try:
-        BashWrapper("cp -f %s/config.ini %s/config.ini.hotswap" % (home, home))
-        with open(home + "/config.ini", "r") as f:
+        if os.path.isfile("%s/metadata.ini" % home):
+            conf_name = "metadata.ini"
+        else:
+            conf_name = "config.ini"
+        BashWrapper(
+            "cp -f %s/%s %s/%s.hotswap" % (home, conf_name, home, conf_name))
+        with open(home + "/" + conf_name, "r") as f:
             c = f.read()
-        with open(home + "/config.ini", "w") as f:
+        with open(home + "/" + conf_name, "w") as f:
             f.write("[__advanced]\ndisable_nginx_conf=1\n")
             f.write(c)
     except Exception as e:

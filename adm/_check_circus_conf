@@ -15,7 +15,7 @@ else
         _make_circus_conf "${PHOME}" >"${TMPOUTPUT}" 2>&1
         if test $? -ne 0; then
             echo_bold "=> the plugin ${PLUGIN} seems to break circus conf"
-            echo_bold "   please check your plugin config.ini and ${TMPOUTPUT} output"
+            echo_bold "   please check your plugin configuration and ${TMPOUTPUT} output"
         else
             rm -f "${TMPOUTPUT}"
         fi
