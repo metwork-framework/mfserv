@@ -2,7 +2,7 @@
 
 import sys
 from mfutil.plugins import get_plugin_info
-from opinionated_configparser import OpinionatedConfigParser
+from mfext.plugins_common import get_plugin_parser
 
 
 infos = get_plugin_info(sys.argv[1])
@@ -10,9 +10,8 @@ if not infos:
     raise Exception("the plugin %s is not installed" % sys.argv[1])
 
 plugin_home = infos['home']
-config_ini = "%s/config.ini" % plugin_home
-parser = OpinionatedConfigParser()
-parser.read(config_ini)
+plugin_name = infos['metadatas']['name']
+parser = get_plugin_parser(plugin_home, plugin_name)
 dangerous = False
 for option in ("extra_nginx_conf_filename",
                "extra_nginx_http_conf_filename",
