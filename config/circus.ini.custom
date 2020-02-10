@@ -12,7 +12,7 @@ stop_children = True
 {% if MFSERV_NGINX_FLAG == "1" %}
 [watcher:nginx]
 cmd=log_proxy_wrapper
-args={% if MFSERV_NGINX_MAX_SIZE_BEFORE_ROTATION|int > 0 %}--rotation-size {{MFSERV_NGINX_MAX_SIZE_BEFORE_ROTATION}} {% endif %}--stdout {{MFMODULE_RUNTIME_HOME}}/log/nginx_access.log --stderr {{MFMODULE_RUNTIME_HOME}}/log/nginx_error.log -- {{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx -p {{MFMODULE_RUNTIME_HOME}}/tmp/nginx_tmp_prefix -c {{MFMODULE_RUNTIME_HOME}}/tmp/config_auto/nginx.conf
+args={% if MFSERV_NGINX_MAX_SIZE_BEFORE_ROTATION|int > 0 %}--rotation-size {{MFSERV_NGINX_MAX_SIZE_BEFORE_ROTATION}} {% endif %}--stdout nginx_access.log --stderr nginx_error.log -- {{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx -p {{MFMODULE_RUNTIME_HOME}}/tmp/nginx_tmp_prefix -c {{MFMODULE_RUNTIME_HOME}}/tmp/config_auto/nginx.conf
 numprocesses = 1                                                                
 copy_env = True                                                                 
 autostart = True                                                                
@@ -28,7 +28,7 @@ max_retry = -1
 {% if MFSERV_AUTORESTART_FLAG == "1" %}
 [watcher:conf_monitor]                                                          
 cmd=log_proxy_wrapper
-args=--stdout {{MFMODULE_RUNTIME_HOME}}/log/conf_monitor.log --stderr STDOUT -- {{MFMODULE_HOME}}/bin/mfserv_conf_monitor.py
+args=--stdout conf_monitor.log --stderr STDOUT -- {{MFMODULE_HOME}}/bin/mfserv_conf_monitor.py
 numprocesses = 1                                                                
 copy_env = True                                                                 
 autostart = True                                                                

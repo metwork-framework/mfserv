@@ -92,7 +92,7 @@ As `mfserv` unix user:
 | --- | --- |
 | **`config.ini`** | main plugin configuration file |
 | **`Makefile`** | build configuration file (you probably don't need to touch this unless you have specific build directives to add to the `custom::` target) |
-| `crontab` | plugin crontab (use something like `* * * * * {{MFSERV_HOME}}/bin/cronwrap.sh -l -e -- plugin_wrapper {YOUR_PLUGIN_NAME} {YOUR_COMMAND} >>{{MODULE_RUNTIME_HOME}}/log/your_command.log 2>&1` for each line to execute your command in your plugin environement) |
+| `crontab` | plugin crontab (use something like `* * * * * {{MFSERV_HOME}}/bin/cronwrap.sh -l -e -- plugin_wrapper {YOUR_PLUGIN_NAME} {YOUR_COMMAND} >>your_command.log 2>&1` for each line to execute your command in your plugin environement) |
 | `local/` | local subdirectory (it mainly holds the python virtualenv), never touch this it's automatically generated) |
 | `bin/` | if you put an executable in this directory, it will be available in `PATH` (in your plugin environment) |
 | `lib/` | thie library directory will be available in `LD_LIBRARY_PATH` and in `PYTHONPATH` (in your plugin environment), so you can put here shared libraries or python files you want to include easily |
