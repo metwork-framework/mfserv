@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
 - port of mflog changes about syslog to node
 - log refactoring
 - mfserv backends refactoring
