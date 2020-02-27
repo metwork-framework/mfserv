@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echoerr() { echo "$@" 1>&2; }
+
 set -eu
 
 TMPFILE="${MFMODULE_RUNTIME_HOME}/tmp/nginx_conf.$$"
@@ -15,6 +17,25 @@ else
     UUID="unknown"
 fi
 export UUID
+
+if test "${MFSERV_NGINX_HTTPS_PORT}" != "null"; then
+    if test "${MFSERV_NGINX_SSL_CERTIFICATE}" = "/dev/null"; then
+        echoerr "ERROR: MFSERV_NGINX_HTTPS_PORT != null but MFSERV_NGINX_SSL_CERTIFICATE is not set"
+        exit 1
+    fi
+    if test "${MFSERV_NGINX_SSL_CERTIFICATE_KEY}" = "/dev/null"; then
+        echoerr "ERROR: MFSERV_NGINX_HTTPS_PORT != null but MFSERV_NGINX_SSL_CERTIFICATE_KEY is not set"
+        exit 1
+    fi
+    if ! test -r "${MFSERV_NGINX_SSL_CERTIFICATE}"; then
+        echoerr "ERROR: MFSERV_NGINX_SSL_CERTIFICATE:${MFSERV_NGINX_SSL_CERTIFICATE} is not readable by ${MFMODULE_RUNTIME_USER} unix user"
+        exit 1
+    fi
+    if ! test -r "${MFSERV_NGINX_SSL_CERTIFICATE_KEY}"; then
+        echoerr "ERROR: MFSERV_NGINX_SSL_CERTIFICATE:${MFSERV_NGINX_SSL_CERTIFICATE_KEY} is not readable by ${MFMODULE_RUNTIME_USER} unix user"
+        exit 1
+    fi
+fi
 
 __make_nginx_conf "$@" >"${TMPFILE}"
 nginxfmt.py "${TMPFILE}"
