@@ -22,7 +22,21 @@ for rep in $list_rep; do
                 truncate -s 0 "${F}"
             done
             if test $WRAPPER -eq 0; then
-                layer_wrapper --layers=$LAYERS_TO_LOAD -- ./$test
+                run_test=1
+                missing_layers=""
+                if test -s .bypass_test_if_missing; then
+                    for layer in `cat .bypass_test_if_missing`; do
+                       if test `is_layer_installed ${layer}` -eq 0; then
+                           missing_layers="${missing_layers}"" ""${layer}"
+                           run_test=0
+                       fi
+                    done
+                fi
+                if test ${run_test} = 1; then
+                    layer_wrapper --layers=$LAYERS_TO_LOAD -- ./$test
+                else
+                    echo $test "not run because of missing layers" $missing_layers
+                fi
             else
                 ./$test
             fi
