@@ -1,3 +1,24 @@
-# Your crontab fragment here
-# Example:
-# 0 2 * * * {% raw %}{{MFSERV_HOME}}{% endraw %}/bin/cronwrap.sh --lock --log-capture-to your_command.log -- plugin_wrapper {{cookiecutter.name}} your_command.sh
+# This is the cron configuration for your plugin
+# This crontab fragment will be injected into the mfserv crontab
+#
+# Line starting with # (comments) will be ignored
+#
+# You have to follow the crontab standard syntax but you have some additional helpers
+# available:
+# - your command should start with {% raw %}{{MFSERV_HOME}}{% endraw %}/bin/cronwrap.sh
+#   (to get the mfserv metwork profile loaded and to get some additional features
+#    see cronwrap.py --help to get some additional features available)
+# - then, you should capture your logs with "--log-capture-to" option (see examples)
+#   (with this option, you will get automatic rotation for your log files)
+# - then, you should use plugin_wrapper wrapper to get your command executed in
+#   the context/env of your plugin
+# - {% raw %}{{MFSERV_CURRENT_PLUGIN_NAME}}{% endraw %} will be replaced by your plugin name
+# - {% raw %}{{MFSERV_CURRENT_PLUGIN_DIR}}{% endraw %} will be replaced by your plugin dir (absolute)
+# - {% raw %}{{ENV_VAR}}{% endraw %} will be replaced by the corresponding ENV_VAR
+# - you can use jinja2 syntax
+#
+# Full example:
+# 0 2 * * * {% raw %}{{MFSERV_HOME}}/bin/cronwrap.sh --lock --log-capture-to your_command.log -- plugin_wrapper {{MFSERV_CURRENT_PLUGIN_NAME}} {{MFSERV_CURRENT_PLUGIN_DIR}}/bin/your_command.sh{% endraw %}
+# => will execute every dat at 02:00 the command {% raw %}{{MFSERV_CURRENT_PLUGIN_DIR}}/bin/your_command.sh{% endraw %}
+#    in your plugin context/env with an automatic log capture to your_command.log
+#    (you will find it under {% raw %}{{MFMODULE_RUNTIME_HOME}}/log{% endraw %}) with the --lock feature of cronwrap.py
