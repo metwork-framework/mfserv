@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- add a better documented crontab file for plugins
 - https/ssl support for nginx in mfserv (#323)
 - remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
 - port of mflog changes about syslog to node
@@ -18,6 +19,7 @@
 
 
 ### Bug Fixes
+- fix the nginx syslog configuration
 - remove rlimit_core (because of `ulimit -c 0` in mfext)
 - fix a compatibility issue with old static plugins
 - fix signal_wrapper in python2
