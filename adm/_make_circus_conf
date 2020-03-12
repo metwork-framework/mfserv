@@ -5,11 +5,11 @@ import glob
 import sys
 import envtpl
 from mflog import get_logger
-from mfutil.plugins import layerapi2_label_to_plugin_name
 from mfext.plugins_common import get_workers, get_cmd_and_args, \
     get_plugin_format_version, get_split_conf, get_rlimit_conf, \
     test_deprecated_options, get_extra_daemon_conf, \
-    get_redis_service_extra_conf, get_plugin_parser
+    get_redis_service_extra_conf, get_plugin_parser, \
+    get_plugin_name_from_plugin_home, set_plugin_env
 from mfserv.plugins_common import get_hot_swap_prefix
 from mfserv.plugins_deprecated import is_typ_valid, typ_to_cmd_args
 
@@ -27,32 +27,17 @@ MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
 LOGGER = get_logger("_make_circus_conf")
 
 
-def get_conf(plugin_dir, hot_swap_plugin=False):
+def get_conf(plugin_dir, plugin_name, hot_swap_plugin=False):
     plugin_conf = {}
-    try:
-        with open(os.path.join(plugin_dir, ".layerapi2_label"), "r") as f:
-            label = f.read().strip()
-    except Exception:
-        LOGGER.warning(
-            "can't read %s/.layerapi2_label => ignoring this plugin",
-            plugin_dir)
-        return None
-    try:
-        plugin_name = layerapi2_label_to_plugin_name(label)
-    except Exception as e:
-        LOGGER.warning("can't read %s/.layerapi2_label with error: %s => "
-                       "ignoring this plugin", plugin_dir, e)
-        return None
     logger = LOGGER.bind(plugin_name=plugin_name)
     parser = get_plugin_parser(plugin_dir, plugin_name)
-    version = get_plugin_format_version(logger, parser)
+    version = get_plugin_format_version(logger, plugin_dir, plugin_name)
     logger = logger.bind(version=version)
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
     extra_daemons = [x.replace("extra_daemon_", "", 1).split(':')[0]
                      for x in parser.sections()
                      if x.startswith("extra_daemon_")]
-    os.environ["MFSERV_CURRENT_PLUGIN_DIR"] = plugin_dir
     redis_service = False
     if parser.has_option("general", "redis_service"):
         redis_service = parser.getboolean("general", "redis_service")
@@ -79,7 +64,7 @@ def get_conf(plugin_dir, hot_swap_plugin=False):
             if parser.get(section, "timeout") != "null":
                 if parser.getint(section, "timeout") > 0:
                     timeout = parser.getint(section, "timeout")
-        if version < 1:
+        if version < [0, 10, 0]:
             typ = parser.get(section, "type")
             if typ in ("empty", "static"):
                 continue
@@ -94,7 +79,7 @@ def get_conf(plugin_dir, hot_swap_plugin=False):
         if parser.has_option(section, "add_app_dir_to_python_path"):
             add_app_dir_to_python_path = \
                 parser.getboolean(section, "add_app_dir_to_python_path")
-        workers = get_workers(logger, parser, section)
+        workers = get_workers(logger, parser, section, plugin_name)
         if workers == 0:
             continue
         max_age = 0
@@ -121,7 +106,7 @@ def get_conf(plugin_dir, hot_swap_plugin=False):
             workers = 1
         else:
             debug_extra_options = ""
-        app_conf.update(get_split_conf(logger, parser, section))
+        app_conf.update(get_split_conf(logger, parser, section, plugin_name))
         app_conf["max_age"] = max_age
         app_conf["name"] = app
         app_conf["debug"] = debug
@@ -138,8 +123,8 @@ def get_conf(plugin_dir, hot_swap_plugin=False):
             app_conf["node_opts"] = parser.get(section, "node_extra_opts")
         else:
             app_conf["node_opts"] = ""
-        app_conf["rlimits"] = get_rlimit_conf(parser, section)
-        if version < 1:
+        app_conf["rlimits"] = get_rlimit_conf(parser, section, plugin_name)
+        if version < [0, 10, 0]:
             app_conf["main_arg"] = parser.get(section, "main_arg")
             app_conf["cmd_args"] = typ_to_cmd_args(typ, plugin_conf, app_conf)
         else:
@@ -176,7 +161,15 @@ else:
     label_files = label_files1 + label_files2
 plugin_dirs = [(os.path.dirname(x), x in label_files2) for x in label_files]
 for plugin_dir, hotswap in plugin_dirs:
-    plugin_conf = get_conf(plugin_dir, hot_swap_plugin=hotswap)
+    plugin_name = get_plugin_name_from_plugin_home(plugin_dir)
+    if plugin_name is None:
+        LOGGER.warning("can't find plugin_name for "
+                       "plugin_dir=%s => ignoring" % plugin_dir)
+        continue
+    saved_environ = os.environ.copy()
+    set_plugin_env(plugin_dir, plugin_name)
+    plugin_conf = get_conf(plugin_dir, plugin_name, hot_swap_plugin=hotswap)
+    os.environ = saved_environ
     if plugin_conf:
         plugins.append(plugin_conf)
 

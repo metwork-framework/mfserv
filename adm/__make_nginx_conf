@@ -7,9 +7,9 @@ import sys
 import hashlib
 import copy
 from mflog import get_logger
-from mfutil.plugins import layerapi2_label_to_plugin_name
 from mfext.plugins_common import get_plugin_format_version, get_workers, \
-    test_deprecated_options, get_plugin_parser
+    test_deprecated_options, get_plugin_parser, \
+    get_plugin_name_from_plugin_home, set_plugin_env
 from mfserv.plugins_common import get_unix_sockets, get_hot_swap_prefix
 from mfserv.plugins_deprecated import is_typ_valid
 
@@ -40,7 +40,7 @@ def is_valid_extra_route(x):
     return x.startswith('/') and (x == '/' or not x.endswith('/'))
 
 
-def get_nginx_conf_string(parser, plugin_directory, plugin_name, plugin_label,
+def get_nginx_conf_string(parser, plugin_directory, plugin_name,
                           section, key):
     extra_nginx_conf_string = ""
     if parser.has_option(section, key):
@@ -54,30 +54,12 @@ def get_nginx_conf_string(parser, plugin_directory, plugin_name, plugin_label,
     return envtpl.render_string(
         extra_nginx_conf_string,
         # FIXME: drop PLUGIN var ?
-        extra_variables={"PLUGIN": {"name": plugin_name},
-                         "MFSERV_CURRENT_PLUGIN_NAME": plugin_name,
-                         "MFSERV_CURRENT_PLUGIN_DIR": plugin_directory,
-                         "MFSERV_CURRENT_PLUGIN_LABEL": plugin_label},
+        extra_variables={"PLUGIN": {"name": plugin_name}},
         keep_multi_blank_lines=False)
 
 
-def get_conf(plugin_directory, hot_swap_plugin=False):
+def get_conf(plugin_directory, plugin_name, hot_swap_plugin=False):
     plugin_conf = {}
-    try:
-        with open(os.path.join(plugin_directory,
-                               ".layerapi2_label"), "r") as f:
-            label = f.read().strip()
-    except Exception:
-        LOGGER.warning(
-            "can't read %s/.layerapi2_label => ignoring this plugin",
-            plugin_directory)
-        return None
-    try:
-        plugin_name = layerapi2_label_to_plugin_name(label)
-    except Exception as e:
-        LOGGER.warning("can't read %s/.layerapi2_label with error: %s => "
-                       "ignoring this plugin", plugin_directory, e)
-        return None
     logger = LOGGER.bind(plugin_name=plugin_name)
     parser = get_plugin_parser(plugin_directory, plugin_name,
                                ignore_sections_starting_with=None)
@@ -85,21 +67,21 @@ def get_conf(plugin_directory, hot_swap_plugin=False):
         if parser.getboolean("__advanced", "disable_nginx_conf"):
             logger.warning("disabled plugin => ignoring")
             return None
-    version = get_plugin_format_version(logger, parser)
+    version = get_plugin_format_version(logger, plugin_directory, plugin_name)
     logger = logger.bind(version=version)
     test_deprecated_options(logger, parser)
     apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
             if x.startswith("app_")]
 
     extra_general_nginx_http_conf_string = \
-        get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
+        get_nginx_conf_string(parser, plugin_directory, plugin_name,
                               "general", "extra_nginx_http_conf_filename")
     extra_general_nginx_server_conf_string = \
-        get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
+        get_nginx_conf_string(parser, plugin_directory, plugin_name,
                               "general", "extra_nginx_server_conf_filename")
     extra_general_nginx_init_worker_by_lua_block_string = \
         get_nginx_conf_string(
-            parser, plugin_directory, plugin_name, label,
+            parser, plugin_directory, plugin_name,
             "general", "extra_nginx_init_worker_by_lua_block_filename")
 
     plugin_conf["name"] = plugin_name
@@ -119,7 +101,7 @@ def get_conf(plugin_directory, hot_swap_plugin=False):
     for app in apps:
         logger = logger.bind(app=app)
         section = "app_%s" % app
-        if version < 1:
+        if version < [0, 10, 0]:
             typ = parser.get(section, "type")
             if not is_typ_valid(typ):
                 logger.warning("unknown typ: %s => ignoring app", typ)
@@ -128,10 +110,10 @@ def get_conf(plugin_directory, hot_swap_plugin=False):
             lua_package_path = os.path.join(plugin_directory, app, '?.lua')
             plugin_conf['lua_package_paths'].append(lua_package_path)
         extra_nginx_conf_string = \
-            get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
+            get_nginx_conf_string(parser, plugin_directory, plugin_name,
                                   section, "extra_nginx_conf_filename")
         extra_nginx_conf_static_string = \
-            get_nginx_conf_string(parser, plugin_directory, plugin_name, label,
+            get_nginx_conf_string(parser, plugin_directory, plugin_name,
                                   section, "extra_nginx_conf_static_filename")
         static_routing = True
         if parser.has_option(section, "static_routing"):
@@ -143,7 +125,7 @@ def get_conf(plugin_directory, hot_swap_plugin=False):
         if parser.has_option(section, "static_directory"):
             static_directory = parser.get(section, "static_directory")
 
-        workers = get_workers(logger, parser, section)
+        workers = get_workers(logger, parser, section, plugin_name)
 
         debug = False
         if parser.has_option(section, "debug"):
@@ -208,7 +190,7 @@ def get_conf(plugin_directory, hot_swap_plugin=False):
             envtpl.render_string(extra_nginx_conf_static_string,
                                  extra_variables={"APP": app_conf},
                                  keep_multi_blank_lines=False)
-        if version < 1 and typ == "static":
+        if version < [0, 10, 0] and typ == "static":
             # compatibility fix (FIXME: will be removed for 0.11)
             app_conf["static_url_prefix"] = ""
             app_conf["static_directory"] = ""
@@ -239,7 +221,15 @@ else:
     label_files = label_files1 + label_files2
 plugin_dirs = [(os.path.dirname(x), x in label_files2) for x in label_files]
 for plugin_dir, hotswap in plugin_dirs:
-    plugin_conf = get_conf(plugin_dir, hot_swap_plugin=hotswap)
+    plugin_name = get_plugin_name_from_plugin_home(plugin_dir)
+    if plugin_name is None:
+        LOGGER.warning("can't find plugin_name for "
+                       "plugin_dir=%s => ignoring" % plugin_dir)
+        continue
+    saved_environ = os.environ.copy()
+    set_plugin_env(plugin_dir, plugin_name)
+    plugin_conf = get_conf(plugin_dir, plugin_name, hot_swap_plugin=hotswap)
+    os.environ = saved_environ
     if plugin_conf:
         lua_package_paths = lua_package_paths + \
             plugin_conf['lua_package_paths']
