@@ -37,6 +37,10 @@ flag=1
 # the response to the client
 add_request_id_header=1
 
+# If accept_incoming_request_id_header=1, accept incoming X-Request-Id as
+# request_id and don't generate a new one (in this case)
+accept_incoming_request_id_header=0
+
 # If add_x_forwarded_headers=1 (default), we add "X-Forwarded-*" headers
 # (and X-Real-Ip also)
 add_x_forwarded_headers=1
