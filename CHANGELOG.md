@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- new accept_incoming_request_id_header variable and x-forwarded-*
 - add a better documented crontab file for plugins
 - https/ssl support for nginx in mfserv (#323)
 - remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
