@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
 
 import os
-import glob
-import envtpl
+from mfutil import get_unique_hexa_identifier
 import sys
-import hashlib
-import copy
+import envtpl
 from mflog import get_logger
-from mfext.plugins_common import get_plugin_format_version, get_workers, \
-    test_deprecated_options, get_plugin_parser, \
-    get_plugin_name_from_plugin_home, set_plugin_env
-from mfserv.plugins_common import get_unix_sockets, get_hot_swap_prefix
-from mfserv.plugins_deprecated import is_typ_valid
+from mfplugin.manager import PluginsManager
+from mfserv.plugins import HOT_SWAP_PREFIX
 
 MFMODULE_RUNTIME_HOME = os.environ["MFMODULE_RUNTIME_HOME"]
 MFSERV_PLUGINS_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
@@ -23,217 +18,63 @@ HOSTNAME = os.environ.get('MFCOM_HOSTNAME')
 HOSTNAME_FULL = os.environ.get('MFCOM_HOSTNAME_FULL')
 MFMODULE = os.environ['MFMODULE']
 
-# FIXME: fix to ensure compatibility with existing plugins using
-# old variables names MODULE* (to be removed)
-for var in ["MODULE", "MODULE_HOME", "MODULE_LOWERCASE", "MODULE_VERSION",
-            "MODULE_STATUS", "MODULE_RUNTIME_HOME", "MODULE_RUNTIME_USER",
-            "MODULE_RUNTIME_SUFFIX", "MODULE_PLUGINS_BASE_DIR"]:
-    new_var = 'MF' + var
-    if var not in os.environ and new_var in os.environ:
-        os.environ[var] = os.environ[new_var]
-
 
 LOGGER = get_logger("__make_nginx_conf")
+manager = PluginsManager(MFSERV_PLUGINS_HOME)
+hs_manager = PluginsManager(MFSERV_PLUGINS_HOTSWAP_HOME)
 
 
-def is_valid_extra_route(x):
-    return x.startswith('/') and (x == '/' or not x.endswith('/'))
+def get_conf(plugin, hot_swap_plugin=False):
+    logger = LOGGER.bind(plugin_name=plugin.name)
+    if plugin.configuration.disable_nginx_conf:
+        logger.warning("disabled plugin => ignoring")
+        return None
+    apps_to_add = []
+    for app in plugin.configuration.apps:
+        logger = logger.bind(app=app.name)
+        if app.name == "main" or len(plugin.configuration.apps) == 1:
+            new_app = app.duplicate(app.name + "_duplicate")
+            new_app.prefix = "/%s" % plugin.name
+            new_app.alias = "yes"
+            new_app.hash = app.hash
+            apps_to_add.append(new_app)
+        for extra_route in app.prefix_based_routing_extra_routes.split(';'):
+            new_app = app.duplicate("%s_duplicate_%s" %
+                                    (app.name, get_unique_hexa_identifier()))
+            new_app.prefix = extra_route.strip()
+            new_app.alias = "yes"
+            new_app.hash = app.hash
+            apps_to_add.append(new_app)
+        if hot_swap_plugin:
+            app.hot_swap_prefix = HOT_SWAP_PREFIX
+    for app in apps_to_add:
+        plugin.configuration.add_app(app)
+    return plugin
 
 
-def get_nginx_conf_string(parser, plugin_directory, plugin_name,
-                          section, key):
-    extra_nginx_conf_string = ""
-    if parser.has_option(section, key):
-        extra_nginx_conf_filename = parser.get(section, key)
-        if extra_nginx_conf_filename != "null":
-            extra_nginx_conf_filepath = \
-                os.path.join(plugin_directory,
-                             extra_nginx_conf_filename)
-            with open(extra_nginx_conf_filepath, "r") as f:
-                extra_nginx_conf_string = f.read()
-    return envtpl.render_string(
-        extra_nginx_conf_string,
-        # FIXME: drop PLUGIN var ?
-        extra_variables={"PLUGIN": {"name": plugin_name}},
-        keep_multi_blank_lines=False)
-
-
-def get_conf(plugin_directory, plugin_name, hot_swap_plugin=False):
-    plugin_conf = {}
-    logger = LOGGER.bind(plugin_name=plugin_name)
-    parser = get_plugin_parser(plugin_directory, plugin_name,
-                               ignore_sections_starting_with=None)
-    if parser.has_option("__advanced", "disable_nginx_conf"):
-        if parser.getboolean("__advanced", "disable_nginx_conf"):
-            logger.warning("disabled plugin => ignoring")
-            return None
-    version = get_plugin_format_version(logger, plugin_directory, plugin_name)
-    logger = logger.bind(version=version)
-    test_deprecated_options(logger, parser)
-    apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
-            if x.startswith("app_")]
-
-    extra_general_nginx_http_conf_string = \
-        get_nginx_conf_string(parser, plugin_directory, plugin_name,
-                              "general", "extra_nginx_http_conf_filename")
-    extra_general_nginx_server_conf_string = \
-        get_nginx_conf_string(parser, plugin_directory, plugin_name,
-                              "general", "extra_nginx_server_conf_filename")
-    extra_general_nginx_init_worker_by_lua_block_string = \
-        get_nginx_conf_string(
-            parser, plugin_directory, plugin_name,
-            "general", "extra_nginx_init_worker_by_lua_block_filename")
-
-    plugin_conf["name"] = plugin_name
-    plugin_conf["extra_general_nginx_http_conf_string"] = \
-        extra_general_nginx_http_conf_string
-    plugin_conf["extra_general_nginx_server_conf_string"] = \
-        extra_general_nginx_server_conf_string
-    plugin_conf["extra_general_nginx_init_worker_by_lua_block_string"] = \
-        extra_general_nginx_init_worker_by_lua_block_string
-    plugin_conf['lua_package_paths'] = []
-    plugin_conf["apps"] = []
-
-    if len(glob.glob(os.path.join(plugin_directory, '*.lua'))) > 0:
-        lua_package_path = os.path.join(plugin_directory, '?.lua')
-        plugin_conf['lua_package_paths'].append(lua_package_path)
-
-    for app in apps:
-        logger = logger.bind(app=app)
-        section = "app_%s" % app
-        if version < [0, 10, 0]:
-            typ = parser.get(section, "type")
-            if not is_typ_valid(typ):
-                logger.warning("unknown typ: %s => ignoring app", typ)
-                continue
-        if len(glob.glob(os.path.join(plugin_directory, app, '*.lua'))) > 0:
-            lua_package_path = os.path.join(plugin_directory, app, '?.lua')
-            plugin_conf['lua_package_paths'].append(lua_package_path)
-        extra_nginx_conf_string = \
-            get_nginx_conf_string(parser, plugin_directory, plugin_name,
-                                  section, "extra_nginx_conf_filename")
-        extra_nginx_conf_static_string = \
-            get_nginx_conf_string(parser, plugin_directory, plugin_name,
-                                  section, "extra_nginx_conf_static_filename")
-        static_routing = True
-        if parser.has_option(section, "static_routing"):
-            static_routing = parser.getboolean(section, "static_routing")
-        static_url_prefix = "/static"
-        if parser.has_option(section, "static_url_prefix"):
-            static_url_prefix = parser.get(section, "static_url_prefix")
-        static_directory = "/static"
-        if parser.has_option(section, "static_directory"):
-            static_directory = parser.get(section, "static_directory")
-
-        workers = get_workers(logger, parser, section, plugin_name)
-
-        debug = False
-        if parser.has_option(section, "debug"):
-            debug = (parser.getint(section, "debug") == 1)
-        virtualdomain_based_routing = False
-        if parser.has_option(section, "virtualdomain_based_routing"):
-            virtualdomain_based_routing = \
-                parser.getboolean(section,
-                                  "virtualdomain_based_routing")
-        prefix_based_routing = True
-        if parser.has_option(section, "prefix_based_routing"):
-            prefix_based_routing = \
-                parser.getboolean(section,
-                                  "prefix_based_routing")
-        prefix_based_routing_extra_routes = []
-        if prefix_based_routing:
-            if parser.has_option(section, "prefix_based_routing_extra_routes"):
-                tmp = parser.get(section, "prefix_based_routing_extra_routes")
-                if tmp.strip() != "null":
-                    prefix_based_routing_extra_routes = \
-                        [x.strip() for x in tmp.strip().split(';')
-                         if is_valid_extra_route(x)]
-        workdir = os.path.join(plugin_directory, app)
-        timeout = MFSERV_NGINX_TIMEOUT
-        if parser.has_option(section, "timeout"):
-            if parser.get(section, "timeout") != "null":
-                if parser.getint(section, "timeout") > 0:
-                    timeout = parser.getint(section, "timeout")
-        virtualdomains = set()
-        for host in (HOSTNAME, HOSTNAME_FULL, "localhost"):
-            virtualdomains.add("%s.%s.%s" % (app, plugin_name, host))
-            if app == "main" or len(apps) == 1:
-                virtualdomains.add("%s.%s" % (plugin_name, host))
-        name = "app_%s_%s" % (plugin_name, app)
-        if debug:
-            workers = 1
-        app_conf = {"name": name,
-                    "alias": "no",
-                    "debug": debug,
-                    "app_name": app,
-                    "workers": workers,
-                    "plugin_name": plugin_name,
-                    "hash": hashlib.md5(name.encode('utf8')).hexdigest(),
-                    "virtualdomain_based_routing": virtualdomain_based_routing,
-                    "prefix_based_routing": prefix_based_routing,
-                    "prefix": "/%s/%s" % (plugin_name, app),
-                    "virtualdomains": sorted(list(virtualdomains)),
-                    "workdir": workdir,
-                    "timeout": timeout + 2,  # kill the backend first
-                    "static_routing": static_routing,
-                    "static_directory": static_directory,
-                    "static_url_prefix": static_url_prefix,
-                    "hot_swap_prefix": get_hot_swap_prefix(hot_swap_plugin)}
-        app_conf["sockets"] = \
-            get_unix_sockets(plugin_name, app, workers,
-                             app_conf["hot_swap_prefix"])
-        app_conf['extra_nginx_conf_string'] = \
-            envtpl.render_string(extra_nginx_conf_string,
-                                 extra_variables={"APP": app_conf},
-                                 keep_multi_blank_lines=False)
-        app_conf['extra_nginx_conf_static_string'] = \
-            envtpl.render_string(extra_nginx_conf_static_string,
-                                 extra_variables={"APP": app_conf},
-                                 keep_multi_blank_lines=False)
-        if version < [0, 10, 0] and typ == "static":
-            # compatibility fix (FIXME: will be removed for 0.11)
-            app_conf["static_url_prefix"] = ""
-            app_conf["static_directory"] = ""
-            app_conf["static_routing"] = True
-        plugin_conf["apps"].append(app_conf)
-        if app == "main" or len(apps) == 1:
-            copy_conf = copy.deepcopy(app_conf)
-            copy_conf['prefix'] = "/%s" % plugin_name
-            copy_conf['alias'] = "yes"
-            plugin_conf["apps"].append(copy_conf)
-        for extra_route in prefix_based_routing_extra_routes:
-            copy_conf = copy.deepcopy(app_conf)
-            copy_conf['prefix'] = extra_route
-            copy_conf['alias'] = "yes"
-            plugin_conf["apps"].append(copy_conf)
-    return plugin_conf
-
-
-plugins = []
+plugin_confs = []
 lua_package_paths = []
 if len(sys.argv) == 2:
-    label_files = glob.glob(sys.argv[1] + "/.layerapi2_label")
-    label_files2 = []
+    p = manager.make_plugin(sys.argv[1])
+    p.load_full()
+    plugins = [p]
 else:
-    label_files1 = glob.glob(MFSERV_PLUGINS_HOME + "/*/.layerapi2_label")
-    label_files2 = glob.glob(
-        MFSERV_PLUGINS_HOTSWAP_HOME + "/*/.layerapi2_label")
-    label_files = label_files1 + label_files2
-plugin_dirs = [(os.path.dirname(x), x in label_files2) for x in label_files]
-for plugin_dir, hotswap in plugin_dirs:
-    plugin_name = get_plugin_name_from_plugin_home(plugin_dir)
-    if plugin_name is None:
-        LOGGER.warning("can't find plugin_name for "
-                       "plugin_dir=%s => ignoring" % plugin_dir)
+    plugins = list(manager.plugins.values()) + \
+        list(hs_manager.plugins.values())
+for plugin in plugins:
+    try:
+        plugin.load_full()
+    except Exception as e:
+        LOGGER.warning("invalid plugin: %s (%s) => ignoring it ; details: %s" %
+                       (plugin.name, plugin.home, e))
         continue
-    saved_environ = os.environ.copy()
-    set_plugin_env(plugin_dir, plugin_name)
-    plugin_conf = get_conf(plugin_dir, plugin_name, hot_swap_plugin=hotswap)
-    os.environ = saved_environ
-    if plugin_conf:
-        lua_package_paths = lua_package_paths + \
-            plugin_conf['lua_package_paths']
-        plugins.append(plugin_conf)
+    hotswap = plugin.name in hs_manager.plugins
+    with plugin.plugin_env_context():
+        p = get_conf(plugin, hot_swap_plugin=hotswap)
+    if p is None:
+        continue
+    lua_package_paths = lua_package_paths + [p.configuration.lua_package_path]
+    plugin_confs.append(p)
 lua_package_paths = \
     lua_package_paths + ["%s/config/?.lua" % os.environ['MFSERV_HOME'],
                          "%s/lib/?.lua" % os.environ['MFSERV_HOME']]
@@ -247,7 +88,7 @@ with open(nginx_conf_file, "r") as f:
          if x.startswith(MFMODULE + "_") or x.startswith("MFMODULE_")]
     )
     extra_variables = {
-        "PLUGINS": plugins,
+        "PLUGINS": plugin_confs,
         "LUA_PACKAGE_PATH": ";".join(lua_package_paths) + ";;",
         "MFMODULE_ENVIRONMENT": mfmodule_env
     }

@@ -7,8 +7,8 @@ import time
 import atexit
 from mfutil import BashWrapper
 from mfutil.cli import echo_running, echo_ok, echo_nok, echo_bold
-from mfutil.plugins import get_plugin_info, init_plugins_base, \
-    install_plugin, uninstall_plugin
+from mfutil.compat import get_plugin_info
+from mfutil.manager import PluginsManager
 
 CIRCUS_ENDPOINT = os.environ['MFSERV_CIRCUS_ENDPOINT']
 MFMODULE_RUNTIME_HOME = os.environ['MFMODULE_RUNTIME_HOME']
@@ -19,7 +19,7 @@ HOTSWAP_PLUGINS_BASE = "%s/tmp/plugins.hotswap" % MFMODULE_RUNTIME_HOME
 def init_hotswap_plugins_base():
     echo_running("Creating hotswap plugins base...")
     BashWrapper("rm -Rf " + HOTSWAP_PLUGINS_BASE)
-    init_plugins_base(HOTSWAP_PLUGINS_BASE)
+    PluginsManager(HOTSWAP_PLUGINS_BASE).initialize_plugins_base()
     echo_ok()
 
 
@@ -93,26 +93,25 @@ def reenable_nginx_conf(home, label):
 
 def install_plugin_in_hotswap_base(plugin_file):
     echo_running("Installing new version in hotswap plugins base...")
-    install_plugin(plugin_file, plugins_base_dir=HOTSWAP_PLUGINS_BASE)
+    PluginsManager(HOTSWAP_PLUGINS_BASE).install_plugin(plugin_file)
     echo_ok()
 
 
 def install_plugin_in_standard_base(plugin_file):
     echo_running("Installing new version in standard plugins base...")
-    install_plugin(plugin_file)
+    PluginsManager().install_plugin(plugin_file)
     echo_ok()
 
 
 def uninstall_plugin_from_standard_base(plugin_name):
     echo_running("Uninstalling plugin from standard base...")
-    uninstall_plugin(plugin_name, ignore_errors=True, quiet=True)
+    PluginsManager().uninstall_plugin(plugin_name)
     echo_ok()
 
 
 def uninstall_plugin_from_hotswap_base(plugin_name):
     echo_running("Uninstalling plugin from standard base...")
-    uninstall_plugin(plugin_name, ignore_errors=True, quiet=True,
-                     plugins_base_dir=HOTSWAP_PLUGINS_BASE)
+    PluginsManager(HOTSWAP_PLUGINS_BASE).uninstall_plugin(plugin_name)
     echo_ok()
 
 
