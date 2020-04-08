@@ -88,10 +88,6 @@ MFSERV_SCHEMA_OVERRIDE = {
             },
             "_extra_nginx_conf_filename": {**EXTRA_NGINX_FRAGMENT},
             "_extra_nginx_conf_static_filename": {**EXTRA_NGINX_FRAGMENT},
-            "_add_plugin_dir_to_python_path": {
-                **NON_REQUIRED_BOOLEAN,
-                "default": True
-            },
             "_http_test_endpoint": {**NON_REQUIRED_STRING_DEFAULT_EMPTY},
             "_http_test_expected_status_code": {
                 **NON_REQUIRED_INTEGER,
@@ -217,14 +213,26 @@ class MfservConfiguration(Configuration):
 
 class MfservApp(App):
 
-    def __init__(self, plugin_name, name, doc_fragment):
-        App.__init__(self, plugin_name, name, doc_fragment)
+    def __init__(self, plugin_home, plugin_name, name, doc_fragment):
+        App.__init__(self, plugin_home, plugin_name, name, doc_fragment)
+        self.hot_swap_prefix = ""
+        self.hot_swap_home = ""
+        if '_cmd_and_args' in self._doc_fragment:
+            old = self._doc_fragment['_cmd_and_args']
+            unix_socket = self._get_unix_socket_name("$(circus.wid)")
+            new = "signal_wrapper.py --timeout=%i --signal=%i " \
+                "--timeout-after-signal=%i --socket-up-after=%i %s -- %s" % \
+                (self.timeout, self.smart_stop_signal, self.smart_stop_delay,
+                 self.smart_start_delay, unix_socket, old)
+            new = new.replace('{unix_socket_path}', unix_socket)
+            new = new.replace('{timeout}', str(self.timeout))
+            new = new.replace('{debug_extra_options}',
+                              str(self.debug_extra_options))
+            self._doc_fragment['_cmd_and_args'] = new
         self.alias = "no"
         self.prefix = "/%s/%s" % (plugin_name, name)
         tmp = "%s/%s" % (plugin_name, name)
         self.hash = hashlib.md5(tmp.encode('utf8')).hexdigest()
-        self.hot_swap_prefix = ""
-        self.hot_swap_home = ""
         if self.numprocesses > 0 and self.debug:
             # we force numprocesses to 1 in debug mode
             self.numprocesses = 1
@@ -314,10 +322,6 @@ class MfservApp(App):
     @property
     def extra_nginx_conf_static_string(self):
         return self._doc_fragment['_extra_nginx_conf_static_string']
-
-    @property
-    def add_plugin_dir_to_python_path(self):
-        return self._doc_fragment['_add_plugin_dir_to_python_path']
 
     @property
     def http_test_endpoint(self):
