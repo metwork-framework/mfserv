@@ -224,6 +224,7 @@ class MfservApp(App):
         tmp = "%s/%s" % (plugin_name, name)
         self.hash = hashlib.md5(tmp.encode('utf8')).hexdigest()
         self.hot_swap_prefix = ""
+        self.hot_swap_home = ""
         if self.numprocesses > 0 and self.debug:
             # we force numprocesses to 1 in debug mode
             self.numprocesses = 1

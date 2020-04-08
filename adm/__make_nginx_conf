@@ -13,9 +13,6 @@ MFSERV_PLUGINS_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
                                    "var", "plugins")
 MFSERV_PLUGINS_HOTSWAP_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
                                            "tmp", "plugins.hotswap")
-MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
-HOSTNAME = os.environ.get('MFCOM_HOSTNAME')
-HOSTNAME_FULL = os.environ.get('MFCOM_HOSTNAME_FULL')
 MFMODULE = os.environ['MFMODULE']
 
 
@@ -47,6 +44,7 @@ def get_conf(plugin, hot_swap_plugin=False):
             apps_to_add.append(new_app)
         if hot_swap_plugin:
             app.hot_swap_prefix = HOT_SWAP_PREFIX
+            app.hot_swap_home = MFSERV_PLUGINS_HOTSWAP_HOME
     for app in apps_to_add:
         plugin.configuration.add_app(app)
     return plugin
@@ -56,7 +54,6 @@ plugin_confs = []
 lua_package_paths = []
 if len(sys.argv) == 2:
     p = manager.make_plugin(sys.argv[1])
-    p.load_full()
     plugins = [p]
 else:
     plugins = list(manager.plugins.values()) + \
