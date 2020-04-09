@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import jinja2
 import glob
 import hashlib
 import collections
@@ -8,7 +9,7 @@ from mfplugin.configuration import Configuration
 from mfplugin.app import App
 from mfplugin.utils import NON_REQUIRED_BOOLEAN, NON_REQUIRED_INTEGER, \
     NON_REQUIRED_STRING_DEFAULT_EMPTY, NON_REQUIRED_STRING, \
-    NON_REQUIRED_BOOLEAN_DEFAULT_FALSE
+    NON_REQUIRED_BOOLEAN_DEFAULT_FALSE, get_current_envs, BadPlugin
 
 HOT_SWAP_PREFIX = "__hs_"
 MFMODULE_RUNTIME_HOME = os.environ.get("MFMODULE_RUNTIME_HOME", "/unknown")
@@ -123,6 +124,32 @@ class MfservConfiguration(Configuration):
         dict_merge(schema, MFSERV_SCHEMA_OVERRIDE)
         return schema
 
+    def after_load(self):
+        # Let's evaluate jinja2 in nginx strings
+        sections = ["general"]
+        sections = sections + [x for x in self._doc.keys()
+                               if x.startswith('app_')]
+        context = self.get_configuration_env_dict(
+            ignore_keys_starting_with='_')
+        context.update(get_current_envs(self.plugin_name, self.plugin_home))
+        for section in sections:
+            for option in ('_extra_nginx_http_conf_string',
+                           '_extra_nginx_server_conf_string',
+                           '_extra_nginx_conf_string',
+                           '_extra_nginx_conf_static_string',
+                           '_extra_nginx_init_worker_by_lua_block_string'):
+                if option in self._doc[section]:
+                    try:
+                        template = jinja2.Template(
+                            self._doc[section][option],
+                            undefined=jinja2.StrictUndefined)
+                        self._doc[section][option] = template.render(**context)
+                    except Exception as e:
+                        raise BadPlugin("problem during jinja2 eval of "
+                                        "[%s]/%s with context: %s" %
+                                        (section, option, context),
+                                        original_exception=e)
+
     def get_final_document(self, validated_document):
         sections = ["general"]
         sections = sections + [x for x in validated_document.keys()
@@ -226,8 +253,11 @@ class MfservApp(App):
                  self.smart_start_delay, unix_socket, old)
             new = new.replace('{unix_socket_path}', unix_socket)
             new = new.replace('{timeout}', str(self.timeout))
-            new = new.replace('{debug_extra_options}',
-                              str(self.debug_extra_options))
+            if self.debug:
+                new = new.replace('{debug_extra_options}',
+                                  str(self.debug_extra_options))
+            else:
+                new = new.replace('{debug_extra_options}', '')
             self._doc_fragment['_cmd_and_args'] = new
         self.alias = "no"
         self.prefix = "/%s/%s" % (plugin_name, name)

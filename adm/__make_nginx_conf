@@ -36,6 +36,8 @@ def get_conf(plugin, hot_swap_plugin=False):
             new_app.hash = app.hash
             apps_to_add.append(new_app)
         for extra_route in app.prefix_based_routing_extra_routes.split(';'):
+            if extra_route.strip() == "":
+                continue
             new_app = app.duplicate("%s_duplicate_%s" %
                                     (app.name, get_unique_hexa_identifier()))
             new_app.prefix = extra_route.strip()
