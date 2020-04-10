@@ -244,31 +244,22 @@ class MfservApp(App):
         App.__init__(self, plugin_home, plugin_name, name, doc_fragment)
         self.hot_swap_prefix = ""
         self.hot_swap_home = ""
-        if '_cmd_and_args' in self._doc_fragment:
-            old = self._doc_fragment['_cmd_and_args']
-            unix_socket = self._get_unix_socket_name("$(circus.wid)")
-            new = "signal_wrapper.py --timeout=%i --signal=%i " \
-                "--timeout-after-signal=%i --socket-up-after=%i %s -- %s" % \
-                (self.timeout, self.smart_stop_signal, self.smart_stop_delay,
-                 self.smart_start_delay, unix_socket, old)
-            new = new.replace('{unix_socket_path}', unix_socket)
-            new = new.replace('{timeout}', str(self.timeout))
-            if self.debug:
-                new = new.replace('{debug_extra_options}',
-                                  str(self.debug_extra_options))
-            else:
-                new = new.replace('{debug_extra_options}', '')
-            self._doc_fragment['_cmd_and_args'] = new
         self.alias = "no"
         self.prefix = "/%s/%s" % (plugin_name, name)
-        tmp = "%s/%s" % (plugin_name, name)
-        self.hash = hashlib.md5(tmp.encode('utf8')).hexdigest()
         if self.numprocesses > 0 and self.debug:
             # we force numprocesses to 1 in debug mode
-            self.numprocesses = 1
+            self._doc_fragment['numprocesses'] = 1
         if self.max_age > 0 and self.debug:
             # we force max_age to 0 in debug mode
-            self.max_age = 0
+            self._doc_fragment['max_age'] = 0
+
+    def duplicate(self, new_name=None):
+        new_app = App.duplicate(self, new_name=new_name)
+        new_app.hot_swap_prefix = self.hot_swap_prefix
+        new_app.hot_swap_home = self.hot_swap_home
+        new_app.alias = self.alias
+        new_app.prefix = self.prefix
+        return new_app
 
     def _get_unix_socket_name(self, worker):
         return (
@@ -276,6 +267,28 @@ class MfservApp(App):
             f"app_{self.hot_swap_prefix}{self.plugin_name}_{self.name}_"
             f"{worker}.socket"
         )
+
+    @property
+    def cmd_and_args(self):
+        old = self._doc_fragment['_cmd_and_args']
+        unix_socket = self._get_unix_socket_name("$(circus.wid)")
+        new = "signal_wrapper.py --timeout=%i --signal=%i " \
+            "--timeout-after-signal=%i --socket-up-after=%i %s -- %s" % \
+            (self.timeout, self.smart_stop_signal, self.smart_stop_delay,
+                self.smart_start_delay, unix_socket, old)
+        new = new.replace('{unix_socket_path}', unix_socket)
+        new = new.replace('{timeout}', str(self.timeout))
+        if self.debug:
+            new = new.replace('{debug_extra_options}',
+                              str(self.debug_extra_options))
+        else:
+            new = new.replace('{debug_extra_options}', '')
+        return new
+
+    @property
+    def hash(self):
+        tmp = "%s%s/%s" % (self.hot_swap_prefix, self.plugin_name, self.name)
+        return hashlib.md5(tmp.encode('utf8')).hexdigest()
 
     @property
     def unix_sockets(self):

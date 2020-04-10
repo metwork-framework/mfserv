@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-from mfutil import get_unique_hexa_identifier
 import sys
 import envtpl
 from mflog import get_logger
@@ -29,24 +28,21 @@ def get_conf(plugin, hot_swap_plugin=False):
     apps_to_add = []
     for app in plugin.configuration.apps:
         logger = logger.bind(app=app.name)
+        if hot_swap_plugin:
+            app.hot_swap_prefix = HOT_SWAP_PREFIX
+            app.hot_swap_home = MFSERV_PLUGINS_HOTSWAP_HOME
         if app.name == "main" or len(plugin.configuration.apps) == 1:
-            new_app = app.duplicate(app.name + "_duplicate")
+            new_app = app.duplicate()
             new_app.prefix = "/%s" % plugin.name
             new_app.alias = "yes"
-            new_app.hash = app.hash
             apps_to_add.append(new_app)
         for extra_route in app.prefix_based_routing_extra_routes.split(';'):
             if extra_route.strip() == "":
                 continue
-            new_app = app.duplicate("%s_duplicate_%s" %
-                                    (app.name, get_unique_hexa_identifier()))
+            new_app = app.duplicate()
             new_app.prefix = extra_route.strip()
             new_app.alias = "yes"
-            new_app.hash = app.hash
             apps_to_add.append(new_app)
-        if hot_swap_plugin:
-            app.hot_swap_prefix = HOT_SWAP_PREFIX
-            app.hot_swap_home = MFSERV_PLUGINS_HOTSWAP_HOME
     for app in apps_to_add:
         plugin.configuration.add_app(app)
     return plugin
@@ -67,7 +63,7 @@ for plugin in plugins:
         LOGGER.warning("invalid plugin: %s (%s) => ignoring it ; details: %s" %
                        (plugin.name, plugin.home, e))
         continue
-    hotswap = plugin.name in hs_manager.plugins
+    hotswap = plugin in hs_manager.plugins.values()
     with plugin.plugin_env_context():
         p = get_conf(plugin, hot_swap_plugin=hotswap)
     if p is None:

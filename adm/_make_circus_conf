@@ -38,11 +38,10 @@ for plugin in plugins:
     try:
         plugin.load_full()
     except Exception as e:
-        raise
         LOGGER.warning("invalid plugin: %s (%s) => ignoring it ; details: %s" %
                        (plugin.name, plugin.home, e))
         continue
-    hotswap = plugin.name in hs_manager.plugins
+    hotswap = plugin in hs_manager.plugins.values()
     with plugin.plugin_env_context():
         p = get_conf(plugin, hot_swap_plugin=hotswap)
     if p is None:
