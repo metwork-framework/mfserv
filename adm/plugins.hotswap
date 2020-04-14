@@ -74,7 +74,7 @@ def disable_nginx_conf(home, label):
         with open(home + "/config.ini", "r") as f:
             c = f.read()
         with open(home + "/config.ini", "w") as f:
-            f.write("[__advanced]\ndisable_nginx_conf=1\n")
+            f.write("[internal]\ndisable_nginx_conf=1\n")
             f.write(c)
     except Exception as e:
         echo_bold("ERROR: %s" % e)

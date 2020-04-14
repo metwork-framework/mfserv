@@ -44,7 +44,7 @@ EXTRA_NGINX_FRAGMENT = {
     "check_with": extra_nginx_check
 }
 MFSERV_SCHEMA_OVERRIDE = {
-    "__advanced": {
+    "internal": {
         "required": False,
         "type": "dict",
         "schema": {
@@ -228,8 +228,8 @@ class MfservConfiguration(Configuration):
     @property
     def disable_nginx_conf(self):
         self.load()
-        if '__advanced' in self._doc:
-            return self._doc['__advanced']['disable_nginx_conf']
+        if 'internal' in self._doc:
+            return self._doc['internal']['disable_nginx_conf']
         return False
 
     @property

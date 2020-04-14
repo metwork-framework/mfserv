@@ -68,7 +68,9 @@ for plugin in plugins:
         p = get_conf(plugin, hot_swap_plugin=hotswap)
     if p is None:
         continue
-    lua_package_paths = lua_package_paths + [p.configuration.lua_package_path]
+    if p.configuration.lua_package_path != "":
+        lua_package_paths = lua_package_paths + \
+            [p.configuration.lua_package_path]
     plugin_confs.append(p)
 lua_package_paths = \
     lua_package_paths + ["%s/config/?.lua" % os.environ['MFSERV_HOME'],
