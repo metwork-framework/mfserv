@@ -19,19 +19,9 @@ MFSERV_PLUGINS_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
 MFSERV_PLUGINS_HOTSWAP_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
                                            "tmp", "plugins.hotswap")
 MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
-HOSTNAME = os.environ.get('MFCOM_HOSTNAME')
-HOSTNAME_FULL = os.environ.get('MFCOM_HOSTNAME_FULL')
+HOSTNAME = os.environ.get('MFHOSTNAME')
+HOSTNAME_FULL = os.environ.get('MFHOSTNAME_FULL')
 MFMODULE = os.environ['MFMODULE']
-
-# FIXME: fix to ensure compatibility with existing plugins using
-# old variables names MODULE* (to be removed)
-for var in ["MODULE", "MODULE_HOME", "MODULE_LOWERCASE", "MODULE_VERSION",
-            "MODULE_STATUS", "MODULE_RUNTIME_HOME", "MODULE_RUNTIME_USER",
-            "MODULE_RUNTIME_SUFFIX", "MODULE_PLUGINS_BASE_DIR"]:
-    new_var = 'MF' + var
-    if var not in os.environ and new_var in os.environ:
-        os.environ[var] = os.environ[new_var]
-
 
 LOGGER = get_logger("__make_nginx_conf")
 
