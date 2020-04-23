@@ -1,44 +1,46 @@
 #!/usr/bin/env python3
 
 import sys
-from mfplugin.compat import get_plugin_info
-from mfext.plugins_common import get_plugin_parser
+from mfplugin.manager import PluginsManager
+from mfplugin.utils import NotInstalledPlugin, BadPlugin
+from mfutil.cli import echo_bold
 
 
-infos = get_plugin_info(sys.argv[1])
-if not infos:
-    raise Exception("the plugin %s is not installed" % sys.argv[1])
+manager = PluginsManager()
+try:
+    plugin = manager.get_plugin(sys.argv[1])
+except NotInstalledPlugin:
+    echo_bold("ERROR: not installed plugin: %s" % sys.argv[1])
+    sys.exit(1)
+try:
+    plugin.load_full()
+except BadPlugin:
+    echo_bold("ERROR: bad plugin exception (bad configuration?)")
+    sys.exit(1)
 
-plugin_home = infos['home']
-plugin_name = infos['metadatas']['name']
-parser = get_plugin_parser(plugin_home, plugin_name)
+plugin_home = plugin.home
+plugin_name = plugin.name
 dangerous = False
 for option in ("extra_nginx_conf_filename",
                "extra_nginx_http_conf_filename",
                "extra_nginx_server_conf_filename",
                "extra_nginx_init_worker_by_lua_block_filename"):
-    if parser.has_option("general", option):
-        tmp = parser.get("general", option).strip()
-        if tmp != "null":
-            print("WARNING: this plugin has a general "
-                  "extra nginx configuration")
-            dangerous = True
-            break
-app_sections = [x.strip() for x in parser.sections() if x.startswith("app_")]
-for app_section in app_sections:
-    if parser.has_option(app_section, "debug"):
-        tmp = parser.get(app_section, "debug").strip()
-        if tmp == "1":
-            print("WARNING: this plugin has a debug == 1 setting for the "
-                  "app: %s" % app_section.replace("app_", ""))
-            dangerous = True
-    if not parser.has_option(app_section, "prefix_based_routing_extra_routes"):
-        continue
-    tmp = parser.get(app_section, "prefix_based_routing_extra_routes").strip()
-    if tmp != "null":
+    tmp = getattr(plugin.configuration, option).strip()
+    if tmp != "":
+        print("WARNING: this plugin has a non empty %s key" % option)
+        dangerous = True
+        break
+
+for app in plugin.configuration.apps:
+    if app.debug:
+        print("WARNING: this plugin has a debug == 1 setting for the "
+              "app: %s" % app.name)
+        dangerous = True
+    tmp = app.prefix_based_routing_extra_routes.strip()
+    if tmp != "":
         print("WARNING: this plugin has a "
               "prefix_based_routing_extra_routes == %s (!= null) "
-              "for the app: %s" % (tmp, app_section.replace("app_", "")))
+              "for the app: %s" % (tmp, app))
         dangerous = True
 if dangerous:
     print("  => This is a dangerous plugin which can break the whole")

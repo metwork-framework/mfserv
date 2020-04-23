@@ -83,7 +83,7 @@ MFSERV_SCHEMA_OVERRIDE = {
                 **NON_REQUIRED_STRING,
                 "default": "/static"
             },
-            "_prefix_based_routing_extra_routes": {
+            "prefix_based_routing_extra_routes": {
                 **NON_REQUIRED_STRING_DEFAULT_EMPTY,
                 "check_with": extra_routes_check
             },
@@ -240,8 +240,10 @@ class MfservConfiguration(Configuration):
 
 class MfservApp(App):
 
-    def __init__(self, plugin_home, plugin_name, name, doc_fragment):
-        App.__init__(self, plugin_home, plugin_name, name, doc_fragment)
+    def __init__(self, plugin_home, plugin_name, name, doc_fragment,
+                 custom_fragment):
+        App.__init__(self, plugin_home, plugin_name, name, doc_fragment,
+                     custom_fragment)
         self.hot_swap_prefix = ""
         self.hot_swap_home = ""
         self.alias = "no"
@@ -252,6 +254,8 @@ class MfservApp(App):
         if self.max_age > 0 and self.debug:
             # we force max_age to 0 in debug mode
             self._doc_fragment['max_age'] = 0
+        # we force graceful timeout with timeout
+        self._doc_fragment["graceful_timeout"] = self._doc_fragment["timeout"]
 
     def duplicate(self, new_name=None):
         new_app = App.duplicate(self, new_name=new_name)
@@ -348,7 +352,7 @@ class MfservApp(App):
 
     @property
     def prefix_based_routing_extra_routes(self):
-        return self._doc_fragment['_prefix_based_routing_extra_routes']
+        return self._doc_fragment['prefix_based_routing_extra_routes']
 
     @property
     def extra_nginx_conf_filename(self):

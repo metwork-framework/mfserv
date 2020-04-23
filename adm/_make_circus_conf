@@ -20,6 +20,7 @@ hs_manager = PluginsManager(MFSERV_PLUGINS_HOTSWAP_HOME)
 
 
 def get_conf(plugin, hot_swap_plugin=False):
+    plugin.reload()
     for app in plugin.configuration.apps:
         if hot_swap_plugin:
             app.hot_swap_prefix = HOT_SWAP_PREFIX
