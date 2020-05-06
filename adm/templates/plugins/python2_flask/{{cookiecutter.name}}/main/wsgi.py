@@ -4,7 +4,7 @@ from flask import Flask, render_template
 
 
 app = Flask(__name__)
-if os.environ.get('MFSERV_CURRENT_PLUGIN_DEBUG', '0') == '1':
+if os.environ.get('MFSERV_CURRENT_APP_DEBUG', '0') == '1':
     app.config['PROPAGATE_EXCEPTIONS'] = True
 logger = mflog.get_logger(__name__)
 
