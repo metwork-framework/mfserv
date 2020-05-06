@@ -1,193 +1,63 @@
 #!/usr/bin/env python3
 
 import os
-import glob
 import sys
 import envtpl
 from mflog import get_logger
-from mfutil.plugins import layerapi2_label_to_plugin_name
-from mfext.plugins_common import get_workers, get_cmd_and_args, \
-    get_plugin_format_version, get_split_conf, get_rlimit_conf, \
-    test_deprecated_options, get_extra_daemon_conf, \
-    get_redis_service_extra_conf, get_plugin_parser
-from mfserv.plugins_common import get_hot_swap_prefix
-from mfserv.plugins_deprecated import is_typ_valid, typ_to_cmd_args
+from mfplugin.manager import PluginsManager
+from mfserv.plugins import HOT_SWAP_PREFIX
 
-MFSERV_PLUGINS_HOME = os.path.join(os.environ["MFMODULE_RUNTIME_HOME"],
-                                   "var", "plugins")
-MFSERV_PLUGINS_HOTSWAP_HOME = os.path.join(os.environ["MFMODULE_RUNTIME_HOME"],
-                                           "tmp", "plugins.hotswap")
-LOG_LEVEL = os.environ.get('MFSERV_LOG_MINIMAL_LEVEL', 'INFO')
-CONFIG = os.environ.get('MFCONFIG', 'GENERIC')
 MFMODULE_RUNTIME_HOME = os.environ["MFMODULE_RUNTIME_HOME"]
+MFSERV_PLUGINS_HOME = os.path.join(MFMODULE_RUNTIME_HOME, "var", "plugins")
+MFSERV_PLUGINS_HOTSWAP_HOME = os.path.join(MFMODULE_RUNTIME_HOME,
+                                           "tmp", "plugins.hotswap")
 MFMODULE_HOME = os.environ["MFMODULE_HOME"]
-MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
 
 
 LOGGER = get_logger("_make_circus_conf")
+manager = PluginsManager(MFSERV_PLUGINS_HOME)
+hs_manager = PluginsManager(MFSERV_PLUGINS_HOTSWAP_HOME)
 
 
-def get_conf(plugin_dir, hot_swap_plugin=False):
-    plugin_conf = {}
+def get_conf(plugin, hot_swap_plugin=False):
+    plugin.reload()
+    for app in plugin.configuration.apps:
+        if hot_swap_plugin:
+            app.hot_swap_prefix = HOT_SWAP_PREFIX
+            app.hot_swap_home = MFSERV_PLUGINS_HOTSWAP_HOME
+    return plugin
+
+
+plugin_confs = []
+if len(sys.argv) == 2:
+    p = manager.make_plugin(sys.argv[1])
+    plugins = [p]
+else:
+    plugins = list(manager.plugins.values()) + \
+        list(hs_manager.plugins.values())
+for plugin in plugins:
     try:
-        with open(os.path.join(plugin_dir, ".layerapi2_label"), "r") as f:
-            label = f.read().strip()
-    except Exception:
-        LOGGER.warning(
-            "can't read %s/.layerapi2_label => ignoring this plugin",
-            plugin_dir)
-        return None
-    try:
-        plugin_name = layerapi2_label_to_plugin_name(label)
+        plugin.load_full()
     except Exception as e:
-        LOGGER.warning("can't read %s/.layerapi2_label with error: %s => "
-                       "ignoring this plugin", plugin_dir, e)
-        return None
-    logger = LOGGER.bind(plugin_name=plugin_name)
-    parser = get_plugin_parser(plugin_dir, plugin_name)
-    version = get_plugin_format_version(logger, parser)
-    logger = logger.bind(version=version)
-    apps = [x.replace("app_", "", 1).split(':')[0] for x in parser.sections()
-            if x.startswith("app_")]
-    extra_daemons = [x.replace("extra_daemon_", "", 1).split(':')[0]
-                     for x in parser.sections()
-                     if x.startswith("extra_daemon_")]
-    os.environ["MFSERV_CURRENT_PLUGIN_DIR"] = plugin_dir
-    redis_service = False
-    if parser.has_option("general", "redis_service"):
-        redis_service = parser.getboolean("general", "redis_service")
-    test_deprecated_options(logger, parser)
-
-    plugin_conf["name"] = plugin_name
-    plugin_conf["dir"] = plugin_dir
-    plugin_conf["apps"] = []
-    plugin_conf["extra_daemons"] = []
-    plugin_conf["hot_swap_plugin"] = hot_swap_plugin
-    plugin_conf["hot_swap_prefix"] = get_hot_swap_prefix(hot_swap_plugin)
-    plugin_conf["hot_swap_home"] = MFSERV_PLUGINS_HOTSWAP_HOME
-
-    for app in apps:
-        logger = logger.bind(app=app)
-        section = "app_%s" % app
-        app_conf = {}
-        timeout = MFSERV_NGINX_TIMEOUT
-        debug = False
-        test_deprecated_options(logger, parser, section)
-        if parser.has_option(section, "debug"):
-            debug = (parser.getint(section, "debug") == 1)
-        if parser.has_option(section, "timeout"):
-            if parser.get(section, "timeout") != "null":
-                if parser.getint(section, "timeout") > 0:
-                    timeout = parser.getint(section, "timeout")
-        if version < 1:
-            typ = parser.get(section, "type")
-            if typ in ("empty", "static"):
-                continue
-            if not is_typ_valid(typ):
-                logger.warning("unknown type: %s => ignoring app", typ)
-                continue
-        add_plugin_dir_to_python_path = True
-        if parser.has_option(section, "add_plugin_dir_to_python_path"):
-            add_plugin_dir_to_python_path = \
-                parser.getboolean(section, "add_plugin_dir_to_python_path")
-        add_app_dir_to_python_path = False
-        if parser.has_option(section, "add_app_dir_to_python_path"):
-            add_app_dir_to_python_path = \
-                parser.getboolean(section, "add_app_dir_to_python_path")
-        workers = get_workers(logger, parser, section)
-        if workers == 0:
-            continue
-        max_age = 0
-        if parser.has_option(section, "max_age") and workers != 1:
-            max_age = parser.getint(section, "max_age")
-            if max_age != 0:
-                max_age = max(60, max_age)
-        debug_extra_options = ""
-        if parser.has_option(section, "debug_extra_options"):
-            debug_extra_options = parser.get(section, "debug_extra_options")
-            if debug_extra_options == "null":
-                debug_extra_options = ""
-        smart_start_delay = 3
-        if parser.has_option(section, "smart_start_delay"):
-            smart_start_delay = parser.getint(section, "smart_start_delay")
-        smart_stop_signal = 15
-        if parser.has_option(section, "smart_stop_signal"):
-            smart_stop_signal = parser.getint(section, "smart_stop_signal")
-        smart_stop_delay = 3
-        if parser.has_option(section, "smart_stop_delay"):
-            smart_stop_delay = parser.getint(section, "smart_stop_delay")
-        if debug:
-            max_age = 0
-            workers = 1
-        else:
-            debug_extra_options = ""
-        app_conf.update(get_split_conf(logger, parser, section))
-        app_conf["max_age"] = max_age
-        app_conf["name"] = app
-        app_conf["debug"] = debug
-        app_conf["smart_start_delay"] = smart_start_delay
-        app_conf["smart_stop_delay"] = smart_stop_delay
-        app_conf["smart_stop_signal"] = smart_stop_signal
-        app_conf["numprocesses"] = workers
-        app_conf["timeout"] = timeout
-        app_conf["debug_extra_options"] = debug_extra_options
-        app_conf["add_plugin_dir_to_python_path"] = \
-            add_plugin_dir_to_python_path
-        app_conf["add_app_dir_to_python_path"] = add_app_dir_to_python_path
-        if parser.has_option(section, "node_extra_opts"):
-            app_conf["node_opts"] = parser.get(section, "node_extra_opts")
-        else:
-            app_conf["node_opts"] = ""
-        app_conf["rlimits"] = get_rlimit_conf(parser, section)
-        if version < 1:
-            app_conf["main_arg"] = parser.get(section, "main_arg")
-            app_conf["cmd_args"] = typ_to_cmd_args(typ, plugin_conf, app_conf)
-        else:
-            tmp = "null"
-            if parser.has_option(section, "cmd_and_args"):
-                tmp = parser.get(section, "cmd_and_args")
-            cmd_and_args = get_cmd_and_args(tmp, plugin_conf, app_conf)
-            app_conf["cmd_args"] = cmd_and_args
-        plugin_conf["apps"].append(app_conf)
-
-    for extra_daemon in extra_daemons:
-        section = "extra_daemon_%s" % extra_daemon
-        extra_conf = get_extra_daemon_conf(logger, parser, section,
-                                           extra_daemon, plugin_conf)
-        plugin_conf["extra_daemons"].append(extra_conf)
-
-    if redis_service:
-        extra_conf = get_redis_service_extra_conf(logger, parser, plugin_conf)
-        plugin_conf["extra_daemons"].append(extra_conf)
-
-    return plugin_conf
-
+        LOGGER.warning("invalid plugin: %s (%s) => ignoring it ; details: %s" %
+                       (plugin.name, plugin.home, e))
+        continue
+    hotswap = plugin in hs_manager.plugins.values()
+    with plugin.plugin_env_context():
+        p = get_conf(plugin, hot_swap_plugin=hotswap)
+    if p is None:
+        continue
+    plugin_confs.append(p)
 
 circus_ini_file = os.path.join(os.environ['MFMODULE_HOME'], 'config',
                                'circus.ini')
-plugins = []
-if len(sys.argv) == 2:
-    label_files = glob.glob(sys.argv[1] + "/.layerapi2_label")
-    label_files2 = []
-else:
-    label_files1 = glob.glob(MFSERV_PLUGINS_HOME + "/*/.layerapi2_label")
-    label_files2 = glob.glob(
-        MFSERV_PLUGINS_HOTSWAP_HOME + "/*/.layerapi2_label")
-    label_files = label_files1 + label_files2
-plugin_dirs = [(os.path.dirname(x), x in label_files2) for x in label_files]
-for plugin_dir, hotswap in plugin_dirs:
-    plugin_conf = get_conf(plugin_dir, hot_swap_plugin=hotswap)
-    if plugin_conf:
-        plugins.append(plugin_conf)
 
 with open(circus_ini_file, "r") as f:
     extra_variables = {
-        "PLUGINS": plugins
+        "PLUGINS": plugin_confs
     }
-    tmp_content = envtpl.render_string(f.read(),
-                                       extra_variables=extra_variables,
-                                       keep_multi_blank_lines=False)
-    # double evaluation for some corner cases
-    content = envtpl.render_string(tmp_content, keep_multi_blank_lines=False)
+    content = envtpl.render_string(f.read(),
+                                   extra_variables=extra_variables,
+                                   keep_multi_blank_lines=False)
 
 print(content)
