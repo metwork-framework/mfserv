@@ -4,12 +4,12 @@ PLUGIN_NAME=$(shell basename $(PWD))
 precustom:: .layerapi2_label .layerapi2_dependencies .release_ignore .plugin_format_version .gitignore .autorestart_includes .autorestart_excludes
 
 .layerapi2_label:
-	echo "plugin_$(PLUGIN_NAME)@mfdata" >$@
+	echo "plugin_$(PLUGIN_NAME)@mfserv" >$@
 
-.layerapi2_dependencies: ../../adm/templates/plugins/python3/{{cookiecutter.name}}/layerapi2_dependencies
+.layerapi2_dependencies: ../../adm/templates/plugins/python3_noweb/{{cookiecutter.name}}/.layerapi2_dependencies
 	cp -f $< $@
 
-.release_ignore: ../../adm/templates/plugins/_common/release_ignore
+.release_ignore: ../../adm/templates/plugins/_common/releaseignore
 	cp -f $< $@
 
 .gitignore:
