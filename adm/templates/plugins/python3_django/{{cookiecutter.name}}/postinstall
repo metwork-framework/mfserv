@@ -44,16 +44,6 @@ cat >>{{cookiecutter.name}}/settings.py <<EOF
 # TO PROVIDE PREFIX BASED ROUTING
 STATIC_URL = '/{{cookiecutter.name}}/{{cookiecutter.name}}/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "{{cookiecutter.name}}/static")
-
-# ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE
-# TO PROVIDE DEBUG FEATURE
-DEBUG = (os.environ.get('MFSERV_CURRENT_PLUGIN_DEBUG', '0') == '1')
-import mflog
-if DEBUG:
-    mflog.set_config(minimal_level="DEBUG")
-else:
-    mflog.set_config()
-
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 EOF
 

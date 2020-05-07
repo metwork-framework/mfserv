@@ -1,0 +1,6 @@
+{% extends "profile" %}
+
+{% block custom %}
+export MFPLUGIN_CONFIGURATION_CLASS=mfserv.plugins.MfservConfiguration
+export MFPLUGIN_APP_CLASS=mfserv.plugins.MfservApp
+{% endblock %}

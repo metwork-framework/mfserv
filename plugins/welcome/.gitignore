@@ -1,0 +1,8 @@
+.layerapi2_label
+.release_ignore
+.plugin_format_version
+.autorestart_includes
+.autorestart_excludes
+python3_virtualenv_sources/src
+python2_virtualenv_sources/src
+local
