@@ -16,9 +16,9 @@ port=18868
 upload_max_body_size=100
 
 # Number of nginx workers
-# (the {{MFCOM_HARDWARE_NUMBER_OF_CPU_CORES_MULTIPLIED_BY_2}} special values
+# (the {{MFHARDWARE_NUMBER_OF_CPU_CORES_MULTIPLIED_BY_2}} special values
 #  is probably a good start)
-workers={{MFCOM_HARDWARE_NUMBER_OF_CPU_CORES_MULTIPLIED_BY_2}}
+workers={{MFHARDWARE_NUMBER_OF_CPU_CORES_MULTIPLIED_BY_2}}
 
 # Default timeout (in seconds)
 # You can override this in plugin config.ini
