@@ -4,6 +4,9 @@
 ## [Unreleased]
 
 ### New Features
+- new plugin system
+- new plugin system
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
 - new accept_incoming_request_id_header variable and x-forwarded-*
 - add a better documented crontab file for plugins
 - https/ssl support for nginx in mfserv (#323)
