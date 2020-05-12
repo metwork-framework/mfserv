@@ -35,7 +35,7 @@ for rep in $list_rep; do
                 if test ${run_test} = 1; then
                     layer_wrapper --layers=$LAYERS_TO_LOAD -- ./$test
                 else
-                    echo $test "not run because of missing layers" $missing_layers
+                    echo $test "not run because of missing layer(s)" $missing_layers
                 fi
             else
                 ./$test
