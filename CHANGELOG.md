@@ -9,6 +9,7 @@
 - remove all references to MFCOM or mfcom, including backward compatibility stuff
 - new accept_incoming_request_id_header variable and x-forwarded-*
 - add a better documented crontab file for plugins
+- remove bjoern (moved to mfext and mfextaddon_python2)
 - https/ssl support for nginx in mfserv (#323)
 - remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
 - port of mflog changes about syslog to node
