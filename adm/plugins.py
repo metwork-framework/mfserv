@@ -13,8 +13,8 @@ from mfplugin.utils import NON_REQUIRED_BOOLEAN, NON_REQUIRED_INTEGER, \
 
 HOT_SWAP_PREFIX = "__hs_"
 MFMODULE_RUNTIME_HOME = os.environ.get("MFMODULE_RUNTIME_HOME", "/unknown")
-HOSTNAME = os.environ.get('MFCOM_HOSTNAME', 'unknown')
-HOSTNAME_FULL = os.environ.get('MFCOM_HOSTNAME_FULL', 'unknown')
+HOSTNAME = os.environ.get('MFHOSTNAME', 'unknown')
+HOSTNAME_FULL = os.environ.get('MFHOSTNAME_FULL', 'unknown')
 
 
 def extra_nginx_check(field, value, error):
