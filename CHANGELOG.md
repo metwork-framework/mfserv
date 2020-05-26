@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- allow binary packages by default (for plugins)
 - new plugin system
 - new plugin system
 - remove all references to MFCOM or mfcom, including backward compatibility stuff
