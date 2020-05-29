@@ -15,6 +15,7 @@ HOT_SWAP_PREFIX = "__hs_"
 MFMODULE_RUNTIME_HOME = os.environ.get("MFMODULE_RUNTIME_HOME", "/unknown")
 HOSTNAME = os.environ.get('MFHOSTNAME', 'unknown')
 HOSTNAME_FULL = os.environ.get('MFHOSTNAME_FULL', 'unknown')
+MFSERV_NGINX_TIMEOUT = int(os.environ['MFSERV_NGINX_TIMEOUT'])
 
 
 def extra_nginx_check(field, value, error):
@@ -37,6 +38,15 @@ def extra_routes_check(field, value, error):
             if r.endswith('/'):
                 error(field, "all routes must not end by / "
                       "(but '/' is allowed)")
+
+
+def coerce_timeout(value):
+    try:
+        if int(value) <= 0:
+            return MFSERV_NGINX_TIMEOUT
+    except Exception:
+        return MFSERV_NGINX_TIMEOUT
+    return int(value)
 
 
 EXTRA_NGINX_FRAGMENT = {
@@ -67,7 +77,11 @@ MFSERV_SCHEMA_OVERRIDE = {
             "smart_stop_signal": {**NON_REQUIRED_INTEGER, "default": 15},
             "smart_stop_delay": {**NON_REQUIRED_INTEGER, "default": 3},
             "smart_start_delay": {**NON_REQUIRED_INTEGER, "default": 3},
-            "timeout": {**NON_REQUIRED_INTEGER, "default": 0},
+            "timeout": {
+                **NON_REQUIRED_INTEGER,
+                "default": MFSERV_NGINX_TIMEOUT,
+                "coerce": coerce_timeout
+            },
             "_debug_extra_options": {**NON_REQUIRED_STRING_DEFAULT_EMPTY},
             "_prefix_based_routing": {**NON_REQUIRED_BOOLEAN, "default": True},
             "_virtualdomain_based_routing": {
