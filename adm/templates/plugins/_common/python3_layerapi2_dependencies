@@ -1,4 +1,5 @@
-python3@mfserv
+python3@mfext
+root@mfdata
 -python3_devtools@mfext
 -python3_ia@mfext
 -python3_vim@mfext
