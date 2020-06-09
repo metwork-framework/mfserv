@@ -9,7 +9,7 @@ When you create a plugin with the :ref:`bootstap_plugin <mfserv_create_plugins:C
 By default, the `.layerapi2_dependencies` file contains only minimal dependencies, e.g.:
 ```cfg
 root@mfserv
-python3@mfserv
+python3@mfext
 ```
 means the plugin will use the :doc:`layer_root` and :doc:`layer_python3` supplied in MFSERV.
 
@@ -18,14 +18,14 @@ For more details on `layerapi2`, check :doc:`MFEXT layerapi2 <mfext:layerapi2>` 
 Let's assume you need a module or package which is available in the MFEXT 'scientific' package, you have to add this dependencies to the `.layerapi2_dependencies` file:
 ```cfg
 root@mfserv
-python3@mfserv
+python3@mfext
 python3_scientific@mfext
 ```
 
 Let's assume now, you want to build your plugin relies on Python2 instead of Python3, the `.layerapi2_dependencies` file will look like this:
 ```cfg
 root@mfserv
-python2@mfserv
+python2@mfext
 python2_scientific@mfext
 ```
 
