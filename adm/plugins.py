@@ -269,7 +269,7 @@ class MfservApp(App):
             # we force max_age to 0 in debug mode
             self._doc_fragment['max_age'] = 0
         # we force graceful timeout with timeout
-        self._doc_fragment["graceful_timeout"] = self._doc_fragment["timeout"]
+        self._doc_fragment["graceful_timeout"] = self.timeout
 
     def duplicate(self, new_name=None):
         new_app = App.duplicate(self, new_name=new_name)
