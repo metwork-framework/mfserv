@@ -13,3 +13,4 @@ __pycache__
 .git*
 *.plugin
 Makefile
+.configuration_cache
