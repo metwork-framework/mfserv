@@ -5,3 +5,4 @@ root@mfserv
 -python3_vim@mfext
 -scientific_core@mfext
 -python3_scientific@mfext
+-python3_scientific_core@mfext
