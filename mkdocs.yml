@@ -1,0 +1,34 @@
+site_name: metwork/mfserv doc
+theme:
+  name: 'material'
+  logo: 'images/logo.png'
+repo_url: https://github.com/metwork-framework/mfserv
+repo_name: 'GitHub'
+plugins:
+  - macros:
+      module_name: mkdocs_main
+  - search
+  - mkdocs-add-number-plugin:
+      strict_mode: False
+      order: 2
+      increment_topnav: False
+      increment_pages: False
+  - awesome-pages
+
+markdown_extensions:
+  - footnotes
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - admonition
+  - attr_list
