@@ -278,6 +278,7 @@ pipeline:
 
 
 
+
   trigger_plugins_buildimage:
     image: metwork/drone-downstream-specific-image:latest
     repositories:
