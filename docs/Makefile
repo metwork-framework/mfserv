@@ -4,14 +4,17 @@ CHANGELOGS_SOURCES=$(shell cd .. && ls CHANGELOG-*.md 2>/dev/null)
 CHANGELOGS_TARGETS=$(addprefix 900-changelogs/, $(CHANGELOGS_SOURCES))
 
 CONFIG_INI_TARGET=850-reference/config.ini
+PLUGIN_CONFIG_INI_TARGET=850-reference/plugin_templates/default/config.ini
 
-all: $(CHANGELOGS_TARGETS) 850-reference/100-components.md $(CONFIG_INI_TARGET)
+all: $(CHANGELOGS_TARGETS) 850-reference/100-components.md $(CONFIG_INI_TARGET) $(PLUGIN_CONFIG_INI_TARGET)
 
 900-changelogs/%: ../%
 	cat $< |sed 's/^# \(.*\) CHANGELOG$$/# \1/g' >$@
 
 850-reference/config.ini: $(MFMODULE_HOME)/config/config.ini
 	cp -f $< $@
+850-reference/plugin_templates/default/config.ini: $(MFMODULE_HOME)/share/templates/plugins/default/{{cookiecutter.name}}/config.ini
+	for T in `ls $(MFMODULE_HOME)/share/templates/plugins |grep -v ^_`; do rm -Rf 850-reference/plugin_templates/$${T} ; mkdir -p 850-reference/plugin_templates/$${T}; layer_wrapper --layers=python3@mfext -- bootstrap_plugin.py create --template=$${T} --no-input foobar; cp foobar/config.ini 850-reference/plugin_templates/$${T}/config.ini; cat 850-reference/_plugin_config_ini.md |sed "s/@@@TEMPLATE@@@/$${T}/g" >850-reference/plugin_templates/$${T}/200-config_ini.md; rm -Rf foobar; done
 
 850-reference/100-components.md: ../.metwork-framework/components.md
 	rm -f $@
@@ -27,3 +30,4 @@ clean:
 	rm -f 850-reference/100-components.md
 	rm -f 850-reference/config.ini
 	rm -f 850-components.md
+	rm -Rf 850-reference/plugin_templates
