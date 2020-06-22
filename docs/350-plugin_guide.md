@@ -180,6 +180,9 @@ But, **if you want to test things interactively in a terminal, you have to enter
 
 To do that, use `plugin_env` with no argument if you are in the plugin directory or `plugin_env {the_plugin_name}` anywhere else.
 
+!!! tip "plugin_wrapper"
+    In some cases, you could want to execute a single command in a *plugin_env* (for example from a `crontab`. For this, you can use the `plugin_wrapper {plugin_name} -- command [command_args]` utility.
+
 #### Defining configuration options
 
 To define configuration options, add some key/values at the end of the `config.ini` file of your
@@ -369,17 +372,23 @@ And you will get a fresh new `.plugin` file.
 ### dev commands
 
 
-{{plugin_ref_dev_commands}}
+```ini
+{{ "cat docs/_plugin_ref_dev_commands.md"|shell() }}
+```
 
 
 ### interesting files inside the plugin directory
 
 
-{{plugin_ref_interesting_files}}
+```ini
+{{ "cat docs/_plugin_ref_interesting_files.md"|shell() }}
+```
 
 
 ### management commands
 
 
-{{plugin_ref_management_commands}}
+```ini
+{{ "cat docs/_plugin_ref_management_commands.md"|shell() }}
+```
 

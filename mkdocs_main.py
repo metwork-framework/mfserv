@@ -4,11 +4,6 @@ from jinja2_fnmatch_extension import _fnmatch
 from jinja2_from_json_extension import from_json
 
 
-def fread(path):
-    with open(path, "r") as f:
-        return f.read()
-
-
 def define_env(env):
 
     # ***** Variables *****
@@ -16,12 +11,6 @@ def define_env(env):
     env.variables['config_ini'] = "../850-reference/200-config_ini"
     env.variables['installation_guide'] = "../100-installation_guide"
     env.variables['addons'] = "../840-addons"
-    env.variables['plugin_ref_interesting_files'] = \
-        fread('docs/_plugin_ref_interesting_files.md')
-    env.variables['plugin_ref_management_commands'] = \
-        fread('docs/_plugin_ref_management_commands.md')
-    env.variables['plugin_ref_dev_commands'] = \
-        fread('docs/_plugin_ref_dev_commands.md')
 
     # ***** Filters *****
     env.filters["shell"] = shell

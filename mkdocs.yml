@@ -5,6 +5,10 @@ theme:
 repo_url: https://github.com/metwork-framework/mfserv
 repo_name: 'GitHub'
 plugins:
+  - exclude:
+      glob:
+        - "_*.md"
+        - "850-reference/_*.md"
   - macros:
       module_name: mkdocs_main
   - search
@@ -14,9 +18,6 @@ plugins:
       increment_topnav: False
       increment_pages: False
   - awesome-pages
-  - exclude:
-      glob:
-        - "_*.md"
 
 markdown_extensions:
   - footnotes
