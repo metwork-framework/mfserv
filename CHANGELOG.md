@@ -4,6 +4,8 @@
 ## [Unreleased]
 
 ### New Features
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
 - allow binary packages by default (for plugins)
 - new plugin system
 - new plugin system
@@ -25,6 +27,9 @@
 
 
 ### Bug Fixes
+- fix graceful timeout
+- fix timeout value when <=0 (#343)
+- fix timeout value when <=0
 - fix the nginx syslog configuration
 - remove rlimit_core (because of `ulimit -c 0` in mfext)
 - fix a compatibility issue with old static plugins
