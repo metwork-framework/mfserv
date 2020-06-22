@@ -372,23 +372,17 @@ And you will get a fresh new `.plugin` file.
 ### dev commands
 
 
-```ini
 {{ "cat docs/_plugin_ref_dev_commands.md"|shell() }}
-```
 
 
 ### interesting files inside the plugin directory
 
 
-```ini
 {{ "cat docs/_plugin_ref_interesting_files.md"|shell() }}
-```
 
 
 ### management commands
 
 
-```ini
 {{ "cat docs/_plugin_ref_management_commands.md"|shell() }}
-```
 
