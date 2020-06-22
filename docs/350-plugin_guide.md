@@ -120,9 +120,8 @@ After that, use `make` in the plugin directory to rebuild the `virtualenv`.
     `virtualenv`/`node_sources` after the installation. Just use `make` to do
     that inside the plugin directory.
 
-??? question "What is the difference between `requirements-to-freeze.txt` and `requirements3.txt` (or `requirements2.txt`) files?
-    [The format](https://pip.pypa.io/en/stable/reference/pip_install/#requirement-specifiers) is the second
-    one if automatically generated (and overwritten!) from the first one (if more recent).
+??? question "What is the difference between `requirements-to-freeze.txt` and `requirements3.txt` (or `requirements2.txt`) files?"
+    The second one if automatically generated (and overwritten!) from the first one (when it is more recent in terms of *last modification date*)
 
     **=> So don't modify `requirements3.txt` manually unless you know exactly what you're doing!**
 
@@ -154,7 +153,32 @@ After that, use `make` in the plugin directory to rebuild the `virtualenv`.
 
 #### Plugin env
 
-FIXME
+Your plugin code runs in a *plugin env*. A *plugin env* is a bunch of `PATH`, `LD_LIBRARY_PATH`, `PYTHONPATH`, `NODE_PATH`
+env var dynamic changes to run your code inside a specific environment with you specific binaries, libraries and dependencies.
+
+With this feature, you can have a "1.0 library/dependency" running in your plugin `foo` and a "1.1 library" running in another plugin.
+
+It's a generalization of the Python concept of [`virtualenv`](https://virtualenv.pypa.io/en/latest/).
+
+It works for Python and NodeJS exactly in the same way. But you can also provides binaries (in any language) in the `bin/` subdirectory
+of your plugin (be sure that these files are executable) or C/C++ libraries in the `lib/` subdirectory. They will be available
+in the `PATH` and/or in the `LD_LIBRARY_PATH` when you are inside the *plugin_env*.
+
+??? question "can I use pip for my Python plugins?"
+    Yes, you can use `pip` command inside your *plugin env*.
+
+    But, **be careful** : the `pip` command can change python packages in your *plugin env*
+    but without reflecting these changes in the `requirements-to-freeze.txt` file. It's great
+    for testing but if you want to release your plugin with its new dependencies, don't forget
+    to also change the `requirements-to-freeze.txt` file!
+
+??? question "can I use npm for my NodeJS plugins?"
+    Yes, you can use `npm` command inside your *plugin env*.
+
+When your plugin/code is executed by the MetWork framework, it's automatically run in the corresponding *plugin_env*.
+But, **if you want to test things interactively in a terminal, you have to enter the plugin_env manually.**
+
+To do that, use `plugin_env` with no argument if you are in the plugin directory or `plugin_env {the_plugin_name}` anywhere else.
 
 #### Defining configuration options
 
@@ -252,10 +276,110 @@ foo=new_value
 
 to override (only) `foo` key of the `[custom]` configuration group.
 
-### Updating a plugin?
-
-FIXME
 
 ### Removing a plugin?
 
-FIXME
+To remove a plugin, use:
+
+```
+plugins.uninstall {plugin_name}
+```
+
+!!! tip
+    The plugin name is given in the first column of the `plugins.list` output.
+
+!!! note
+    If you made some changes in the `${MFMODULE_RUNTIME_HOME}/config/plugins/{plugin_name}.ini`
+    configuration override file, the uninstallation process won't delete it. If you are sure
+    you don't need it anymore, you can delete this file manually or add the `--clean` option
+    with the `plugins.uninstall` command.
+
+!!! note
+    The uninstallation process (with or without the `--clean` option) can't delete
+    the `/etc/metwork.config.d/mfserv/plugins/{plugin_name}.ini` configuration
+    override root file (as this file belongs to the root account).
+
+### Updating a plugin?
+
+To update a plugin, there is no specific command. You have to remove it. Then, reinstall it.
+
+!!! tip
+    Don't use the `--clean` option during `plugins.uninstall` to keep your configuration
+    overrides.
+
+??? tip "hotswapping with `mfserv`"
+    With `mfserv`, there is another way to replace a plugin with a different
+    version called "hot-swapping". This feature is a bit slow but this guarantees
+    that you don't loose any HTTP request during the switch.
+
+    Let's take an example:
+
+    ```
+    # Standard install of the foo.plugin (version 1)
+    plugins.install /path/foo-1.plugin
+
+    # [...]
+
+    # Hotswapping the installed version 1 by the version 2 of the same plugin
+    plugins.hotswap /path/foo-2.plugin
+    ```
+
+### (advanced) Installing several times the same plugin?
+
+You can't install several plugins with the same name.
+
+But sometimes, it can be useful to install the same plugin several times. For example:
+
+- to test a new version
+- to use the same plugin but with a different configuration
+
+If the plugin didn't hardcode its name in its code, you can use an advanced option
+to install a plugin file with another name:
+
+```
+# Standard install of the foo.plugin
+plugins.install /path/foo.plugin
+
+# Install of the same plugin file but with another name
+plugins.install --new-name bar /path/foo.plugin
+```
+
+!!! warning
+    It can't work if the plugin hardcode its name in its code. Developers should use `MFSERV_CURRENT_PLUGIN_NAME` or `MFDATA_CURRENT_PLUGIN_NAME` env var to avoid that.
+
+
+
+### (advanced) Repackaging a plugin
+
+If you have installed a plugin with another name (see above) or if you change
+the configuration (as an administrator), you can be interested in producing a
+new corresponding `.plugin` file (including name and configuration overrides) without
+going back through the development role.
+
+To do that, you can use:
+
+```
+plugins.repackage {name_of_the_installed_plugin}
+```
+
+And you will get a fresh new `.plugin` file.
+
+## Plugin reference
+
+### dev commands
+
+
+{{plugin_ref_dev_commands}}
+
+
+### interesting files inside the plugin directory
+
+
+{{plugin_ref_interesting_files}}
+
+
+### management commands
+
+
+{{plugin_ref_management_commands}}
+

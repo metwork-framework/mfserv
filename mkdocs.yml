@@ -14,6 +14,9 @@ plugins:
       increment_topnav: False
       increment_pages: False
   - awesome-pages
+  - exclude:
+      glob:
+        - "_*.md"
 
 markdown_extensions:
   - footnotes
