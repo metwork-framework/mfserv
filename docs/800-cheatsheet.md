@@ -64,7 +64,9 @@ As `mfserv` user:
 As `mfserv` unix user:
 
 
-{{plugin_ref_management_commands}}
+```ini
+{{ "cat docs/_plugin_ref_management_commands.md"|shell() }}
+```
 
 
 
@@ -77,13 +79,17 @@ As `mfserv` unix user:
 As `mfserv` unix user, inside a plugin directory for `make` commands (you must have a `Makefile` and `config.ini` files inside the current working directory):
 
 
-{{plugin_ref_dev_commands}}
+```ini
+{{ "cat docs/_plugin_ref_dev_commands.md"|shell() }}
+```
 
 
 ### interesting files inside the plugin directory
 
 
-{{plugin_ref_interesting_files}}
+```ini
+{{ "cat docs/_plugin_ref_interesting_files.md"|shell() }}
+```
 
 
 > Note: mandatory files are in **bold**, all these files are not created by default (it mainly depends on the template you used) but you can create them afterwards.
