@@ -1,4 +1,4 @@
-# Module configuration file
+# Configuration file
 
 This is the default mfserv configuration file.
 
