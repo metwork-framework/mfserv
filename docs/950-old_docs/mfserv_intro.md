@@ -22,7 +22,7 @@ All these technologies are managed in a "production ready" with:
 .. index:: WSGI server, Node.js server, templates, plugin templates, Django, Flask
 ## How it works?
 
-![image](./_images/overall_architecture.svg)
+![image](overall_architecture.svg)
 
 **MSERV relies on the following components:**
 
@@ -54,9 +54,9 @@ If the MFSERV plugin is :ref:`configured for monitoring <mfserv_tuning_monitorin
 .. seealso::
     | :doc:`MFADMIN Documentation <mfadmin:index>`
     | :doc:`mfadmin:mfadmin_monitoring_plugins`
-    | :ref:`mfadmin:mfadmin_miscellaneous:Circus hooks` 
+    | :ref:`mfadmin:mfadmin_miscellaneous:Circus hooks`
     | `A new way to serve (python) web apps article <https://medium.com/metwork-framework/a-new-way-to-serve-python-web-apps-d5662ab69dc0>`_
-    
+
 .. index:: configuration
 ## MFSERV configuration
 
