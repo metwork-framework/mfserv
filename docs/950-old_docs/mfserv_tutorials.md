@@ -27,13 +27,13 @@ make develop
 
 This command will download and install Django framework and some other dependencies. It will also create the Django project with an "Hello World!" application.
 
-.. important:: 
+.. important::
     | - if you are behind a proxy, you have to set `http_proxy` and `https_proxy` environment variables in order to be able to download any Python package you may need.
     | - you may also need to disable your Linux firewall:
     |   `systemctl status firewalld`
     |   `systemctl stop firewalld.service`
     |   `systemctl disable firewalld`
-   
+
 Once build is done, the `foo_django` plugin directory contains additional files and directories:
 - **db.sqlite3** file: the default [SQLite](https://www.sqlite.org/index.html) database
 - **manage.py** file: a convenience script that allows you to run administrative tasks like Django's included django-admin (see [django-admin and manage.py](https://docs.djangoproject.com/en/stable/ref/django-admin/))
@@ -44,8 +44,8 @@ Once build is done, the `foo_django` plugin directory contains additional files 
     - **wsgi.py**: An entry-point for WSGI-compatible web servers to serve your project.
     - **static**: Static files of the applications (read more about [The staticfiles app](https://docs.djangoproject.com/en/stable/ref/contrib/staticfiles/) and [Managing static files](https://docs.djangoproject.com/en/2.2/howto/static-files/)).
 - **hello** directory: the `hello` application directory containing the application template files.
-    
-    
+
+
 Now, you can check your application works by invoking the following URL: http://localhost:18868/foo_django/hello (you may replace localhost by your remote host if needed). A HTML page must display `Hello World from django app`.
 
 Now, let's create a data model.
@@ -96,7 +96,7 @@ Synchronize the database state with the current set of the model: enter `python 
 
 .. seealso::
     | `Django migrations documentation <https://docs.djangoproject.com/en/stable/topics/migrations/>`_
-    
+
 In order to check the model has been create in the SQLite database, enter `sqlite3 db.sqlite3`, then enter the following SQLite/SQL commands:
 ```sql
 .tables
@@ -121,7 +121,7 @@ Log in with the account you have just created.
 
 The click the **Articles** link in order to manipulate `Article` data (view, add, change, delete...):
 
-![mfserv_django_tuto_admin_site](./_images//mfserv_django_tuto_admin_site.jpg)
+![mfserv_django_tuto_admin_site](mfserv_django_tuto_admin_site.jpg)
 
 
 In order to check the `hello` application access to the database, edit the **hello/views.py** as below:
@@ -139,7 +139,7 @@ Build again the plugin (`make develop` command).
 Check your application still works by invoking the following URL: http://localhost:18868/foo_django/hello
 
 .. hint::
-    Set the `debug` parameter to 1 (instead of 0) in the `[app_...]` section of the plugin `config.ini` file, in order to get an **interactive debugger** in your browser: check :ref:`Interactive debugger section <mfserv_debug_plugin:Interactive debugger>`    
+    Set the `debug` parameter to 1 (instead of 0) in the `[app_...]` section of the plugin `config.ini` file, in order to get an **interactive debugger** in your browser: check :ref:`Interactive debugger section <mfserv_debug_plugin:Interactive debugger>`
 
 .. seealso::
     | :doc:`../configure_a_metwork_package`.
@@ -164,7 +164,7 @@ Check this directory, it contains few files, including:
     - **\_\_init\_\_.py**: An empty file that tells Python that this directory should be considered a Python package. If you’re a Python beginner, read more about packages in the official Python docs.
     - **templates** directory: It contains samples Jinja template page
     - **wsgi.py**: An entry-point for WSGI-compatible web servers to serve your project.
-    
+
 
 Let's now **build** the plugin by entering the command from the `foo_django` plugin directory:
 
@@ -174,13 +174,13 @@ make develop
 
 This command will download and install Flaks framework and some other dependencies. It will also create a Flask project with an "Hello World!" application.
 
-.. important:: 
+.. important::
     | - if you are behind a proxy, you have to set `http_proxy` and `https_proxy` environment variables in order to be able to download any Python package you may need.
     | - you may also need to disable your Linux firewall:
     |   `systemctl status firewalld`
     |   `systemctl stop firewalld.service`
     |   `systemctl disable firewalld`
-   
+
 
 Now, you can check your application works by invoking the following URL: http://localhost:18868/foo_flask (you may replace localhost by your remote host if needed). A HTML page must display `Hello World!`.
 
@@ -218,30 +218,30 @@ Let's now **build** the plugin by entering the command from the `foo_django` plu
 ```bash
 make develop
 ```
-This command will download and install needed Javascript node modules. 
+This command will download and install needed Javascript node modules.
 
-A **package-lock.json** is automatically generated for any operations where npm modifies either the node_modules tree, or **package.json**. 
+A **package-lock.json** is automatically generated for any operations where npm modifies either the node_modules tree, or **package.json**.
 It describes the exact tree that was generated, such that subsequent installs are able to generate identical trees, regardless of intermediate dependency updates.and some other dependencies.
 
-You may also check the **node_modules** directory. 
+You may also check the **node_modules** directory.
 
 .. note::
     | What is the difference between package.json and package-lock.json ?
-    | - **package-lock.json**: records the exact version of each installed package which allows you to re-install them. Future installs will be able to build an identical dependency tree. ... 
+    | - **package-lock.json**: records the exact version of each installed package which allows you to re-install them. Future installs will be able to build an identical dependency tree. ...
     | - **package.json**: records the minimum version you app needs.
 
 .. important::
     | **package-lock.json** is intended to be checked into source control, as Git. You should commit this file.
 
-.. important:: 
+.. important::
     | - if you are behind a proxy, you have to set `http_proxy` and `https_proxy` environment variables in order to be able to download any Python package you may need.
     | - you may also need to disable your Linux firewall:
     |   `systemctl status firewalld`
     |   `systemctl stop firewalld.service`
     |   `systemctl disable firewalld`
-   
 
-Check the `foo_nodejs/server.js` script. It is a basic [Express](https://expressjs.com/) application (app) which starts a server and listens for connection. 
+
+Check the `foo_nodejs/server.js` script. It is a basic [Express](https://expressjs.com/) application (app) which starts a server and listens for connection.
 This application responds with `Hello World foo_nodejs!` for requests to the homepage. For every other path, it will respond with an `HTTP 404 Not Found`.
 
 You will also see some calls to start and stop functions and callbacks from `metwork_tools` module to neatly start and stop the application:
@@ -289,7 +289,7 @@ app.post('/foo_nodejs', function (req, res) {
 })
 
 // This responds a GET request for wxy, waxy, w1234bxy, and so on...
-app.get('/foo_nodejs/w*xy', function(req, res) {   
+app.get('/foo_nodejs/w*xy', function(req, res) {
    res.send('Page Pattern Match foo_nodejs');
 })
 
@@ -354,9 +354,9 @@ Now, you can check your application works by invoking the following URL: http://
 
 .. hint::
     Set the `debug` parameter to 1 (instead of 0) in the `[app_...]` section of the plugin `config.ini` file, in order to get an **interactive debugger** in your browser: check :ref:`Interactive debugger section <mfserv_debug_plugin:Interactive debugger>`
-    
 
-Check the `foo_aiohttp/application.py` script. It is a basic [aiohttp](https://docs.aiohttp.org/en/stable) application (app) which create, start the application. It routes all incoming HTTP GET requests to a unique handler which return an "Hello World" HTTP response. 
+
+Check the `foo_aiohttp/application.py` script. It is a basic [aiohttp](https://docs.aiohttp.org/en/stable) application (app) which create, start the application. It routes all incoming HTTP GET requests to a unique handler which return an "Hello World" HTTP response.
 
 You will also see some calls to start and stop functions and callbacks from `metwork_tools` module to neatly start and stop the application:
 When creating the application, you will see :ref:`MetWork middlewares <mfserv_aiohttp_middleware>` are passed to the `middlewares` parameter:
@@ -488,4 +488,4 @@ if __name__ == '__main__':
 
 <!--
 Intentional comment to prevent m2r from generating bad rst statements when the file ends with a block .. xxx ::
--->    
+-->
