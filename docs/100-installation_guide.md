@@ -60,7 +60,7 @@ continuous integration | http://metwork-framework.org/pub/metwork/continuous_int
 
 ??? question "Want to install a released old version ?"
     You have to change the `BaseURL` and replace `/stable/` by `/release_X.Y/`. For example, use
-    `http://metwork-framework.org/pub/metwork/releases/rpms/release_0.9/portable/`
+    http://metwork-framework.org/pub/metwork/releases/rpms/release_0.9/portable/
     as `BaseURL` for installing a `0.9.Z` released old version.
 
 ??? question "Want to install a < 0.9 version?"
