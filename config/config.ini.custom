@@ -71,7 +71,7 @@ smart_start_delay=0
 # Advanced settings
 # Determines whether the connection with a plugin should be
 # closed when a client closes the connection without waiting for a response.
-# See: [link](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_ignore_client_abort)
+# See: `http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_ignore_client_abort`
 proxy_ignore_client_abort=1
 
 # If your mfserv is behing a reverse proxy, you will loose the real client ip
