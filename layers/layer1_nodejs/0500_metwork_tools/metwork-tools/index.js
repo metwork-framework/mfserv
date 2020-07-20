@@ -17,28 +17,6 @@ const PID = process.pid
 const PLUGIN = process.env.MFSERV_CURRENT_PLUGIN_NAME || "unknown"
 
 
-
-function before_start(unix_socket_path) {
-    // FIXME: DEPRECATED
-    process.stdout.write("metwork_tooks.before_start() is deprecated => remove this call from your code")
-}
-
-function after_start(unix_socket_path) {
-    // FIXME: DEPRECATED
-    process.stdout.write("ok: process #" + process.pid + " is listening on " + unix_socket_path + "\n")
-}
-
-function before_stop(unix_socket_path) {
-    // FIXME: DEPRECATED
-    process.stdout.write("metwork_tooks.before_stop() is deprecated => remove this call from your code")
-    server.close()
-}
-
-function after_stop(unix_socket_path) {
-    // FIXME: DEPRECATED
-    process.stdout.write("exiting !\n")
-}
-
 function _get_console_args(level, data, ...args) {
     var new_args = [];
     var d = new Date();
@@ -150,10 +128,6 @@ function console_critical(data, ...args) {
     _json_log(5, data, ...args)
 }
 
-exports.before_start = before_start
-exports.before_stop = before_stop
-exports.after_start = after_start
-exports.after_stop = after_stop
 exports.console_debug = console_debug
 exports.console_info = console_info
 exports.console_warn = console_warn

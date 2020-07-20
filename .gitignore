@@ -49,3 +49,4 @@ layers/layer1_python2/cache
 layers/layer1_python3/cache
 layers/layer9_default/cache
 plugins/*/.plugin_format_version
+_docs_build/
