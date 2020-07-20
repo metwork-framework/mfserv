@@ -268,8 +268,11 @@ class MfservApp(App):
         if self.max_age > 0 and self.debug:
             # we force max_age to 0 in debug mode
             self._doc_fragment['max_age'] = 0
-        # we force graceful timeout with timeout
-        self._doc_fragment["graceful_timeout"] = self.timeout
+        # we force graceful timeout with a value > timeout
+        # because we don't want circus to sigkill signal_wrapper
+        # (it can lead to process leaks)
+        self._doc_fragment["graceful_timeout"] = \
+            self.timeout + self._doc_fragment["smart_stop_delay"] + 10
 
     def duplicate(self, new_name=None):
         new_app = App.duplicate(self, new_name=new_name)
@@ -337,8 +340,7 @@ class MfservApp(App):
 
     @property
     def timeout(self):
-        # we add 2 to kill the backend first
-        return self._doc_fragment['timeout'] + 2
+        return self._doc_fragment['timeout']
 
     @property
     def debug_extra_options(self):
