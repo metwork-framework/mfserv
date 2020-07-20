@@ -40,43 +40,14 @@ All these technologies are managed in a "production ready" with:
 
 
 
+## Quickstart, installation guide...
 
-
-
-
-
-
-
-
-## Cheatsheet
-
-A cheatsheet for this module is available [here](.metwork-framework/cheatsheet.md)
-
-
-
-## Reference documentation
-
-- (for **master (development)** version), see [this dedicated site](http://metwork-framework.org/pub/metwork/continuous_integration/docs/master/mfserv/) for reference documentation.
-- (for **latest released stable** version), see [this dedicated site](http://metwork-framework.org/pub/metwork/releases/docs/stable/mfserv/) for reference documentation.
+Please consult the [reference documentation](http://metwork-framework.org/pub/metwork/continuous_integration/docs/master/mfserv/).
 
 For very specific use cases, you might be interested in
 [reference documentation for integration branch](http://metwork-framework.org/pub/metwork/continuous_integration/docs/integration/mfserv/).
 
 And if you are looking for an old released version, you can search [here](http://metwork-framework.org/pub/metwork/releases/docs/).
-
-
-
-## Installation guide
-
-See [this document](.metwork-framework/install_a_metwork_package.md).
-
-
-## Configuration guide
-
-See [this document](.metwork-framework/configure_a_metwork_package.md).
-
-
-
 
 
 ## Contributing guide

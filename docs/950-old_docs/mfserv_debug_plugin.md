@@ -101,11 +101,11 @@ WARNING: this plugin has a debug == 1 setting for the app: main
   => But it can be assumed if you trust the author
 ```
 
-Then, run and check your application from a browser by entering the application url `http://{your_host_name}:18868/testdyndebug` (e.g.: http://localhost:18868/testdyndebug)*[]: 
+Then, run and check your application from a browser by entering the application url `http://{your_host_name}:18868/testdyndebug` (e.g.: http://localhost:18868/testdyndebug)*[]:
 
 You should see an HTML page containing the stack trace of the application error like this:
 
-![Interactive debugger](./_images/mfserv_debug_interactive.jpg)
+![Interactive debugger](mfserv_debug_interactive.jpg)
 
 .. note::
     If you are running a :ref:`Django project plugin <mfserv_create_plugins_the_django_template>`, the debug HTML page is sightly different and you can't execute arbitrary python code in the stack frames.  containingWe will called it **foo_django**. to initialize a plugin containing
@@ -119,6 +119,3 @@ In some cases, you would like to run commands from your plugin environment, e.g.
 In order to do this, run the command `plugin_env` from the root directory of the plugin.
 
 Then, you have entered the environment of your plugin and you are able to run commands through a command line in this plugin environment.
-
-
-
