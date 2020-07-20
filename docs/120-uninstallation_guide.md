@@ -30,7 +30,6 @@ zypper remove "metwork-mfserv*"
 To uninstall all metwork modules, use following `root` commands:
 
 ```console tab="CentOS/Fedora"
-# for CentOS or Fedora (see previous note for other distributions)
 # We stop metwork services (see note below)
 service metwork stop
 
@@ -39,7 +38,6 @@ yum remove "metwork-*"
 ```
 
 ```console tab="Mageia"
-# for CentOS or Fedora (see previous note for other distributions)
 # We stop metwork services (see note below)
 service metwork stop
 
@@ -48,7 +46,6 @@ urpme "metwork-*"
 ```
 
 ```console tab="SUSE"
-# for CentOS or Fedora (see previous note for other distributions)
 # We stop metwork services (see note below)
 service metwork stop
 

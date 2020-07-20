@@ -62,7 +62,7 @@ Last, he releases his plugin as a single `.plugin` file.
 #### The administrator (OP)
 
 The administrator work starts with some released `.plugin` files. He installs them
-with a single command (or with the provisioning feature) and optionally change
+with a single command (or with the provisioning feature) and optionally changes
 their configuration.
 
 On the deployment machine, no internet access is necessary because `.plugin` files
@@ -154,13 +154,13 @@ After that, use `make` in the plugin directory to rebuild the `virtualenv`.
 #### Plugin env
 
 Your plugin code runs in a *plugin env*. A *plugin env* is a bunch of `PATH`, `LD_LIBRARY_PATH`, `PYTHONPATH`, `NODE_PATH`
-env var dynamic changes to run your code inside a specific environment with you specific binaries, libraries and dependencies.
+env var dynamic changes to run your code inside a specific environment with your specific binaries, libraries and dependencies.
 
 With this feature, you can have a "1.0 library/dependency" running in your plugin `foo` and a "1.1 library" running in another plugin.
 
 It's a generalization of the Python concept of [`virtualenv`](https://virtualenv.pypa.io/en/latest/).
 
-It works for Python and NodeJS exactly in the same way. But you can also provides binaries (in any language) in the `bin/` subdirectory
+It works for Python and NodeJS exactly in the same way. But you can also provide binaries (in any language) in the `bin/` subdirectory
 of your plugin (be sure that these files are executable) or C/C++ libraries in the `lib/` subdirectory. They will be available
 in the `PATH` and/or in the `LD_LIBRARY_PATH` when you are inside the *plugin_env*.
 
@@ -222,6 +222,14 @@ The naming schema if (of course) always the same:
     as these values can be overriden with other files by an administrator
     during deployment (see further).
 
+#### Configuring cron jobs
+
+FIXME
+
+#### Configuring "extra-daemons"
+
+FIXME
+
 #### Releasing
 
 When the development is done, the developer can release his plugin with:
@@ -234,7 +242,7 @@ He will get a self-contained `.plugin` file with everything needed inside.
 
 ### OP actions
 
-#### Installing a plugin?
+#### Installing a plugin
 
 ##### Manually
 
@@ -246,7 +254,7 @@ as `mfserv/mfdata/mfbase` user (or in corresponding MetWork env for custom insta
 
 After that, the `.plugin` is no longer useful.
 
-##### Automatically with the provisioning feature?
+##### Automatically with the provisioning feature
 
 To automatically install a released plugin with the provisioning feature, just put the
 `.plugin` file in `/etc/metwork.config.d/mfserv/plugins/` directory (change `mfserv` by `mfdata` or `mfbase` depending on the module).
@@ -254,19 +262,19 @@ To automatically install a released plugin with the provisioning feature, just p
 Then, restart the corresponding module by restarting the corresponding service with
 your favorite system services manager or with `/etc/rc.d/init.d/metwork restart mfserv` (as root user) (change `mfserv` by `mfdata` or `mfbase` depending on the module).
 
-#### Configuring a plugin?
+#### Configuring a plugin
 
 When a plugin is installed, some configuration options can be changed by OPs (after installation). Available keys are keys in plugin `config.ini` which don't start with underscore.
 
-##### Manually?
+##### Manually
 
 These keys are available in `${MFMODULE_RUNTIME_HOME}/config/plugins/{plugin_name}.ini`. So for example in `~mfserv/config/config.ini` (for a standard `MFSERV` module). By default, all keys
-are commented so standard values (defined by the developer) are used. If you want (as an OP)
+are commented, so standard values (defined by the developer) are used. If you want (as an OP)
 to override these default values, uncomment the corresponding key in `${MFMODULE_RUNTIME_HOME}/config/plugins/{plugin_name}.ini` and change its value.
 
 Note: this file itself can be overriden by the provisioning feature (see further).
 
-##### Automatically with the provisioning feature?
+##### Automatically with the provisioning feature
 
 If you create a file in `/etc/metwork.config.d/mfserv/plugins/{plugin_name}.ini` (change `mfserv` by `mfdata` or `mfbase` depending on the module) with a configuration part you want to override:
 
@@ -280,7 +288,7 @@ foo=new_value
 to override (only) `foo` key of the `[custom]` configuration group.
 
 
-### Removing a plugin?
+### Removing a plugin
 
 To remove a plugin, use:
 
@@ -302,7 +310,7 @@ plugins.uninstall {plugin_name}
     the `/etc/metwork.config.d/mfserv/plugins/{plugin_name}.ini` configuration
     override root file (as this file belongs to the root account).
 
-### Updating a plugin?
+### Updating a plugin
 
 To update a plugin, there is no specific command. You have to remove it. Then, reinstall it.
 
@@ -327,7 +335,7 @@ To update a plugin, there is no specific command. You have to remove it. Then, r
     plugins.hotswap /path/foo-2.plugin
     ```
 
-### (advanced) Installing several times the same plugin?
+### (advanced) Installing several times the same plugin
 
 You can't install several plugins with the same name.
 
@@ -348,7 +356,7 @@ plugins.install --new-name bar /path/foo.plugin
 ```
 
 !!! warning
-    It can't work if the plugin hardcode its name in its code. Developers should use `MFSERV_CURRENT_PLUGIN_NAME` or `MFDATA_CURRENT_PLUGIN_NAME` env var to avoid that.
+    It can't work if the plugin hardcodes its name in its code. Developers should use `MFSERV_CURRENT_PLUGIN_NAME` or `MFDATA_CURRENT_PLUGIN_NAME` env var to avoid that.
 
 
 

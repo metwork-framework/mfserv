@@ -2,84 +2,219 @@
 
 pull_request_rules:
 
-- name: backport to 0.5
-  conditions:
-    - base=integration
-    - label=backport-to-0.5
-  actions:
-    backport:
-      branches:
-        - release_0.5
-- name: backport to 0.6
-  conditions:
-    - base=integration
-    - label=backport-to-0.6
-  actions:
-    backport:
-      branches:
-        - release_0.6
-- name: backport to 0.7
-  conditions:
-    - base=integration
-    - label=backport-to-0.7
-  actions:
-    backport:
-      branches:
-        - release_0.7
-- name: backport to 0.8
-  conditions:
-    - base=integration
-    - label=backport-to-0.8
-  actions:
-    backport:
-      branches:
-        - release_0.8
-- name: backport to 0.9
-  conditions:
-    - base=integration
-    - label=backport-to-0.9
-  actions:
-    backport:
-      branches:
-        - release_0.9
-- name: backport to 1.0
-  conditions:
-    - base=integration
-    - label=backport-to-1.0
-  actions:
-    backport:
-      branches:
-        - release_1.0
-- name: release branch
-  actions:
-    merge:
-      method: merge
-      strict: true
-    delete_head_branch: {}
-  conditions:
-    - base~=^release_
-    - -merged
-    - -closed
-    - label!=Merge Manual
-    - status-success=pr ready to merge
-    - status-success=license/cla
+  - name: backport to 0.5
+    conditions:
+      - base=integration
+      - label=backport-to-0.5
+    actions:
+      backport:
+        branches:
+          - release_0.5
+  - name: backport to 0.6
+    conditions:
+      - base=integration
+      - label=backport-to-0.6
+    actions:
+      backport:
+        branches:
+          - release_0.6
+  - name: backport to 0.7
+    conditions:
+      - base=integration
+      - label=backport-to-0.7
+    actions:
+      backport:
+        branches:
+          - release_0.7
+  - name: backport to 0.8
+    conditions:
+      - base=integration
+      - label=backport-to-0.8
+    actions:
+      backport:
+        branches:
+          - release_0.8
+  - name: backport to 0.9
+    conditions:
+      - base=integration
+      - label=backport-to-0.9
+    actions:
+      backport:
+        branches:
+          - release_0.9
+  - name: backport to 1.0
+    conditions:
+      - base=integration
+      - label=backport-to-1.0
+    actions:
+      backport:
+        branches:
+          - release_1.0
 
-    - status-success=continuous-integration/drone/pr
+  - name: approved merges
+    actions:
+      merge:
+        method: squash
+        strict: true
+        commit_message: title+body
+      delete_head_branch: {}
+    conditions:
 
-- name: integration branch
-  actions:
-    merge:
-      method: merge
-      strict: true
-    delete_head_branch: {}
-  conditions:
-    - base=integration
-    - -merged
-    - -closed
-    - label!=Merge Manual
-    - status-success=pr ready to merge
-    - status-success=license/cla
+      - base!=master
 
-    - status-success=continuous-integration/drone/pr
+      - -merged
+      - -closed
+      - "#approved-reviews-by>=1"
+      - -title~=(WIP|wip)
+      - "label!=Status: Blocked"
+
+      - "label~=^Type: "
 
 
+      - status-success=license/cla
+
+      - status-success=continuous-integration/drone/pr
+
+
+
+  - name: missing type
+    actions:
+      comment:
+        message: |
+          To (auto) merge this pull-request, just tag this PR with a label:
+
+          - `Type: Enhancement` (new feature)
+          - (or) `Type: Bug` (bugfix)
+          - (or) `Type: Maintenance` (not on the changelog)
+    conditions:
+
+      - base!=master
+
+      - -merged
+      - -closed
+      - "#approved-reviews-by>=1"
+      - -title~=(WIP|wip)
+      - "label!=Status: Blocked"
+      - "-label~=^Type: "
+
+  - name: buildbot auto merges
+    actions:
+      label:
+        add: ["Type: Maintenance"]
+        remove: ["Type: Question", "Type: Enhancement", "Type: Bug"]
+      review:
+        type: APPROVE
+        message: "automatic approve because author=metworkbot"
+    conditions:
+
+      - base!=master
+
+      - -merged
+      - -closed
+      - author=metworkbot
+      - -title~=(WIP|wip)
+      - "label!=Status: Blocked"
+  - name: mergenow auto merges
+    actions:
+      review:
+        type: APPROVE
+        message: "automatic approve because label=Status: Merge Now"
+    conditions:
+
+      - base!=master
+
+      - -merged
+      - -closed
+      - -title~=(WIP|wip)
+      - "label=Status: Merge Now"
+  - name: wip
+    actions:
+      label:
+        add: ["Status: In Progress"]
+        remove: ["Status: Revision Needed", "Status: Pending", "Status: Review Needed", "Status: Accepted", "Status: Blocked", "Status: NotReproduced", "Status: Merged", "Status: Merge Now"]
+    conditions:
+
+      - base!=master
+
+      - -merged
+      - -closed
+      - title~=(WIP|wip)
+      - "label!=Status: Blocked"
+  - name: review needed
+    actions:
+      label:
+        add: ["Status: Review Needed"]
+        remove: ["Status: Revision Needed", "Status: Pending", "Status: In Progress", "Status: Accepted", "Status: Blocked", "Status: NotReproduced", "Status: Merged", "Status: Merge Now"]
+    conditions:
+
+      - base!=master
+
+      - -merged
+      - -closed
+      - -title~=(WIP|wip)
+      - "label!=Status: Blocked"
+      - "#approved-reviews-by=0"
+  - name: revision needed1
+    actions:
+      label:
+        add: ["Status: Revision Needed"]
+        remove: ["Status: In Progress", "Status: Pending", "Status: Review Needed", "Status: Accepted", "Status: Blocked", "Status: NotReproduced", "Status: Merged", "Status: Merge Now"]
+    conditions:
+
+      - base!=master
+
+      - -merged
+      - -closed
+      - "#changes-requested-reviews-by>=1"
+      - "label!=Status: Blocked"
+  - name: revision needed2
+    actions:
+      label:
+        add: ["Status: Revision Needed"]
+        remove: ["Status: In Progress", "Status: Pending", "Status: Review Needed", "Status: Accepted", "Status: Blocked", "Status: NotReproduced", "Status: Merged", "Status: Merge Now"]
+    conditions:
+
+      - base!=master
+
+      - -merged
+      - -closed
+      - conflict
+      - "label!=Status: Blocked"
+
+  - name: master branch
+    actions:
+      comment:
+        message: |
+          Thank you for contributing to this project.
+
+          But we don't accept pull requests on `master` branch as said in our
+          contributing guide.
+
+          => You have to change the base branch of your pull request to
+          `integration` branch.
+
+           It's very easy to do that by following this [github guide](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/changing-the-base-branch-of-a-pull-request).
+
+           Many thanks!
+      label:
+        add: ["Status: Revision Needed"]
+        remove: ["Status: Pending", "Status: Review Needed", "Status: Accepted", "Status: Blocked", "Status: Closed", "Status: In Progress", "Status: NotReproduced", "Status: Merge Now"]
+    conditions:
+      - base=master
+      - -closed
+
+  - name: closed
+    actions:
+      label:
+        add: ["Status: Closed"]
+        remove: ["Status: Revision Needed", "Status: Pending", "Status: Merged", "Status: Review Needed", "Status: Accepted", "Status: Blocked", "Status: In Progress", "Status: NotReproduced", "Status: Merge Now"]
+    conditions:
+      - closed
+      - -merged
+  - name: merged
+    actions:
+      label:
+        add: ["Status: Merged"]
+        remove: ["Status: Revision Needed", "Status: Pending", "Status: Closed", "Status: Review Needed", "Status: Accepted", "Status: Blocked", "Status: In Progress", "Status: NotReproduced", "Status: Merge Now"]
+    conditions:
+      - merged

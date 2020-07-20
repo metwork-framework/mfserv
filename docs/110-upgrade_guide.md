@@ -44,6 +44,12 @@ zypper update "metwork-*"
 service metwork start
 ```
 
+!!! note
+    If your distribution does not provide `service` command, you can use
+    `systemctl stop metwork.service` and `systemctl start metwork.service` instead
+     or `/etc/rc.d/init.d/metwork stop` and `/etc/rc.d/init.d/metwork start`
+    (if you don't have a `systemd` enabled machine or container).
+
 ### If your starting version is < 0.9
 
 !!! warning

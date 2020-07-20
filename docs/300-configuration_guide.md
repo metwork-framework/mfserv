@@ -1,7 +1,5 @@
 # Configuration guide
 
-
-
 ## Concepts
 
 There are several concepts about configuration in MetWork framework.
@@ -12,7 +10,8 @@ This is a completely optional step/concept.
 
 You can set a configuration name globally for one machine in `/etc/metwork.config` file.
 
-This file contains a single line with this **uppercase configuration name**.
+This file contains a single line with an **uppercase configuration name**.
+By default, its value is `GENERIC`.
 
 !!! warning
     Please use only alphanumeric uppercase characters here
@@ -20,8 +19,6 @@ This file contains a single line with this **uppercase configuration name**.
 !!! note
     The `underscore` character has a special inheritance meaning. You can use it but read
     this configuration guide before to understand its special meaning.
-
-By default, its value is `GENERIC`.
 
 This *configuration name* will be used to select special configuration values in all metwork modules
 and plugins. But you have to define them! If these special configuration values
@@ -33,7 +30,7 @@ configuration value for this silly configuration name.
 So changing the configuration name with `/etc/metwork.config` file can be a
 fast and practical way to select a kind of configuration variant
 (for example: `PROD_DATACENTER1`, `DEV_JOHN`...). But this variant must exist
-in other configuration files (see below). Else, default values will be used.
+in other configuration files (see below). If not, default values will be used.
 
 !!! note
     Even, if the default value in `/etc/metwork.config` is `GENERIC`, you won't
@@ -41,7 +38,7 @@ in other configuration files (see below). Else, default values will be used.
     default values are used.
 
 !!! note
-    With a MetWork profile loaded, you will also the configuration name under
+    With a MetWork profile loaded, you will also find the configuration name under
     the `${MFCONFIG}` environment variable (read from the `/etc/metwork.config` file).
 
 ### Overriding roles
@@ -100,7 +97,7 @@ But, if you set `DEV` in `/etc/metwork.config` (configuration name), the `debug`
 because of the `debug[DEV]=1` line/variant.
 
 Now, if you set `PROD` in `/etc/metwork.config` (configuration name), as there is no `debug[PROD]` line/variant,
-the debug value will failback to standard value: `0` (in this example).
+the debug value will failback to the default value: `0` (in this example).
 
 #### Inheritance behavior
 
@@ -115,7 +112,7 @@ debug[DEV]=1
 What about if we use `DEV_JOHN_MONDAY` in `/etc/metwork.config`? As there is no `debug[DEV_JOHN_MONDAY]` line,
 one might think that the retained value would be the default one: `0`.
 
-In fact, the retrained value will be `1`! Why? Because `_` (underscore) has a special meaning
+In fact, the retained value will be `1`! Why? Because `_` (underscore) has a special meaning
 in configuration names. This is a kind of inheritance mark.
 
 So `DEV_JOHN_MONDAY` means as a configuration name:
@@ -156,7 +153,7 @@ Configuration name | selected value for `debug` key | comment
 
 ### Configuration files and environment variables
 
-The value in the configuration file is read only by a custom profile script that will transform
+The value in the configuration file is read only by a custom profile script that will transform it
 into an environment variable.
 
 **Only this environment variable will be used by the rest of the module.**
@@ -169,7 +166,7 @@ In a more general way, every configuration option is stored in an environment va
 And this environment variable is set **only during profile loading**.
 
 !!! warning
-    When you change the configuration file, it does not change existing environment variables
+    When you change the configuration file, it does not change existing environment variables,
     so in some cases you will have to close and reopen your terminal to get new environment
     variable values.
 
@@ -211,7 +208,7 @@ With `mfadmin` unix user, you will find a `config/config.ini` file in `mfadmin` 
 
 This file is created (if necessary) when you first log in as `mfadmin` unix user. It's a copy of the *upstream configuration file*
 will all keys commented. As it overrides the *upstream configuration file*, if the key is commented, the *upstream* value is used.
-If you uncomment a key, this is the corresponding value in *upstream* is not used any more.
+If you uncomment a key, the corresponding value in this file is used for this key and the value in *upstream* is not used any more.
 
 !!! note
     Configuration groups `[name_of_the_group]` are not commented and it is normal! Never comment them!
@@ -223,6 +220,10 @@ If you want to change this port, first uncomment the line and set a new value to
 ??? warning "you are using a <= 0.9 version?"
     If you are using a <= 0.9 version, you also need a `[INCLUDE_config.ini]` special line at the very beginning of your `config.ini` file.
 
+??? warning "My new environment variables values are not taken into account"
+    Remember : When you change the configuration file, it does not change existing environment variables,
+    so you will probably have to close and reopen your terminal to get new environment
+    variable values.
 
 ### As an admin
 
