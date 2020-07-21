@@ -224,7 +224,52 @@ The naming schema if (of course) always the same:
 
 #### Configuring cron jobs
 
-FIXME
+In every plugin, you will find a `crontab` file dedicated to your plugin.
+
+This file can be used to define cron jobs specific to your plugin.
+
+They will be automatically injected into the `${MFMODULE_RUNTIME_USER}` crontab
+when installing the plugin and removed when uninstalling the plugin.
+
+**Don't play with the crontab command by yourself or other system configurations!**
+
+All you need is this `crontab` file in your plugin directory.
+
+If you are not familiar with the syntax of `crontab` files, please have a look
+at the internet as they are plenty of beginners guide about that.
+
+**BUT**, there are some things specific to MetWork Framework usage:
+
+
+- first, prefix your command with:
+
+```
+{% raw %}{{MFSERV_HOME}}/bin/cronwrap.sh --lock --log-capture-to your_command.log -- plugin_wrapper {{MFSERV_CURRENT_PLUGIN_NAME}} --
+```
+
+It will:
+
+- replace automatically `{{MFSERV_HOME}}`, `{{MFSERV_CURRENT_PLUGIN_NAME}}` and `{{MFSERV_CURRENT_PLUGIN_DIR}}{% raw %}` variables (to avoid hardcoding things)
+- load the MetWork environment
+- define an execution timeout of 3600 seconds (you can change this with a `--timeout` option after `--lock` for example)
+- avoid multiple execution of the same command (thanks to the `--lock` option you can remove if you don't want this and if you know exactly what you are doing)
+- capture all logs (stdout/stderr) and redirect them to `${MFMODULE_RUNTIME_HOME}/log/your_command.log` (of course you can change this filename)
+- load the `plugin_env` of the current plugin (very useful if you installed some extra libraries in your plugin or if you want to use some custom env variables)
+- then execute your command!
+
+
+
+This file will be injected into the `${MFMODULE_RUNTIME_USER}` crontab.
+
+??? question "How to debug?"
+    Use `crontab -l` as `${MFMODULE_RUNTIME_USER}` to see injected cronjobs
+    for all plugins and `mfserv` module.
+
+    If you don't have your lines, control output of `_make_and_install_crontab.sh`
+    command.
+
+    If you have your lines but if your cron don't work well, check your cron log file
+    as specified with `... --log-capture-to your_command.log ...` part of the line.
 
 #### Configuring "extra-daemons"
 
