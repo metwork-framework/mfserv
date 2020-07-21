@@ -67,25 +67,26 @@ pull_request_rules:
       - "#approved-reviews-by>=1"
       - -title~=(WIP|wip)
       - "label!=Status: Blocked"
-
-      - "label~=^Type: "
-
+      - "title~=^(build|chore|ci|docs|style|refactor|perf|test|fix|feat|fix|feat|feat!|fix!)(\\([a-z]+\\))?: [\\w ]+$"
 
       - status-success=license/cla
 
       - status-success=continuous-integration/drone/pr
 
 
-
-  - name: missing type
+  - name: change title
     actions:
       comment:
         message: |
-          To (auto) merge this pull-request, just tag this PR with a label:
+          For mergify to merge automatically this PR,
 
-          - `Type: Enhancement` (new feature)
-          - (or) `Type: Bug` (bugfix)
-          - (or) `Type: Maintenance` (not on the changelog)
+          => you have to change the PR title to match conventional commit specification:
+
+          ```
+          regex: ^(build|chore|ci|docs|style|refactor|perf|test|fix|feat|fix|feat|feat!|fix!)(\([a-z]+\))?: [\w ]+$
+          ```
+
+          As the title will be used for the commit message (and so for changelog entry if `feat:` or `fix:`).
     conditions:
 
       - base!=master
@@ -95,13 +96,15 @@ pull_request_rules:
       - "#approved-reviews-by>=1"
       - -title~=(WIP|wip)
       - "label!=Status: Blocked"
-      - "-label~=^Type: "
+      - "-title~=^(build|chore|ci|docs|style|refactor|perf|test|fix|feat|fix|feat|feat!|fix!)(\\([a-z]+\\))?: [\\w ]+$"
+
+      - status-success=license/cla
+
+      - status-success=continuous-integration/drone/pr
+
 
   - name: buildbot auto merges
     actions:
-      label:
-        add: ["Type: Maintenance"]
-        remove: ["Type: Question", "Type: Enhancement", "Type: Bug"]
       review:
         type: APPROVE
         message: "automatic approve because author=metworkbot"
