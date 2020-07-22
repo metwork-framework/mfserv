@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- fix details in documentation (including comment lines in config.ini files)
 - add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
 - remove aiohttp_metwork_middlewares (now in a dedicated repository)
 - allow binary packages by default (for plugins)
