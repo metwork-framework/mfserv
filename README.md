@@ -25,7 +25,7 @@ for building and managing production grade applications or micro-services
 (from development to operations).
 
 
-## What is it ?
+## What is it?
 
 This in the **M**etwork **F**ramework "**SERV**ices" module. This module is a kind of private [PAAS](https://en.wikipedia.org/wiki/Platform_as_a_service) which help to develop, run and manage
 webservices applications.
