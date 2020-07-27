@@ -18,7 +18,7 @@
 # - you can use jinja2 syntax
 #
 # Full example:
-# 0 2 * * * {% raw %}{{MFSERV_HOME}}/bin/cronwrap.sh --lock --log-capture-to your_command.log -- plugin_wrapper {{MFSERV_CURRENT_PLUGIN_NAME}} {{MFSERV_CURRENT_PLUGIN_DIR}}/bin/your_command.sh{% endraw %}
+# 0 2 * * * {% raw %}{{MFSERV_HOME}}/bin/cronwrap.sh --lock --log-capture-to your_command.log -- plugin_wrapper {{MFSERV_CURRENT_PLUGIN_NAME}} -- {{MFSERV_CURRENT_PLUGIN_DIR}}/bin/your_command.sh{% endraw %}
 # => will execute every dat at 02:00 the command {% raw %}{{MFSERV_CURRENT_PLUGIN_DIR}}/bin/your_command.sh{% endraw %}
 #    in your plugin context/env with an automatic log capture to your_command.log
 #    (you will find it under {% raw %}{{MFMODULE_RUNTIME_HOME}}/log{% endraw %}) with the --lock feature of cronwrap.py
