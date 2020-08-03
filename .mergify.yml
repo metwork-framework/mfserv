@@ -1,4 +1,4 @@
-# automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/%7B%7Bcookiecutter.repo%7D%7D/mergify.yml)
+# automatically generated from https://github.com/metwork-framework/github_organization_management/blob/master/common_files/mergify.yml)
 
 pull_request_rules:
 
@@ -71,7 +71,7 @@ pull_request_rules:
 
       - status-success=license/cla
 
-      - status-success=continuous-integration/drone/pr
+      #- status-success=continuous-integration/drone/pr
 
 
   - name: change title
@@ -100,7 +100,7 @@ pull_request_rules:
 
       - status-success=license/cla
 
-      - status-success=continuous-integration/drone/pr
+      #- status-success=continuous-integration/drone/pr
 
 
   - name: buildbot auto merges
