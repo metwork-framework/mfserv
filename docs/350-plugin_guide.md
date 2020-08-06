@@ -483,4 +483,3 @@ And you will get a fresh new `.plugin` file.
 
 
 {{ "cat docs/_plugin_ref_management_commands.md"|shell() }}
-
