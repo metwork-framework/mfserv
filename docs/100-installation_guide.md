@@ -332,4 +332,3 @@ Sorry, but it's our packaging choice in it is coherent with [Linux FHS](https://
 If you are really not happy with that, you can install MetWork
 where you want by recompiling it.
 
-
