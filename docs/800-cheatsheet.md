@@ -88,4 +88,3 @@ As `mfserv` unix user, inside a plugin directory for `make` commands (you must h
 
 > Note: mandatory files are in **bold**, all these files are not created by default (it mainly depends on the template you used) but you can create them afterwards.
 
-

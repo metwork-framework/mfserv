@@ -83,4 +83,3 @@ Then you can use the standard procedure described at the beginning of this docum
     You can use use the standard procedure even if your starting version is < 0.9 as
     the "patch update" is supported for all versions (without reinstalling everything).
 
-
