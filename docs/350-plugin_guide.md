@@ -254,7 +254,7 @@ at the internet as they are plenty of beginners guide about that.
 
 It will:
 
-- replace automatically `{{MFSERV_HOME}} }}`, `{{MFSERV_CURRENT_PLUGIN_NAME}}`, `{{MFSERV_CURRENT_PLUGIN_DIR + " }}`, `{{MFSERV_CURRENT_PLUGIN_CUSTOM_*}}` variables (to avoid hardcoding things) ([full list of available variables](../850-reference/700-env/)
+- replace automatically `{{MFSERV_HOME}} }}`, `{{MFSERV_CURRENT_PLUGIN_NAME}}`, `{{MFSERV_CURRENT_PLUGIN_DIR + " }}`, `{{MFSERV_CURRENT_PLUGIN_CUSTOM_*}}` variables (to avoid hardcoding things) ([full list of available variables](../850-reference/700-env/))
 - load the MetWork environment
 - define an execution timeout of 3600 seconds (you can change this with a `--timeout` option after `--lock` for example)
 - avoid multiple execution of the same command (thanks to the `--lock` option you can remove if you don't want this and if you know exactly what you are doing)
@@ -340,17 +340,17 @@ To install a released plugin manually, the *administrator* use:
 
 `plugins.install /path/to/the/dot/plugin/file.plugin`
 
-as `mfserv/mfdata/mfbase` user (or in corresponding MetWork env for custom installations).
+as `mfserv` user (or in corresponding MetWork env for custom installations).
 
 After that, the `.plugin` is no longer useful.
 
 ##### Automatically with the provisioning feature
 
 To automatically install a released plugin with the provisioning feature, just put the
-`.plugin` file in `/etc/metwork.config.d/mfserv/plugins/` directory (change `mfserv` by `mfdata` or `mfbase` depending on the module).
+`.plugin` file in `/etc/metwork.config.d/mfserv/plugins/` directory.
 
 Then, restart the corresponding module by restarting the corresponding service with
-your favorite system services manager or with `/etc/rc.d/init.d/metwork restart mfserv` (as root user) (change `mfserv` by `mfdata` or `mfbase` depending on the module).
+your favorite system services manager or with `/etc/rc.d/init.d/metwork restart mfserv` (as root user).
 
 #### Configuring a plugin
 
@@ -366,7 +366,7 @@ Note: this file itself can be overriden by the provisioning feature (see further
 
 ##### Automatically with the provisioning feature
 
-If you create a file in `/etc/metwork.config.d/mfserv/plugins/{plugin_name}.ini` (change `mfserv` by `mfdata` or `mfbase` depending on the module) with a configuration part you want to override:
+If you create a file in `/etc/metwork.config.d/mfserv/plugins/{plugin_name}.ini` with a configuration part you want to override:
 
 For example:
 
@@ -446,7 +446,7 @@ plugins.install --new-name bar /path/foo.plugin
 ```
 
 !!! warning
-    It can't work if the plugin hardcodes its name in its code. Developers should use `MFSERV_CURRENT_PLUGIN_NAME` or `MFDATA_CURRENT_PLUGIN_NAME` env var to avoid that.
+    It can't work if the plugin hardcodes its name in its code. Developers should use `MFSERV_CURRENT_PLUGIN_NAME` env var to avoid that.
 
 
 
