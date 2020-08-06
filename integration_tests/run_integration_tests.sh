@@ -1,5 +1,5 @@
 #!/bin/bash
-# automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/mfxxx_run_integration_tests.sh template
+# automatically generated from https://github.com/metwork-framework/github_organization_management/blob/master/common_files/mfxxx_run_integration_tests.sh template
 
 list_rep=$(ls -d */|grep -v data)
 if test -z "$list_rep"; then
