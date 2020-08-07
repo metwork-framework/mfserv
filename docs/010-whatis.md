@@ -9,7 +9,7 @@ With this module, you can easily implement robust webservices with:
 - synchronous Python2 (WSGI) (with a custom virtualenv including the framework you want like Django, Flask...)
 - asynchronous Python3 (with [aiohttp](https://aiohttp.readthedocs.io/) and your custom virtualenv)
 - asynchronous Python3 (with [tornado](https://www.tornadoweb.org/) and your custom virtualenv)
-- asynchronous Python3 [ASGI](https://asgi.readthedocs.io/) (with [Uvicorn](https://www.uvicorn.org/) server your custom virtualenv including your favorite async framework like [FastAPI](https://fastapi.tiangolo.com/), [Starlette](https://github.com/encode/starlette)...)
+- asynchronous Python3 [ASGI](https://asgi.readthedocs.io/) (with [Uvicorn](https://www.uvicorn.org/) server and your custom virtualenv including your favorite async framework like [FastAPI](https://fastapi.tiangolo.com/), [Starlette](https://github.com/encode/starlette)...)
 - nodejs (and your custom `node_modules`)
 - [OpenResty](https://openresty.org/en/) (lua + nginx)
 
