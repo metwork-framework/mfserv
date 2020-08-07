@@ -10,5 +10,5 @@ the [Django](https://www.djangoproject.com/) framework.
 By default, you have a configured django project (same name as the plugin)
 with one application `hello`.
 
-Have a look to the `postinstall` script to see we have configured (you can
+Have a look to the `postinstall` script to see what we have configured (you can
 change everything if you want).

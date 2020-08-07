@@ -13,7 +13,7 @@ you can use plain `WSGI` protocol by hand.
 By default, the main entry point is in `main/wsgi.py` file.
 
 Note that an interactive debugger is automatically configured if you use `debug=1`
-in your plugin `config.ini`.
+in your plugin `config.ini` file.
 
 ??? question "Want to change everything?"
     The file `main/wsgi.py` must define a `WSGI` `application()` function (you can change this in the plugin `config.ini` file in the `_cmd_and_args` key)
