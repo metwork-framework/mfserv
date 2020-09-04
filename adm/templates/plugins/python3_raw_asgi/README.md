@@ -16,4 +16,4 @@ FastAPI, Quart, Starlette...).
 
 ??? question "change the entry-point?"
     The ASGI entry point is by default the `app()` function in `main/application.py` file.
-    But you can change this on the `_cmd_and_args` option in your plugin `config.ini`
+    But you can change this on the `_cmd_and_args` option in your plugin `config.ini` file
