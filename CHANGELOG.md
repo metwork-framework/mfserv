@@ -1,9 +1,11 @@
-# CHANGELOG
+# release_1.0 CHANGELOG
 
 
 ## [Unreleased]
 
 ### New Features
+- fix details in documentation (including comment lines in config.ini files)
+- fix details in documentation (including comment lines in config.ini files)
 - add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
 - remove aiohttp_metwork_middlewares (now in a dedicated repository)
 - allow binary packages by default (for plugins)
@@ -28,7 +30,9 @@
 
 ### Bug Fixes
 - fix graceful timeout
+- fix graceful timeout
 - fix timeout value when <=0 (#343)
+- fix timeout value when <=0
 - fix timeout value when <=0
 - fix the nginx syslog configuration
 - remove rlimit_core (because of `ulimit -c 0` in mfext)
