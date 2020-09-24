@@ -14,26 +14,32 @@ RET=0
 
 
 cd "${MFMODULE_HOME}" || exit 1
-DEPS1=$(external_dependencies.sh |awk -F '/' '{print $NF}' |xargs)
-DEPS2=$(external_dependencies_not_found.sh |xargs)
-DEPS=$(echo $DEPS1 $DEPS2)
-for DEP in ${DEPS}; do
-    FOUND=0
-    for OK_DEP in ${OK_DEPS}; do
-        if test "${DEP}" = "${OK_DEP}"; then
-            FOUND=1
-            break
+cd opt
+for layer in `ls`; do
+    cd "${layer}"
+    current_layer=`cat .layerapi2_label`
+    DEPS1=$(layer_wrapper --layers=${current_layer} -- external_dependencies.sh |awk -F '/' '{print $NF}' |xargs)
+    DEPS2=$(layer_wrapper --layers=${current_layer} -- external_dependencies_not_found.sh |xargs)
+    DEPS=$(echo $DEPS1 $DEPS2)
+    for DEP in ${DEPS}; do
+        FOUND=0
+        for OK_DEP in ${OK_DEPS}; do
+            if test "${DEP}" = "${OK_DEP}"; then
+                FOUND=1
+                break
+            fi
+        done
+        if test "${FOUND}" = "1"; then
+            continue
         fi
+        echo "***** ${DEP} *****"
+        echo "=== revert ldd ==="
+        revert_ldd.sh "${DEP}"
+        echo
+        echo
+        RET=1
     done
-    if test "${FOUND}" = "1"; then
-        continue
-    fi
-    echo "***** ${DEP} *****"
-    echo "=== revert ldd ==="
-    revert_ldd.sh "${DEP}"
-    echo
-    echo
-    RET=1
+    cd ..
 done
 
 

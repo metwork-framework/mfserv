@@ -1,7 +1,7 @@
 [![logo](https://raw.githubusercontent.com/metwork-framework/resources/master/logos/metwork-white-logo-small.png)](http://www.metwork-framework.org)
 # mfserv
 
-[//]: # (automatically generated from https://github.com/metwork-framework/resources/blob/master/cookiecutter/_%7B%7Bcookiecutter.repo%7D%7D/README.md)
+[//]: # (automatically generated from https://github.com/metwork-framework/github_organization_management/blob/master/common_files/README.md)
 
 **Status (master branch)**
 
@@ -14,9 +14,15 @@
 [![Gitter](https://github.com/metwork-framework/resources/blob/master/badges/community-fr.svg)](https://gitter.im/metwork-framework/community-fr?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 
-[//]: # (TABLE_OF_CONTENTS_PLACEHOLDER)
 
-## What is it ?
+## What is MetWork FrameWork?
+
+[MetWork Framework](https://metwork-framework.org) is an opensource system
+for building and managing production grade applications or micro-services
+(from development to operations).
+
+
+## What is it?
 
 This in the **M**etwork **F**ramework "**SERV**ices" module. This module is a kind of private [PAAS](https://en.wikipedia.org/wiki/Platform_as_a_service) which help to develop, run and manage
 webservices applications.
@@ -40,36 +46,9 @@ All these technologies are managed in a "production ready" with:
 
 
 
-
-
-
-## Full list of components
-
-| Name | Version | Layer |
-| --- | --- | --- |
-| [aiohttp](https://github.com/aio-libs/aiohttp) | 3.4.4 | python3 |
-| [async-timeout](https://github.com/aio-libs/async_timeout/) | 3.0.0 | python3 |
-| [attrs](https://www.attrs.org/) | 19.3.0 | python3 |
-| [bjoern](https://github.com/thefab/bjoern/tree/metwork) | metwork-20190515 | python2 |
-| [bjoern](https://github.com/thefab/bjoern/tree/metwork) | metwork-20190515 | python3 |
-| [idna-ssl](https://github.com/aio-libs/idna-ssl) | 1.1.0 | python3 |
-| [multidict](https://github.com/aio-libs/multidict) | 4.4.2 | python3 |
-| [yarl](https://github.com/aio-libs/yarl/) | 1.2.6 | python3 |
-
-*(8 components)*
-
-
-
-
-
-
-
-
-
-
 ## Cheatsheet
 
-A cheatsheet for this module is available [here](.metwork-framework/cheatsheet.md)
+A cheatsheet for this module is available [here](https://metwork-framework.org/pub/metwork/continuous_integration/docs/master/mfserv/800-cheatsheet/)
 
 
 
@@ -85,16 +64,15 @@ And if you are looking for an old released version, you can search [here](http:/
 
 
 
+
 ## Installation guide
 
-See [this document](.metwork-framework/install_a_metwork_package.md).
+See [this document](https://metwork-framework.org/pub/metwork/continuous_integration/docs/master/mfserv/100-installation_guide/).
 
 
 ## Configuration guide
 
-See [this document](.metwork-framework/configure_a_metwork_package.md).
-
-
+See [this document](https://metwork-framework.org/pub/metwork/continuous_integration/docs/master/mfserv/300-configuration_guide/).
 
 
 

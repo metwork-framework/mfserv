@@ -1,0 +1,48 @@
+site_name: metwork/mfserv doc
+theme:
+  name: 'material'
+  logo: 'images/logo.png'
+repo_url: https://github.com/metwork-framework/mfserv
+repo_name: 'GitHub'
+plugins:
+  - exclude:
+      glob:
+        - "_*.md"
+        - "850-reference/_*.md"
+  - macros:
+      module_name: mkdocs_main
+  - search
+  - mkdocs-add-number-plugin:
+      strict_mode: False
+      order: 2
+      increment_topnav: False
+      increment_pages: False
+  - awesome-pages
+
+markdown_extensions:
+  - footnotes
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - admonition
+  - attr_list
+
+extra_css:
+  - https://unpkg.com/mermaid@8.5.1/dist/mermaid.css
+
+extra_javascript:
+  - https://unpkg.com/mermaid@8.5.1/dist/mermaid.min.js
