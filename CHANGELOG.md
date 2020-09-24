@@ -1,41 +1,47 @@
 # release_1.0 CHANGELOG
 
 
-## [Unreleased]
+
+## v1.0.1 (2020-09-19)
+
+- No interesting change
+
+
+## v1.0.0 (2020-09-19)
 
 ### New Features
-- fix details in documentation (including comment lines in config.ini files)
-- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
-- remove aiohttp_metwork_middlewares (now in a dedicated repository)
-- allow binary packages by default (for plugins)
-- new plugin system
-- new plugin system
-- remove all references to MFCOM or mfcom, including backward compatibility stuff
-- new accept_incoming_request_id_header variable and x-forwarded-*
-- add a better documented crontab file for plugins
-- remove bjoern (moved to mfext and mfextaddon_python2)
-- https/ssl support for nginx in mfserv (#323)
-- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
-- port of mflog changes about syslog to node
-- log refactoring
-- mfserv backends refactoring
-- adaptation to removal of layer misc@mfext (#284)
-- improve empty plugin template and update documentation
-- add a new configuration key for plugins
-- add extra nginx configuration keys for empty plugins
-- little improvment in socket up/down feature
 - better default dependencies
+- little improvment in socket up/down feature
+- add extra nginx configuration keys for empty plugins
+- add a new configuration key for plugins
+- improve empty plugin template and update documentation
+- adaptation to removal of layer misc@mfext (#284)
+- mfserv backends refactoring
+- log refactoring
+- port of mflog changes about syslog to node
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
+- https/ssl support for nginx in mfserv (#323)
+- remove bjoern (moved to mfext and mfextaddon_python2)
+- add a better documented crontab file for plugins
+- new accept_incoming_request_id_header variable and x-forwarded-*
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
+- new plugin system
+- new plugin system
+- allow binary packages by default (for plugins)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- fix details in documentation (including comment lines in config.ini files)
 
 
 ### Bug Fixes
-- fix graceful timeout
-- fix timeout value when <=0 (#343)
-- fix timeout value when <=0
-- fix the nginx syslog configuration
-- remove rlimit_core (because of `ulimit -c 0` in mfext)
-- fix a compatibility issue with old static plugins
-- fix signal_wrapper in python2
 - important fix about max_age feature
+- fix signal_wrapper in python2
+- fix a compatibility issue with old static plugins
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
+- fix the nginx syslog configuration
+- fix timeout value when <=0
+- fix timeout value when <=0 (#343)
+- fix graceful timeout
 
 
 
