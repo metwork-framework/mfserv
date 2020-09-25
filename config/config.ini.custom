@@ -46,10 +46,10 @@ accept_incoming_request_id_header=0
 add_x_forwarded_headers=1
 
 # extra networks allowed on /uuid endpoint (in addition to 127.0.0.1/32)
-# # (coma separated list)
-# # ("null" => no extra uuid allowed)
-# # example : 
-# # uuid_endpoint_extra_allows=5.6.0.0/16,1.2.3.4/32
+# (coma separated list)
+# ("null" => no extra uuid allowed)
+# example : 
+# uuid_endpoint_extra_allows=5.6.0.0/16,1.2.3.4/32
 uuid_endpoint_extra_allows=null
  
 # Advanced settings, change this only if you are sure what you are doing
