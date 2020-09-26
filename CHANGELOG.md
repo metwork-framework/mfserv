@@ -2,6 +2,17 @@
 
 
 
+## v0.9.10 (2020-09-25)
+
+### New Features
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#394)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#394)
+
+
+
+
+
+
 ## v0.9.9 (2020-01-29)
 
 - No interesting change
