@@ -4,6 +4,7 @@
 ## [Unreleased]
 
 ### New Features
+- add a configuration option to open the endpoint /uuid to other … (#393)
 - load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (#389)
 - fix details in documentation (including comment lines in config.ini files)
 - add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
