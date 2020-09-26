@@ -1,6 +1,16 @@
 # release_1.0 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
+
+
+
+
+
 
 ## v1.0.1 (2020-09-19)
 
