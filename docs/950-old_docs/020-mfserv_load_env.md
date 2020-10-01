@@ -13,6 +13,7 @@ In order to work with MFSERV, you have to load/activate the "Metwork MFSERV envi
 
 In the following sections, we use `{MFSERV_HOME}` as the installation directory of the `mfserv` module.
 
+
 ## Activate MFSERV environment by logging in as mfserv user.
 
 Once MFSERV is installed, a `mfserv` user and, therefore, a `/home/mfserv` directory are created.
@@ -50,7 +51,6 @@ Then, the MFSERV environment is loaded/activated for the whole session of your a
 	Before sourcing `interactive_profile`, mfserv service must not be started, for instance, from a `mfserv` user session. Check from a `mfserv` user session mfserv is stopped : `mfserv.status`, `mfserv.stop`.
 
 
-!!! tip ""
 	If you are fed up of always entering the `source` command, you may create an `mfserv` alias in your `.bash_profile` file and use this `mfserv` alias when you want to quickly load the "MFSERV environment":
         `MFSERV_HOME=/opt/metwork-mfserv`
 
