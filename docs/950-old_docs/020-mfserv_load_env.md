@@ -13,8 +13,6 @@ In order to work with MFSERV, you have to load/activate the "Metwork MFSERV envi
 
 In the following sections, we use `{MFSERV_HOME}` as the installation directory of the `mfserv` module.
 
-.. _activate_mfserv_user:
-
 ## Activate MFSERV environment by logging in as mfserv user.
 
 Once MFSERV is installed, a `mfserv` user and, therefore, a `/home/mfserv` directory are created.
@@ -24,7 +22,7 @@ Log in as the mfserv user:
 su - mfserv
 ```
 
-.. note::
+!!! note
 	If it's the first time you log in as mfserv user, there is no default password. You have to either set a password before (`passwd mfserv` or `sudo passwd mfserv`), or or use `su - mfserv` from `root` to log in as `mfserv` user.
 
 Then, the MFSERV environment is loaded/activated for the whole session of the `mfserv` user.
@@ -45,20 +43,20 @@ source {MFSERV_HOME}/share/interative_profile
 
 Then, the MFSERV environment is loaded/activated for the whole session of your account. A `metwork/mfserv` directory is created in your home directory. From now, you are able to work with your plugin(s) in this `~/metwork/mfserv` directory.
 
-.. caution::
-	The `~/metwork/mfserv` directory has nothing to do with the `/home/mfserv` :ref:`directory <activate_mfserv_user>` and they don't share anything.
+!!! warning
+	The `~/metwork/mfserv` directory has nothing to do with the `/home/mfserv` [directory](#2-activate-mfserv-environment-by-logging-in-as-mfserv-user) and they don't share anything.
 
-.. caution::
+!!! warning
 	Before sourcing `interactive_profile`, mfserv service must not be started, for instance, from a `mfserv` user session. Check from a `mfserv` user session mfserv is stopped : `mfserv.status`, `mfserv.stop`.
 
 
-.. tip::
+!!! tip ""
 	If you are fed up of always entering the `source` command, you may create an `mfserv` alias in your `.bash_profile` file and use this `mfserv` alias when you want to quickly load the "MFSERV environment":
         `MFSERV_HOME=/opt/metwork-mfserv`
 
         `alias mfserv="source ${MFSERV_HOME}/share/interactive_profile"`
 
-.. warning::
+!!! warning
 	We don't recommend to source directly `mfserv interactive_profile` in your `.bash_profile` if you are working with a full graphical interface because of possible side effects with desktop environment.
 
 
@@ -94,9 +92,7 @@ For more details, enter `{MFSERV_HOME}/bin/mfserv_wrapper --help` command.
 
 ## Miscellaneous
 
-You may also be interested in the `outside` Metwork command. Check the :ref:`related documentation <mfdata:outside_metwork_command>`.
-
-
+You may also be interested in the `outside` Metwork command. Check the [related documentation](../../../mfdata/950-old_docs/mfdata_miscellaneous/#9-the-outside-metwork-command)
 
 
 
