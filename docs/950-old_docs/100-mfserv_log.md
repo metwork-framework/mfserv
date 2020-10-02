@@ -1,4 +1,3 @@
-.. index:: log, logger, logging, mflog
 # MFSERV Log
 
 ## Default logs files
