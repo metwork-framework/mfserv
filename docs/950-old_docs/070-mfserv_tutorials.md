@@ -1,19 +1,90 @@
 # Tutorials
 
-.. index:: Django project, Django template
 ## Django project plugin
 
-.. hint::
-    **Before starting this tutorial, if not done yet, we recommend to have a look at the** :ref:`Django template section <mfserv_create_plugins_the_django_template>`.
+### About the Django plugin template
 
-Let's create a plugin based on the :ref:`Django template <mfserv_create_plugins_the_django_template>`. We will called it **foo_django**.
+The `django` plugin template enables you to initialize a plugin containing a single rough `Django` project and a first `Hello World!` application in this project.
+
+Once your plugin is initialized, you will have a python virtual environment containing a collection of modules, including Django.
+
+The Django version provided by MetWork can be check in the `python3_virtualenv_sources/requirements-to-freeze.txt` file in the plugin directory. You can change it if needed.
+
+!!! important
+    - This template works with Python3 only
+    - This template is limited to a single “django project” in a plugin (of course, you can still have multiple “django applications” in your plugin)
+    - This template provides a default [SQLITE](https://www.sqlite.org/index.html) file. If you want to use a [PostgreSQL](http://postgresql.org/) database or other [database engines](../090-mfserv_miscellaneous/#8-access-a-database), you have to configure it by yourself (it is not difficult), please read [Django databases documentation](https://docs.djangoproject.com/en/stable/ref/databases/)
+
+
+The `Django secret key` of your first project is randomly generated during the  process. Your project will own a secret key similar to the one that is set when you
+create a new Django project with the Django command `django-admin startproject` (see [Django secret key documentation](https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-SECRET_KEY)).
+
+Once you bootstrapped a plugin with the Django template, a **postinstall** script is create in the plugin directory. It is executed when you launch the `make develop` or `plugins.install` command.
+
+The **postinstall** script do the following:
+
+- Create the Django project `django-admin startproject {PLUGIN_NAME}` (see [django-admin startproject documentation](https://docs.djangoproject.com/en/stable/ref/django-admin/#startproject)) 
+- Create the "Hello World!" application `django-admin startapp hello` (see [django-admin startapp documentation](https://docs.djangoproject.com/en/stable/ref/django-admin/#startapp)) 
+- Configure the project 
+- Run `python manage.py migrate` (see [Django migrate documentation](https://docs.djangoproject.com/en/stable/ref/django-admin/#django-admin-migrate)) 
+- Run `python manage.py collectstatic` (see [Django collectstatic documentation](https://docs.djangoproject.com/en/stable/ref/contrib/staticfiles/#collectstatic)) 
+
+You may modify **postinstall** script, for example if you want to do the same for other Django projects inside your plugin.
+
+!!! note
+    The **postinstall** script does not run `python manage.py createsuperuser`. You have to run the command by yourself if you want to create a superuser (see [Django createsuperuser documentation](https://docs.djangoproject.com/en/stable/ref/django-admin/#createsuperuser)).
+
+!!! danger
+    Each time the **postinstall** script is executed, it remove project directories.
+    **It's highly recommended** to rename (or delete) this script otherwise you will loose source and code you added or changed if you build again or install the plugin.
+
+!!! important
+
+     Django has a security `ALLOWED_HOSTS` parameter in order to prevent HTTP Host header attacks.
+     By default, the template set ALLOWED_HOSTS=['localhost', '127.0.0.1', '[::1]']. You will definitely need to change this setting. In order to do this, change it:
+
+     - either in the **postinstall** script file before building the plugin:
+       ```
+           cat >>foo_django/settings.py <<EOF
+           # ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE
+           # TO PROVIDE DEBUG FEATURE
+           DEBUG = (os.environ.get('MFSERV_CURRENT_PLUGIN_DEBUG', '0') == '1')
+           import mflog
+           if DEBUG:
+               mflog.set_config(minimal_level="DEBUG")
+           else:
+               mflog.set_config()
+    
+           **ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']**
+           EOF
+       ```
+    
+     - or in the **settings.py** Django python configuration file after building the plugin:
+       ```
+           # ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE
+           # TO PROVIDE DEBUG FEATURE
+           DEBUG = (os.environ.get('MFSERV_CURRENT_PLUGIN_DEBUG', '0') == '1')
+           import mflog
+           if DEBUG:
+               mflog.set_config(minimal_level="DEBUG")
+           else:
+               mflog.set_config()
+    
+           **ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']**
+       ```
+    
+     For further details about ALLOWED_HOSTS, see [Django documentation](https://docs.djangoproject.com/en/stable/ref/settings/#allowed-hosts)
+
+
+### Tutorial
+Let's create a plugin based on the [Django template](../../850-reference/plugin_templates/python3_django/100-intro/). We will called it **foo_django**.
 
 First, **bootstrap** the plugin with the command:
- ```bash
+```bash
 bootstrap_plugin.py create --template=django foo_django
 ```
 
-Once you have entered this command, you will be asked to fill in some fields to configure and customize your plugin: for now, press `[ENTER]` to set the default value, you will be able to modify your plugin configuration anytime later.
+Once you have entered this command, you will be asked to fill in some fields to configure and customize your plugin: for now, press `[ENTER]` to set the default values, you will be able to modify your plugin configuration anytime later.
 
 The plugin is created in the current directory, inside the directory named `foo_django`.
 
@@ -27,14 +98,18 @@ make develop
 
 This command will download and install Django framework and some other dependencies. It will also create the Django project with an "Hello World!" application.
 
-.. important::
-    | - if you are behind a proxy, you have to set `http_proxy` and `https_proxy` environment variables in order to be able to download any Python package you may need.
-    | - you may also need to disable your Linux firewall:
-    |   `systemctl status firewalld`
-    |   `systemctl stop firewalld.service`
-    |   `systemctl disable firewalld`
+!!! important
+
+- if you are behind a proxy, you have to set `http_proxy` and `https_proxy` environment variables in order to be able to download any Python package you may need.
+- you may also need to disable your Linux firewall:
+```
+      systemctl status firewalld
+      systemctl stop firewalld.service
+      systemctl disable firewalld
+```
 
 Once build is done, the `foo_django` plugin directory contains additional files and directories:
+
 - **db.sqlite3** file: the default [SQLite](https://www.sqlite.org/index.html) database
 - **manage.py** file: a convenience script that allows you to run administrative tasks like Django's included django-admin (see [django-admin and manage.py](https://docs.djangoproject.com/en/stable/ref/django-admin/))
 - **foo_django** directory: the Python package for your project. Its name is the Python package name you’ll need to use to import anything inside it. This directory contains:
@@ -145,13 +220,12 @@ Check your application still works by invoking the following URL: http://localho
     | :doc:`../configure_a_metwork_package`.
 
 
-.. index:: Flask template, Jinja2
 ## Flask plugin
 
 Let's create a plugin based on the :ref:`Flask template <mfserv_create_plugins_the_flask_template>`. We will called it **foo_flask**.
 
 First, **bootstrap** the plugin with the command:
- ```bash
+```bash
 bootstrap_plugin.py create --template=flask foo_flask
 ```
 
@@ -193,13 +267,12 @@ Check the **wsgi.py** to discover the other urls (routes) provided by this templ
 - ...
 
 
-.. index:: Node.js application, Node.js template, node template
 ## Node.js plugin
 
 Let's create a plugin based on the :ref:`Node template <mfserv_create_plugins_the_node_template>`. We will called it **foo_nodejs**.
 
 First, **bootstrap** the plugin with the command:
- ```bash
+```bash
 bootstrap_plugin.py create --template=node foo_nodejs
 ```
 
@@ -314,13 +387,12 @@ Check your application works by invoking the relevant URLs you added.
     | :doc:`../configure_a_metwork_package`.
 
 
-.. index:: default template, asyncio
-## aiohttp python plugin
+## Aiohttp python plugin
 
 Let's create a plugin based on the :ref:`Default template <mfserv_create_plugins_the_default_template>` whose type is :index:`aiohttp`, i.e. [asynchronous Python3/asyncio web application](https://aiohttp.readthedocs.io/en/stable/web.html). We will called it **foo_aiohttp**.
 
 First, **bootstrap** the plugin with the command (`--template=default` can be omitted):
- ```bash
+```bash
 bootstrap_plugin.py create foo_aiohttp
 ```
 

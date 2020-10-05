@@ -21,84 +21,62 @@ mfserv.start
 ```bash
 service metwork restart mfserv
 ```
-.. seealso::
-    | :ref:`mfadmin:mfadmin_miscellaneous:Exporting logs`
-    | :doc:`mfadmin:mfadmin_monitoring_plugins`
+!!! tip "See also:" 
 
-.. index:: Nginx, Nginx Access Log, Enable/disable Nginx Access Log
+    - [Exporting logs](../../../mfadmin/950-old_docs/mfadmin_miscellaneous/#26-exporting-logs)
+    - [Monitoring plugins](../../../mfadmin/950-old_docs/mfadmin_monitoring_plugins/)
+
 ## Nginx Access Log
 
 Nginx writes logs information in the access log regarding each request made by a client.
 
-By default, these access logs are enaable. But you can prevent Nginx Access Log from being writtent by setting `logging` parameter in the  `[nginx]` section of the `~/config/config.ini` file of the module:
+By default, these access logs are enaable. But you can prevent Nginx Access Log from being written by setting `logging` parameter in the  `[nginx]` section of the `~/config/config.ini` file of the module:
 
 ```cfg
 # If logging=0, do not log anything in nginx_access.log
 logging=1
 ```
-.. index:: Interactive debugger, debug
 ## Interactive debugger
 
-An interactive debugger is available for `python3_sync`,  `python2_sync` and `aiothhp` plugin type created with the :ref:`default plugin template <mfserv_create_plugins_the_default_template>`.
+An interactive debugger is available for python plugins such as `python3_flask`, `python3_django`, `python3_aiohttp`, etc...
 
 In order to show you how it works, follow the instruction below.
 
 
-Create a plugin with the :ref:`default template <mfserv_create_plugins_the_default_template>`:
+Create a plugin with the [default (flask) template](../../850-reference/plugin_templates/default/100-intro/)
 ```cfg
  bootstrap_plugin.py create testdyndebug
 ```
 
-When **Select type** is asked, choose *1* (python3_sync - the default choice):
-
-```cfg
- Select type:
-1 - python3_sync
-2 - python2_sync
-3 - aiohttp
-4 - gunicorn3_sync
-5 - gunicorn2_sync
-6 - gunicorn3_asyncio
-Choose from 1, 2, 3, 4, 5, 6 [1]:
-```
-
 Set the `debug` parameter to 1 (instead of 0) in the `[app_...]` section of the plugin `config.ini` file:
 ```cfg
-# if you set debug=1, then you will get an interactive debugger
-# when you got an exception in your code
-# (max age will also be automatically set to 0 and mflog minimal level will be
-#  set to DEBUG)
+# If you set debug=1, numprocesses will be forced to 1 and we will try
+#   to set all debug options and features (max_age will also be forced
+#   to 0 and mflog minimal level will be set to DEBUG)
 # DON'T USE IT ON PRODUCTION!!!
 debug=1
 ```
 
 Then, when your plugin is created, edit the `main/wsgi.py` script an raise intentionally an error:
 ```python
-from mflog import get_logger
+import os
+import mflog
+from flask import Flask, render_template
 
-logger = get_logger("myapp")
+app = Flask(__name__)
+if os.environ.get('MFSERV_CURRENT_APP_DEBUG', '0') == '1':
+    app.config['PROPAGATE_EXCEPTIONS'] = True
+logger = mflog.get_logger(__name__)
 
 
-def application(environ, start_response):
-    status = '200 OK'
-    output = b'Hello World!'
-    logger.info("this is a test message")
-    # Raise intentionnally an excetion
-    x = 1/0
-    response_headers = [('Content-Type', 'text/plain'),
-                        ('Content-Length', str(len(output)))]
-    start_response(status, response_headers)
-    return [output]
+@app.route("/my_plugin/")
+def hello_world():
+    logger.info("This is an info message")
+    x=1/0
+    return "Hello World !"
 ```
 
-Build the plugin by entering the `make develop` command. You should notice because the `debug` parameter is set to 1, a warning message is displayed:
-```
-...
-WARNING: this plugin has a debug == 1 setting for the app: main
-  => This is a dangerous plugin which can break the whole
-     mfserv module
-  => But it can be assumed if you trust the author
-```
+Build the plugin by entering the `make develop` command.
 
 Then, run and check your application from a browser by entering the application url `http://{your_host_name}:18868/testdyndebug` (e.g.: http://localhost:18868/testdyndebug)*[]:
 
@@ -106,11 +84,10 @@ You should see an HTML page containing the stack trace of the application error 
 
 ![Interactive debugger](mfserv_debug_interactive.jpg)
 
-.. note::
-    If you are running a :ref:`Django project plugin <mfserv_create_plugins_the_django_template>`, the debug HTML page is sightly different and you can't execute arbitrary python code in the stack frames.  containingWe will called it **foo_django**. to initialize a plugin containing
+!!! note
+    If you are running a [Django project plugin](../../850-reference/plugin_templates/python3_django/100-intro/), the debug HTML page is sightly different and you can't execute arbitrary python code in the stack frames.
 
 
-.. index:: plugin_env
 ## Entering the plugin environment
 
 In some cases, you would like to run commands from your plugin environment, e.g. `django` command line.
