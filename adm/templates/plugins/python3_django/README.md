@@ -15,6 +15,8 @@ change everything if you want).
 
 ## Tutorial
 
+Let's create a plugin based on the python3 Django plugin template. We will called it **foo_django**.
+
 First, **bootstrap** the plugin with the command:
 ```bash
 bootstrap_plugin.py create --template=python3_django foo_django
