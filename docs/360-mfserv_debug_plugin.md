@@ -23,8 +23,8 @@ service metwork restart mfserv
 ```
 !!! tip "See also:" 
 
-    - [Exporting logs](../../../mfadmin/950-old_docs/mfadmin_miscellaneous/#26-exporting-logs)
-    - [Monitoring plugins](../../../mfadmin/950-old_docs/mfadmin_monitoring_plugins/)
+    - [Exporting logs](../../mfadmin/950-old_docs/mfadmin_miscellaneous/#26-exporting-logs)
+    - [Monitoring plugins](../../mfadmin/950-old_docs/mfadmin_monitoring_plugins/)
 
 ## Nginx Access Log
 
@@ -43,7 +43,7 @@ An interactive debugger is available for python plugins such as `python3_flask`,
 In order to show you how it works, follow the instruction below.
 
 
-Create a plugin with the [default (flask) template](../../850-reference/plugin_templates/default/100-intro/)
+Create a plugin with the [default (flask) template](../850-reference/plugin_templates/default/100-intro/)
 ```cfg
  bootstrap_plugin.py create testdyndebug
 ```
@@ -82,7 +82,7 @@ Then, run and check your application from a browser by entering the application 
 
 You should see an HTML page containing the stack trace of the application error like this:
 
-![Interactive debugger](mfserv_debug_interactive.jpg)
+![Interactive debugger](images/mfserv_debug_interactive.jpg)
 
 !!! note
     If you are running a [Django project plugin](../../850-reference/plugin_templates/python3_django/100-intro/), the debug HTML page is sightly different and you can't execute arbitrary python code in the stack frames.
