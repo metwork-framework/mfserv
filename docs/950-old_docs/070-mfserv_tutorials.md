@@ -100,13 +100,13 @@ This command will download and install Django framework and some other dependenc
 
 !!! important
 
-- if you are behind a proxy, you have to set `http_proxy` and `https_proxy` environment variables in order to be able to download any Python package you may need.
-- you may also need to disable your Linux firewall:
-```
-      systemctl status firewalld
-      systemctl stop firewalld.service
-      systemctl disable firewalld
-```
+    - if you are behind a proxy, you have to set `http_proxy` and `https_proxy` environment variables in order to be able to download any Python package you may need.
+    - you may also need to disable your Linux firewall:
+    ```
+          systemctl status firewalld
+          systemctl stop firewalld.service
+          systemctl disable firewalld
+    ```
 
 Once build is done, the `foo_django` plugin directory contains additional files and directories:
 
@@ -163,20 +163,30 @@ admin.site.register(Article, admin.ModelAdmin)
 
 Build the plugin with `make develop` command.
 
-Then, enter into the plugin environment in order to be able to execute Django commands: enter :ref:`plugins_guide:\`\`plugin_env\`\`` command.
+Then, enter into the plugin environment in order to be able to execute Django commands. Enter [`plugin_env`](../../350-plugin_guide/#214-plugin-env)  command.
 
-Create new migrations based on the changes detected to your models: enter `python manage.py makemigrations`.
+Create new migrations based on the changes detected to your models. Enter : 
+```
+    python manage.py makemigrations
+```
 
-Synchronize the database state with the current set of the model: enter `python manage.py migrate`.
+Synchronize the database state with the current set of the model. Enter :
+```
+    python manage.py migrate
+```
 
-.. seealso::
-    | `Django migrations documentation <https://docs.djangoproject.com/en/stable/topics/migrations/>`_
+!!! info "See also [Django migrations documentation](https://docs.djangoproject.com/en/stable/topics/migrations)"
 
-In order to check the model has been create in the SQLite database, enter `sqlite3 db.sqlite3`, then enter the following SQLite/SQL commands:
+In order to check the model has been created in the SQLite database, enter :
+```
+    sqlite3 db.sqlite3
+```
+then enter the following SQLite/SQL command:
 ```sql
 .tables
 ```
 
+You should see the `hello_article` is created :
 ```
 auth_group                  django_admin_log
 auth_group_permissions      django_content_type
@@ -186,15 +196,17 @@ auth_user_groups            hello_article
 auth_user_user_permissions
 ```
 
-You should see the `hello_article` is created.
-
-Create a superuser in order to be able to connect to the Django Administration site: enter `python manage.py createsuperuser` and set fields (see [Creating an admin user](https://docs.djangoproject.com/en/stable/intro/tutorial02/#creating-an-admin-user)).
+Create a superuser in order to be able to connect to the Django Administration site. Enter:
+```
+    python manage.py createsuperuser
+```
+ and set fields (see [Creating an admin user](https://docs.djangoproject.com/en/stable/intro/tutorial02/#creating-an-admin-user)).
 
 Now, from a browser, connect to the Django Administration site by invoking the following URL: http://localhost:18868/foo_django/admin (you may replace localhost by your remote host if needed).
 
 Log in with the account you have just created.
 
-The click the **Articles** link in order to manipulate `Article` data (view, add, change, delete...):
+Then click the **Articles** link in order to manipulate `Article` data (view, add, change, delete...):
 
 ![mfserv_django_tuto_admin_site](mfserv_django_tuto_admin_site.jpg)
 
@@ -213,11 +225,10 @@ Build again the plugin (`make develop` command).
 
 Check your application still works by invoking the following URL: http://localhost:18868/foo_django/hello
 
-.. hint::
-    Set the `debug` parameter to 1 (instead of 0) in the `[app_...]` section of the plugin `config.ini` file, in order to get an **interactive debugger** in your browser: check :ref:`Interactive debugger section <mfserv_debug_plugin:Interactive debugger>`
+!!! hint
+    Set the `debug` parameter to 1 (instead of 0) in the `[app_...]` section of the plugin `config.ini` file, in order to get an **interactive debugger** in your browser: check [Interactive debugger](../050-mfserv_debug_plugin/#3-interactive-debugger).
 
-.. seealso::
-    | :doc:`../configure_a_metwork_package`.
+!!! info "See also [Configure a Metwork module](../../300-configuration_guide/#2-how-to-configure-a-metwork-module)"
 
 
 ## Flask plugin
