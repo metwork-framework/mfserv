@@ -9,7 +9,7 @@ const timeout = parseInt(args[1], 10)
 // set the express app
 const app = express()
 app.get('/{{cookiecutter.name}}', function (req, res) {
-      res.send('Hello World {{cookiecutter.name}}!')
+      res.send('Hello World from {{cookiecutter.name}}!')
 })
 
 // call after_stop on exit

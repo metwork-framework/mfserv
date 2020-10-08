@@ -165,7 +165,7 @@ Build again the plugin (`make develop` command).
 Check your application still works by invoking the following URL: http://localhost:18868/foo_django/hello
 
 !!! hint
-    Set the `debug` parameter to 1 (instead of 0) in the `[app_...]` section of the plugin `config.ini` file, in order to get an **interactive debugger** in your browser: check [Interactive debugger](../050-mfserv_debug_plugin/#3-interactive-debugger).
+    Set the `debug` parameter to 1 (instead of 0) in the `[app_...]` section of the plugin `config.ini` file, in order to get an **interactive debugger** in your browser: check [Interactive debugger](../../../../360-mfserv_debug_plugin/#3-interactive-debugger).
 
-!!! info "See also [Configure a Metwork module](../../300-configuration_guide/#2-how-to-configure-a-metwork-module)"
+!!! info "See also [Configure a Metwork module](../../../../300-configuration_guide/#2-how-to-configure-a-metwork-module)"
 

@@ -8,7 +8,7 @@ from aiohttp_metwork_middlewares import timeout_middleware_factory
 async def handle(request):
     log = request['mflog_logger']
     log.info("this is an info message")
-    return web.Response(text="Hello World")
+    return web.Response(text="Hello World from aiohttp app")
 
 
 def get_app(timeout=int(os.environ['MFSERV_NGINX_TIMEOUT']) - 2):
