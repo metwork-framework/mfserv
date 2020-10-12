@@ -39,12 +39,12 @@ echo 'PREFIXES = [r"^{{cookiecutter.name}}/"]' >>{{cookiecutter.name}}/urls.py
 echo "urlpatterns = [url(x, include(urlpatterns)) for x in PREFIXES]" >>{{cookiecutter.name}}/urls.py
 
 cat >>{{cookiecutter.name}}/settings.py <<EOF
-
 # ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE
 # TO PROVIDE PREFIX BASED ROUTING
 STATIC_URL = '/{{cookiecutter.name}}/{{cookiecutter.name}}/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "{{cookiecutter.name}}/static")
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+INSTALLED_APPS.append('hello')
 EOF
 
 python manage.py migrate
