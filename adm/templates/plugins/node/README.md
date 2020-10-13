@@ -7,8 +7,7 @@ This template is made for building [NodeJS](https://nodejs.org) plugins.
 !!! warning
     To use this template, you need the `metwork-mfext-layer-nodejs` `mfext` extra layer.
 
-    Please refer to the [installation guide]({{installation_guide}}) if you don't
-    know how to do that.
+    Please refer to the [Installation guide](https://metwork-framework.org/pub/metwork/continuous_integration/docs/integration/mfserv/100-installation_guide) if you don't know how to do that.
 
 With this plugin template, you will be able to host one `NodeJS` app and its
 `node_modules`. For technical reasons, you can't host several `NodeJS` apps under
@@ -24,3 +23,5 @@ You can change the `node` command in `cmd_and_args` configuration option. By def
 we launch a minimal `server.js` file (built with `express` library) but of course you can change this.
 
 In the plugin directory, you will find a `package.json` to manage your `node_modules` dependencies (dedicated to your plugin) with `npm` tool in a standard way.
+
+You will find a tutorial about this plugin at [https://metwork-framework.org/pub/metwork/continuous_integration/docs/integration/mfserv/870-tutorials/010_node_plugin/](https://metwork-framework.org/pub/metwork/continuous_integration/docs/integration/mfserv/870-tutorials/010_node_plugin/)

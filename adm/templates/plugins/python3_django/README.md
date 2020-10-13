@@ -12,3 +12,5 @@ with one application `hello`.
 
 Have a look to the `postinstall` script to see what we have configured (you can
 change everything if you want).
+
+You will find a tutorial about this plugin at [https://metwork-framework.org/pub/metwork/continuous_integration/docs/integration/mfserv/870-tutorials/040_python3_django_plugin/](https://metwork-framework.org/pub/metwork/continuous_integration/docs/integration/mfserv/870-tutorials/040_python3_django_plugin/)
