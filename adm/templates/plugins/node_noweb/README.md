@@ -8,8 +8,7 @@ without a web part (see the `node` plugin template if you need a web app).
 !!! warning
     To use this template, you need the `metwork-mfext-layer-nodejs` `mfext` extra layer.
 
-    Please refer to the [installation guide]({{installation_guide}}) if you don't
-    know how to do that.
+    Please refer to the [Installation guide](https://metwork-framework.org/pub/metwork/continuous_integration/docs/integration/mfserv/100-installation_guide) if you don't know how to do that.
 
 ## How to play with it?
 
