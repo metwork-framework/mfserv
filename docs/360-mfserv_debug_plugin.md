@@ -4,9 +4,8 @@
 
 Log level is defined in the `[log]` section of the `~/config/config.ini` file of the module.
 
-There are 2 parameters :
+The most important parameter is:
 
-- minimal_level[DEV]: log level in development environment (plugin installed as dev build). default value is `DEBUG`
 - minimal_level: log level in production environment. default value is `INFO`
 
 You can change the log level. After changing it, you have to stop and start MFSERV to reload the configuration, by entering the commands :
@@ -30,7 +29,7 @@ service metwork restart mfserv
 
 Nginx writes logs information in the access log regarding each request made by a client.
 
-By default, these access logs are enaable. But you can prevent Nginx Access Log from being written by setting `logging` parameter in the  `[nginx]` section of the `~/config/config.ini` file of the module:
+By default, these access logs are enabled. But you can prevent Nginx Access Log from being written by setting `logging` parameter in the  `[nginx]` section of the `~/config/config.ini` file of the module:
 
 ```cfg
 # If logging=0, do not log anything in nginx_access.log
@@ -38,7 +37,7 @@ logging=1
 ```
 ## Interactive debugger
 
-An interactive debugger is available for python plugins such as `python3_flask`, `python3_django`, `python3_aiohttp`, etc...
+An interactive debugger is available for some python plugins such as `python3_flask`, `python3_django`...
 
 In order to show you how it works, follow the instruction below.
 
