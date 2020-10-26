@@ -9,7 +9,12 @@
 
 # Port of nginx daemon
 # IMPORTANT: this is the main port of the mfserv module
-# Note: as metwork does not run as root user, you CAN'T use here a value < 1024
+# Note: you can use <1024 value here (80 for example) but ports <1024 need
+#       an extra configuration step as root user:
+#       => setcap cap_net_bind_service=+ep "{{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx"
+#       (and)
+#       => touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service
+#          (for this change survives after a metwork update)
 port=18868
 
 # Max body size for incoming http requests (in MB)
@@ -48,10 +53,10 @@ add_x_forwarded_headers=1
 # extra networks allowed on /uuid endpoint (in addition to 127.0.0.1/32)
 # (coma separated list)
 # ("null" => no extra uuid allowed)
-# example : 
+# example :
 # uuid_endpoint_extra_allows=5.6.0.0/16,1.2.3.4/32
 uuid_endpoint_extra_allows=null
- 
+
 # Advanced settings, change this only if you are sure what you are doing
 # healthcheck endpoint for mfserv (useful only if you have a loadbalancer
 #                                  before mfserv)
@@ -112,10 +117,15 @@ server_tokens=1
 max_size_before_rotation=-1
 
 # Port of nginx daemon in SSL mode
-# Note: as metwork does not run as root user, you CAN'T use here a value < 1024
 # (null => no https support)
 # If you set a value here, you have also to set ssl_certificate and
 # ssl_certificate_key keys
+# Note: you can use <1024 value here (80 for example) but ports <1024 need
+#       an extra configuration step as root user:
+#       => setcap cap_net_bind_service=+ep "{{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx"
+#       (and)
+#       => touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service
+#          (for this change survives after a metwork update)
 https_port=null
 
 # SSL certificate (full path)
