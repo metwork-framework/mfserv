@@ -30,6 +30,7 @@
 
 
 ### Bug Fixes
+- don't prevent nginx to bind <1024 port (with setcap) (#411)
 - fix graceful timeout
 - fix timeout value when <=0 (#343)
 - fix timeout value when <=0
