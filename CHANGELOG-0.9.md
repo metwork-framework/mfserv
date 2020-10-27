@@ -1,7 +1,8 @@
 # release_0.9 CHANGELOG
 
 
-## [Unreleased]
+
+## v0.9.11 (2020-10-27)
 
 ### New Features
 - backport of https support and <1024 port binding (from 1.0 branch) (#418)
