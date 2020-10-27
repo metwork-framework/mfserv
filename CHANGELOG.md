@@ -1,6 +1,17 @@
 # release_1.0 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+
+
+### Bug Fixes
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+
+
+
+
 
 ## v1.0.2 (2020-09-26)
 
