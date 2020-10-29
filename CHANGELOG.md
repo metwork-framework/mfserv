@@ -2,6 +2,19 @@
 
 
 
+## v0.9.12 (2020-10-28)
+
+### New Features
+
+
+### Bug Fixes
+- bug with static files when extra_route is set to / (#425)
+- bug with static files when extra_route is set to / (#425)
+
+
+
+
+
 ## v0.9.11 (2020-10-27)
 
 ### New Features
