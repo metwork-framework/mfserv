@@ -30,6 +30,7 @@
 
 
 ### Bug Fixes
+- bug with static files when extra_route is set to / (#424)
 - don't prevent nginx to bind <1024 port (with setcap) (#411)
 - fix graceful timeout
 - fix timeout value when <=0 (#343)
