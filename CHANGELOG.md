@@ -1,13 +1,16 @@
 # release_1.0 CHANGELOG
 
 
-## [Unreleased]
+
+## v1.0.3 (2020-10-28)
 
 ### New Features
 
 
 ### Bug Fixes
 - don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- bug with static files when extra_route is set to / (bp #424) (#428)
 
 
 
