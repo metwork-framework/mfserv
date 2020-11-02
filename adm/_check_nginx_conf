@@ -19,8 +19,8 @@ if test "${MFSERV_NGINX_PORT}" -le 1024; then
         exit 1
     fi
 fi
-if test "${MFSERV_NGINX_HTTPS_PORT}" != "null"; then
-    if test "${MFSERV_NGINX_HTTPS_PORT}" -le 1024; then
+if test "${MFSERV_NGINX_HTTPS_PORT:-null}" != "null"; then
+    if test "${MFSERV_NGINX_HTTPS_PORT:-null}" -le 1024; then
         CAPA=$(getcap "${NGINX}" |grep "cap_net_bind_service+ep" 2>/dev/null)
         if test "${CAPA}" = ""; then
             echo_nok
