@@ -18,7 +18,7 @@ else
 fi
 export UUID
 
-if test "${MFSERV_NGINX_HTTPS_PORT}" != "null"; then
+if test "${MFSERV_NGINX_HTTPS_PORT:-null}" != "null"; then
     if test "${MFSERV_NGINX_SSL_CERTIFICATE}" = "/dev/null"; then
         echoerr "ERROR: MFSERV_NGINX_HTTPS_PORT != null but MFSERV_NGINX_SSL_CERTIFICATE is not set"
         exit 1
