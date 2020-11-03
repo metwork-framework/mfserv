@@ -30,6 +30,7 @@
 
 
 ### Bug Fixes
+- fix bad comment in boostrapped config.ini for plugins (#435)
 - bug with static files when extra_route is set to / (#424)
 - don't prevent nginx to bind <1024 port (with setcap) (#411)
 - fix graceful timeout
