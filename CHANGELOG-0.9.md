@@ -2,6 +2,19 @@
 
 
 
+## v0.9.13 (2020-11-02)
+
+### New Features
+
+
+### Bug Fixes
+- fix some rare https configuration issues (#436)
+- fix some rare https configuration issues (#436)
+
+
+
+
+
 ## v0.9.12 (2020-10-28)
 
 ### New Features
