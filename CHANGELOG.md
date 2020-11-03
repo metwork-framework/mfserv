@@ -1,6 +1,17 @@
 # release_1.0 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+
+
+### Bug Fixes
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+
+
+
+
 
 ## v1.0.3 (2020-10-28)
 
