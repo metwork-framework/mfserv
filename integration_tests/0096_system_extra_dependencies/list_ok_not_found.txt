@@ -1,11 +1,1 @@
-libjvm.so
-libpython2.7.so.1.0
-libboost_system-gcc62-mt-1_65_1.so.1.65.1
-libavcodec-4cf96bc1.so.58.65.103
-libavutil-ac3ec209.so.56.38.100
-libbz2-7225278b.so.1.0.3
-libcrypto-cc2fb98b.so.1.1
-libssl-fdf0b66c.so.1.1
-libswresample-994f1795.so.3.6.100
-libvpx-3dd7ccd6.so.6.2.0
-libz-a147dcb0.so.1.2.3
+no_extra_lib
