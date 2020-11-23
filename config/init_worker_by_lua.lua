@@ -1,4 +1,4 @@
-local stats = require('stats')
+local stats = require('mfserv.stats')
 local admin_hostname = os.getenv('MFSERV_ADMIN_HOSTNAME')
 local telegraf_statsd_port = tonumber(os.getenv('MFSERV_TELEGRAF_STATSD_PORT'))
 local new_timer = ngx.timer.at
