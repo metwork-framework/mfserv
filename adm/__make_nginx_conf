@@ -73,9 +73,11 @@ for plugin in plugins:
         lua_package_paths = lua_package_paths + \
             [p.configuration.lua_package_path]
     plugin_confs.append(p)
-lua_package_paths = \
-    lua_package_paths + ["%s/config/?.lua" % os.environ['MFSERV_HOME'],
-                         "%s/lib/?.lua" % os.environ['MFSERV_HOME']]
+lua_package_paths = [
+    "%s/lib/?.lua" % os.environ['MFSERV_HOME'],
+    MFSERV_PLUGINS_HOTSWAP_HOME + "/?.lua",
+    MFSERV_PLUGINS_HOME + "/?.lua"
+] + lua_package_paths
 
 nginx_conf_file = os.path.join(os.environ['MFMODULE_HOME'], 'config',
                                'nginx.conf')

@@ -9,7 +9,8 @@ from mfplugin.configuration import Configuration
 from mfplugin.app import App
 from mfplugin.utils import NON_REQUIRED_BOOLEAN, NON_REQUIRED_INTEGER, \
     NON_REQUIRED_STRING_DEFAULT_EMPTY, NON_REQUIRED_STRING, \
-    NON_REQUIRED_BOOLEAN_DEFAULT_FALSE, get_current_envs, BadPlugin
+    NON_REQUIRED_BOOLEAN_DEFAULT_FALSE, get_current_envs, BadPlugin, \
+    NON_REQUIRED_BOOLEAN_DEFAULT_TRUE
 
 HOT_SWAP_PREFIX = "__hs_"
 MFMODULE_RUNTIME_HOME = os.environ.get("MFMODULE_RUNTIME_HOME", "/unknown")
@@ -69,6 +70,9 @@ MFSERV_SCHEMA_OVERRIDE = {
             "_extra_nginx_server_conf_filename": {**EXTRA_NGINX_FRAGMENT},
             "_extra_nginx_init_worker_by_lua_block_filename": {
                 **EXTRA_NGINX_FRAGMENT
+            },
+            "_add_plugin_dir_to_lua_path": {
+                **NON_REQUIRED_BOOLEAN_DEFAULT_TRUE
             }
         }
     },
@@ -132,6 +136,16 @@ def dict_merge(dct, merge_dct):
 
 
 class MfservConfiguration(Configuration):
+    def __init__(self, *args, **kwargs):
+        Configuration.__init__(self, *args, **kwargs)
+        self.jinja2_env = jinja2.Environment(
+            extensions=[
+                "jinja2_shell_extension.ShellExtension",
+                "jinja2_getenv_extension.GetenvExtension",
+                "jinja2_fnmatch_extension.FnMatchExtension",
+            ],
+            undefined=jinja2.StrictUndefined,
+        )
 
     def get_schema(self):
         schema = Configuration.get_schema(self)
@@ -154,15 +168,20 @@ class MfservConfiguration(Configuration):
                            '_extra_nginx_init_worker_by_lua_block_string'):
                 if option in self._doc[section]:
                     try:
-                        template = jinja2.Template(
-                            self._doc[section][option],
-                            undefined=jinja2.StrictUndefined)
+                        template = self.jinja2_env.from_string(
+                            self._doc[section][option]
+                        )
                         self._doc[section][option] = template.render(**context)
                     except Exception as e:
                         raise BadPlugin("problem during jinja2 eval of "
                                         "[%s]/%s with context: %s" %
                                         (section, option, context),
                                         original_exception=e)
+        self._doc['general']['_lua_package_path'] = ''
+        if self.add_plugin_dir_to_lua_path:
+            if len(glob.glob(os.path.join(self.plugin_home, '*.lua'))) > 0:
+                self._doc['general']['_lua_package_path'] = \
+                    os.path.join(self.plugin_home, '?.lua')
 
     def get_final_document(self, validated_document):
         sections = ["general"]
@@ -185,12 +204,6 @@ class MfservConfiguration(Configuration):
                         content = ""
                     new_option = option.replace('_filename', '_string')
                     validated_document[section][new_option] = content
-
-        if len(glob.glob(os.path.join(self.plugin_home, '*.lua'))) > 0:
-            validated_document['general']['_lua_package_path'] = \
-                os.path.join(self.plugin_home, '?.lua')
-        else:
-            validated_document['general']['_lua_package_path'] = ''
         app_sections = [x for x in validated_document.keys()
                         if x.startswith('app_')]
         for section in app_sections:
@@ -238,6 +251,14 @@ class MfservConfiguration(Configuration):
         self.load()
         return self._doc['general']['_extra_nginx_init_worker_'
                                     'by_lua_block_string']
+
+    @property
+    def add_plugin_dir_to_lua_path(self):
+        self.load()
+        key = "_add_plugin_dir_to_lua_path"
+        if key in self._doc['general']:
+            return self._doc['general'][key]
+        return True
 
     @property
     def disable_nginx_conf(self):
