@@ -8,6 +8,7 @@
 
 ### Bug Fixes
 - avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
 
 
 
