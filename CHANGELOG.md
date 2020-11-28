@@ -30,6 +30,7 @@
 
 
 ### Bug Fixes
+- fix static files routing with virtualhost (#452)
 - avoid lua collisions with multiple openresty plugins (#447)
 - fix bad comment in boostrapped config.ini for plugins (#435)
 - bug with static files when extra_route is set to / (#424)
