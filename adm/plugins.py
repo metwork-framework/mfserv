@@ -92,6 +92,9 @@ MFSERV_SCHEMA_OVERRIDE = {
                 **NON_REQUIRED_BOOLEAN,
                 "default": False
             },
+            "virtualdomain_based_routing_extra_vhosts": {
+                **NON_REQUIRED_STRING_DEFAULT_EMPTY
+            },
             "_static_routing": {**NON_REQUIRED_BOOLEAN, "default": True},
             "_static_url_prefix": {
                 **NON_REQUIRED_STRING,
@@ -211,6 +214,12 @@ class MfservConfiguration(Configuration):
             validated_document[section]['_workdir'] = \
                 os.path.join(self.plugin_home, app_name)
             virtualdomains = set()
+            tmp = validated_document[section].get(
+                'virtualdomain_based_routing_extra_vhosts', ''
+            )
+            for x in tmp.split(','):
+                if x.strip() not in ("", "null"):
+                    virtualdomains.add(x.strip())
             for host in (HOSTNAME, HOSTNAME_FULL, "localhost"):
                 virtualdomains.add("%s.%s.%s" % (app_name, self.plugin_name,
                                                  host))
@@ -374,6 +383,13 @@ class MfservApp(App):
     @property
     def virtualdomain_based_routing(self):
         return self._doc_fragment['_virtualdomain_based_routing']
+
+    @property
+    def virtualdomain_based_routing_extra_vhosts(self):
+        tmp = self._doc_fragment['virtualdomain_based_routing_extra_vhosts']
+        return [
+            x.strip() for x in tmp.split(',') if x.strip() not in ("", "null")
+        ]
 
     @property
     def static_routing(self):
