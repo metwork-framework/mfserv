@@ -1,7 +1,21 @@
 # release_1.0 CHANGELOG
 
 
-## [Unreleased]
+
+## v1.0.6 (2020-11-30)
+
+### New Features
+
+
+### Bug Fixes
+- fix virtualhosting usage (bp #456) (#457)
+- fix virtualhosting usage (bp #456) (#457)
+
+
+
+
+
+## v1.0.5 (2020-11-28)
 
 ### New Features
 
