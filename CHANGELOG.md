@@ -30,6 +30,8 @@
 
 
 ### Bug Fixes
+- fix potential lua collisions between mutiple openresty plugins (#451)
+- fix virtualhosting usage (#456)
 - fix static files routing with virtualhost (#452)
 - avoid lua collisions with multiple openresty plugins (#447)
 - fix bad comment in boostrapped config.ini for plugins (#435)
