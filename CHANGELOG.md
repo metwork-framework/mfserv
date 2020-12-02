@@ -1,6 +1,22 @@
 # release_1.0 CHANGELOG
 
 
+## [Unreleased]
+
+### New Features
+
+
+### Bug Fixes
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+
+
+
+
+
+## v1.0.7 (2020-12-01)
+
+- No interesting change
+
 
 ## v1.0.6 (2020-11-30)
 
