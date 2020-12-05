@@ -1,7 +1,8 @@
 # release_1.0 CHANGELOG
 
 
-## [Unreleased]
+
+## v1.0.8 (2020-12-02)
 
 ### New Features
 
