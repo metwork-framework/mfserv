@@ -402,7 +402,22 @@ plugins.uninstall {plugin_name}
 
 ### Updating a plugin
 
-To update a plugin, there is no specific command. You have to remove it. Then, reinstall it.
+##### Manually
+
+To update a plugin manually, there is no specific command. You have to remove it. Then, reinstall it.
+
+##### Automatically with the provisioning feature
+
+To automatically update a released plugin with the provisioning feature, just put the
+`.plugin` file in `/etc/metwork.config.d/mfserv/plugins/` directory.
+
+Then, restart the corresponding module by restarting the corresponding service with
+your favorite system services manager or with `/etc/rc.d/init.d/metwork restart mfserv` (as root user).
+
+The previous version of the plugin (identified by it's name) will be uninstalled first, then the released plugin will be installed.
+
+!!! note
+    A plugin hash is used to compare the released plugin with the installed plugin with the same name. If the hash is the same, then nothing happen. If the hash is different the already installed plugin is uninstalled then the released plugin is installed, whatever the version.
 
 !!! tip
     Don't use the `--clean` option during `plugins.uninstall` to keep your configuration
