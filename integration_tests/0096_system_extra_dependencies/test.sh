@@ -17,9 +17,14 @@ cd "${MFMODULE_HOME}" || exit 1
 cd opt
 for layer in `ls`; do
     cd "${layer}"
+    echo
+    echo "=== System extra dependencies layer ${layer} ==="
+    echo
     current_layer=`cat .layerapi2_label`
     DEPS1=$(layer_wrapper --layers=${current_layer} -- external_dependencies.sh |awk -F '/' '{print $NF}' |xargs)
+    echo "--- extra dependencies ---" ${DEPS1}
     DEPS2=$(layer_wrapper --layers=${current_layer} -- external_dependencies_not_found.sh |xargs)
+    echo "--- dependencies not found ---" ${DEPS2}
     DEPS=$(echo $DEPS1 $DEPS2)
     for DEP in ${DEPS}; do
         FOUND=0
