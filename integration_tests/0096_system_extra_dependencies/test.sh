@@ -24,8 +24,16 @@ for layer in `ls`; do
     DEPS1=$(layer_wrapper --layers=${current_layer} -- external_dependencies.sh |awk -F '/' '{print $NF}' |xargs)
     echo "--- external dependencies ---" ${DEPS1}
     DEPS2=$(layer_wrapper --layers=${current_layer} -- external_dependencies_not_found.sh |xargs)
-    echo "--- dependencies not found ---" ${DEPS2}
-    DEPS=$(echo $DEPS1 $DEPS2)
+    # We don t consider libraries available in the layer (they should not be here, probably a LD_LIBRARY_PATH issue)
+    DEPS3=""
+    for lib in ${DEPS2}; do
+        found=$(find . -name ${lib} -print)
+        if test "${found}" == ""; then
+            DEPS3="${DEPS3} ${lib}"
+        fi
+    done
+    echo "--- dependencies not found ---" ${DEPS3}
+    DEPS=$(echo $DEPS1 $DEPS3)
     for DEP in ${DEPS}; do
         FOUND=0
         for OK_DEP in ${OK_DEPS}; do
