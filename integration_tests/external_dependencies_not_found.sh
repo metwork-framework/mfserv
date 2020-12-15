@@ -11,4 +11,4 @@ if test "${1:-}" = "--help"; then
     exit 0
 fi
 
-( find . -type f -name "*.so*" -exec ldd {} 2>/dev/null \; ; find . -type f -wholename "*/bin/*" -exec ldd {} 2>/dev/null \;) |grep "=>" | grep "not found" |awk -F '=>' '{print $1;}' |sort |uniq
+( find . -type f -name "*.so*" -exec ldd {} 2>/dev/null \; ; find . -type f -wholename "./bin/*" -exec ldd {} 2>/dev/null \;) |grep "=>" | grep "not found" |awk -F '=>' '{print $1;}' |sort |uniq
