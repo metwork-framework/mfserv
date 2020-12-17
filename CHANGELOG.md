@@ -1,76 +1,57 @@
 # release_0.7 CHANGELOG
 
-
-
 ## v0.7.6 (2019-08-09)
 
 ### New Features
+
 - add plugin dir as valid path for lua files (for openresty)
-
-
-
-
-
 
 ## v0.7.5 (2019-07-16)
 
 - No interesting change
 
-
 ## v0.7.4 (2019-07-15)
 
 ### New Features
+
 - add proxy_ignore_client_abort option
 
-
 ### Bug Fixes
+
 - typo with virtualdomain based routing
-
-
-
-
 
 ## v0.7.3 (2019-06-27)
 
 ### New Features
+
 - add a healthcheck endpoint
 - add some smart start/stop options and features
 
-
 ### Bug Fixes
+
 - add the missing line for numprocesses
-
-
-
-
 
 ## v0.7.2 (2019-06-17)
 
 ### New Features
+
 - allow / to be used as extra_route
 - add a new configuration key (for extending nginx conf)
-
-
-
-
-
 
 ## v0.7.1 (2019-06-12)
 
 ### New Features
+
 - move plugin extra_nginx_general_conf to server section.
 
-
 ### Bug Fixes
+
 - remove debug message in nginx conf
-
-
-
-
 
 ## v0.7.0 (2019-05-29)
 
 ### New Features
+
 - split multiple node workers output to multiple files
 - send mflog logs to mfadmin
 - add plugin name in logs
@@ -83,15 +64,12 @@
 - remove double access-log messages with gunicorn
 - huge refactoring (sorry about this monster commit)
 
-
 ### Bug Fixes
+
 - fix some nasty reload bugs in some corner cases
 - django template regression when bootstrapping
 - proxy_timeout was bypassed by gunicorn sync configurations
 - fix building issues with proxy
 - fix extra daemon feature and add test
-
-
-
 
 
