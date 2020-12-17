@@ -1,95 +1,52 @@
 # release_1.0 CHANGELOG
 
-
-
 ## v1.0.8 (2020-12-02)
 
-### New Features
-
-
 ### Bug Fixes
+
 - fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
-
-
-
-
 
 ## v1.0.7 (2020-12-01)
 
 - No interesting change
 
-
 ## v1.0.6 (2020-11-30)
 
-### New Features
-
-
 ### Bug Fixes
+
 - fix virtualhosting usage (bp #456) (#457)
-- fix virtualhosting usage (bp #456) (#457)
-
-
-
-
 
 ## v1.0.5 (2020-11-28)
 
-### New Features
-
-
 ### Bug Fixes
+
 - avoid lua collisions with multiple openresty plugins (bp #447) (#448)
 - fix static files routing with virtualhost (bp #452) (#453)
 
-
-
-
-
 ## v1.0.4 (2020-11-03)
 
-### New Features
-
-
 ### Bug Fixes
+
 - fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
-
-
-
-
 
 ## v1.0.3 (2020-10-28)
 
-### New Features
-
-
 ### Bug Fixes
+
 - don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
 - bug with static files when extra_route is set to / (bp #424) (#428)
-- bug with static files when extra_route is set to / (bp #424) (#428)
-
-
-
-
 
 ## v1.0.2 (2020-09-26)
 
 ### New Features
+
 - load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
 - add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
-
-
-
-
-
-
-## v1.0.1 (2020-09-19)
-
-- No interesting change
-
 
 ## v1.0.0 (2020-09-19)
 
 ### New Features
+
 - better default dependencies
 - little improvment in socket up/down feature
 - add extra nginx configuration keys for empty plugins
@@ -112,8 +69,8 @@
 - add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
 - fix details in documentation (including comment lines in config.ini files)
 
-
 ### Bug Fixes
+
 - important fix about max_age feature
 - fix signal_wrapper in python2
 - fix a compatibility issue with old static plugins
@@ -123,7 +80,8 @@
 - fix timeout value when <=0 (#343)
 - fix graceful timeout
 
+## v1.0.1 (2020-09-19)
 
-
+- No interesting change
 
 
