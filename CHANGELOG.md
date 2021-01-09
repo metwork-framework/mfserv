@@ -1,5 +1,11 @@
 # release_1.0 CHANGELOG
 
+## v1.0.9 (2021-01-08)
+
+### Bug Fixes
+
+- fix error message in nginx error log (bp #473) (#474)
+
 ## v1.0.8 (2020-12-02)
 
 ### Bug Fixes
