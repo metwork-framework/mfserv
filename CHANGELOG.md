@@ -16,5 +16,6 @@
 - fix static files routing with virtualhost (#452)
 - fix virtualhosting usage (#456)
 - fix potential lua collisions between mutiple openresty plugins (#451)
+- fix error message in nginx error log (#473)
 
 
