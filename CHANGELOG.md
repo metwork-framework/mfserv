@@ -2,57 +2,68 @@
 
 ## v1.0.9 (2021-01-08)
 
-### Bug Fixes
-
-- fix error message in nginx error log (bp #473) (#474)
-
-## v1.0.8 (2020-12-02)
-
-### Bug Fixes
-
-- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
-
-## v1.0.7 (2020-12-01)
-
-- No interesting change
-
-## v1.0.6 (2020-11-30)
-
-### Bug Fixes
-
-- fix virtualhosting usage (bp #456) (#457)
-
-## v1.0.5 (2020-11-28)
-
-### Bug Fixes
-
-- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
-- fix static files routing with virtualhost (bp #452) (#453)
-
-## v1.0.4 (2020-11-03)
-
-### Bug Fixes
-
-- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
-
-## v1.0.3 (2020-10-28)
-
-### Bug Fixes
-
-- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
-- bug with static files when extra_route is set to / (bp #424) (#428)
-
-## v1.0.2 (2020-09-26)
-
 ### New Features
 
-- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
-- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
-
-## v1.0.0 (2020-09-19)
-
-### New Features
-
+- change default configuration
+- add a redis_service option
+- add plugin app directory into lua_package_path
+- delete "blank only" files during bootstrap
+- introduce an empty plugin type
+- provide a better plugin crontab bootstrap
+- better plugin crontab example
+- aiohttp upgrade (now 3.4.4)
+- Add static plugin type and corresponding template
+- filter gunicorn messages in stdout/stderr depending on their level
+- add an internal welcome plugin
+- remove crontab support useless choice
+- publish MFSERV environment variables into nginx environment
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- add a plugin template for Django
+- autorestart feature is configurable
+- Changes in management of layer dependencies and metapackage names
+- we can deactivate the nginx startup
+- provide an easy way for a plugin to listen to an extra route
+- execute integration tests directly from mfserv module
+- nginx logs are now in JSON to prepare mfadmin#16 (#123)
+- add an option to send nginx access log to mfadmin (#124)
+- split multiple node workers output to multiple files
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
+- add nginx timeout configuration
+- send mflog logs to mfadmin
+- add plugin name in logs
+- add X-Request-Id header
+- introduce automatic mflog/nginx correlation for request_id
+- add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
+- remove double access-log messages with gunicorn
+- huge refactoring (sorry about this monster commit)
+- use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
+- introduce $extra_log_format nginx var
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- replace MODULE* environment variables names by MFMODULE* (MODULE_HOME becomes MFMODULE_HOME and so on)
+- add an option to configure the nginx real_ip feature
+- load resty.core in nginx conf
+- add nginx/server_tokens option in config
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
+- add nodejs mflog lib
+- infinite max_retry for circus (#258)
+- add an option for x_forwarded headers
+- add a warning if nginx/port is < 1024
 - better default dependencies
 - little improvment in socket up/down feature
 - add extra nginx configuration keys for empty plugins
@@ -74,9 +85,34 @@
 - remove aiohttp_metwork_middlewares (now in a dedicated repository)
 - add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
 - fix details in documentation (including comment lines in config.ini files)
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
 
 ### Bug Fixes
 
+- better plugin routing
+- fix lua lib paths
+- fix timeout issues around conf_monitor restarts
+- handle NOTSET logging level value in nginx configuration
+- add missing file for node plugin template
+- don't start plugins during installation or uninstallation
+- fix the node plugin template
+- fix some nginx location conflicts when used with multiple apps
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+- fix makefile target name
+- fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
+- proxy_timeout was bypassed by gunicorn sync configurations
+- fix building issues with proxy
+- fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
+- fix security issue by updating django to latest 2.2 serie
+- fix circus generation test
 - important fix about max_age feature
 - fix signal_wrapper in python2
 - fix a compatibility issue with old static plugins
@@ -85,9 +121,1183 @@
 - fix timeout value when <=0
 - fix timeout value when <=0 (#343)
 - fix graceful timeout
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
+- fix virtualhosting usage (bp #456) (#457)
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+- fix error message in nginx error log (bp #473) (#474)
+
+## v1.0.8 (2020-12-02)
+
+### New Features
+
+- change default configuration
+- add a redis_service option
+- add plugin app directory into lua_package_path
+- delete "blank only" files during bootstrap
+- introduce an empty plugin type
+- provide a better plugin crontab bootstrap
+- better plugin crontab example
+- aiohttp upgrade (now 3.4.4)
+- Add static plugin type and corresponding template
+- filter gunicorn messages in stdout/stderr depending on their level
+- add an internal welcome plugin
+- remove crontab support useless choice
+- publish MFSERV environment variables into nginx environment
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- add a plugin template for Django
+- autorestart feature is configurable
+- Changes in management of layer dependencies and metapackage names
+- we can deactivate the nginx startup
+- provide an easy way for a plugin to listen to an extra route
+- execute integration tests directly from mfserv module
+- nginx logs are now in JSON to prepare mfadmin#16 (#123)
+- add an option to send nginx access log to mfadmin (#124)
+- split multiple node workers output to multiple files
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
+- add nginx timeout configuration
+- send mflog logs to mfadmin
+- add plugin name in logs
+- add X-Request-Id header
+- introduce automatic mflog/nginx correlation for request_id
+- add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
+- remove double access-log messages with gunicorn
+- huge refactoring (sorry about this monster commit)
+- use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
+- introduce $extra_log_format nginx var
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- replace MODULE* environment variables names by MFMODULE* (MODULE_HOME becomes MFMODULE_HOME and so on)
+- add an option to configure the nginx real_ip feature
+- load resty.core in nginx conf
+- add nginx/server_tokens option in config
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
+- add nodejs mflog lib
+- infinite max_retry for circus (#258)
+- add an option for x_forwarded headers
+- add a warning if nginx/port is < 1024
+- better default dependencies
+- little improvment in socket up/down feature
+- add extra nginx configuration keys for empty plugins
+- add a new configuration key for plugins
+- improve empty plugin template and update documentation
+- adaptation to removal of layer misc@mfext (#284)
+- mfserv backends refactoring
+- log refactoring
+- port of mflog changes about syslog to node
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
+- https/ssl support for nginx in mfserv (#323)
+- remove bjoern (moved to mfext and mfextaddon_python2)
+- add a better documented crontab file for plugins
+- new accept_incoming_request_id_header variable and x-forwarded-*
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
+- new plugin system
+- new plugin system
+- allow binary packages by default (for plugins)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- fix details in documentation (including comment lines in config.ini files)
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
+
+### Bug Fixes
+
+- better plugin routing
+- fix lua lib paths
+- fix timeout issues around conf_monitor restarts
+- handle NOTSET logging level value in nginx configuration
+- add missing file for node plugin template
+- don't start plugins during installation or uninstallation
+- fix the node plugin template
+- fix some nginx location conflicts when used with multiple apps
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+- fix makefile target name
+- fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
+- proxy_timeout was bypassed by gunicorn sync configurations
+- fix building issues with proxy
+- fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
+- fix security issue by updating django to latest 2.2 serie
+- fix circus generation test
+- important fix about max_age feature
+- fix signal_wrapper in python2
+- fix a compatibility issue with old static plugins
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
+- fix the nginx syslog configuration
+- fix timeout value when <=0
+- fix timeout value when <=0 (#343)
+- fix graceful timeout
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
+- fix virtualhosting usage (bp #456) (#457)
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+- fix error message in nginx error log (bp #473) (#474)
+
+## v1.0.7 (2020-12-01)
+
+### New Features
+
+- change default configuration
+- add a redis_service option
+- add plugin app directory into lua_package_path
+- delete "blank only" files during bootstrap
+- introduce an empty plugin type
+- provide a better plugin crontab bootstrap
+- better plugin crontab example
+- aiohttp upgrade (now 3.4.4)
+- Add static plugin type and corresponding template
+- filter gunicorn messages in stdout/stderr depending on their level
+- add an internal welcome plugin
+- remove crontab support useless choice
+- publish MFSERV environment variables into nginx environment
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- add a plugin template for Django
+- autorestart feature is configurable
+- Changes in management of layer dependencies and metapackage names
+- we can deactivate the nginx startup
+- provide an easy way for a plugin to listen to an extra route
+- execute integration tests directly from mfserv module
+- nginx logs are now in JSON to prepare mfadmin#16 (#123)
+- add an option to send nginx access log to mfadmin (#124)
+- split multiple node workers output to multiple files
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
+- add nginx timeout configuration
+- send mflog logs to mfadmin
+- add plugin name in logs
+- add X-Request-Id header
+- introduce automatic mflog/nginx correlation for request_id
+- add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
+- remove double access-log messages with gunicorn
+- huge refactoring (sorry about this monster commit)
+- use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
+- introduce $extra_log_format nginx var
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- replace MODULE* environment variables names by MFMODULE* (MODULE_HOME becomes MFMODULE_HOME and so on)
+- add an option to configure the nginx real_ip feature
+- load resty.core in nginx conf
+- add nginx/server_tokens option in config
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
+- add nodejs mflog lib
+- infinite max_retry for circus (#258)
+- add an option for x_forwarded headers
+- add a warning if nginx/port is < 1024
+- better default dependencies
+- little improvment in socket up/down feature
+- add extra nginx configuration keys for empty plugins
+- add a new configuration key for plugins
+- improve empty plugin template and update documentation
+- adaptation to removal of layer misc@mfext (#284)
+- mfserv backends refactoring
+- log refactoring
+- port of mflog changes about syslog to node
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
+- https/ssl support for nginx in mfserv (#323)
+- remove bjoern (moved to mfext and mfextaddon_python2)
+- add a better documented crontab file for plugins
+- new accept_incoming_request_id_header variable and x-forwarded-*
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
+- new plugin system
+- new plugin system
+- allow binary packages by default (for plugins)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- fix details in documentation (including comment lines in config.ini files)
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
+
+### Bug Fixes
+
+- better plugin routing
+- fix lua lib paths
+- fix timeout issues around conf_monitor restarts
+- handle NOTSET logging level value in nginx configuration
+- add missing file for node plugin template
+- don't start plugins during installation or uninstallation
+- fix the node plugin template
+- fix some nginx location conflicts when used with multiple apps
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+- fix makefile target name
+- fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
+- proxy_timeout was bypassed by gunicorn sync configurations
+- fix building issues with proxy
+- fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
+- fix security issue by updating django to latest 2.2 serie
+- fix circus generation test
+- important fix about max_age feature
+- fix signal_wrapper in python2
+- fix a compatibility issue with old static plugins
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
+- fix the nginx syslog configuration
+- fix timeout value when <=0
+- fix timeout value when <=0 (#343)
+- fix graceful timeout
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
+- fix virtualhosting usage (bp #456) (#457)
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+- fix error message in nginx error log (bp #473) (#474)
+
+## v1.0.6 (2020-11-30)
+
+### New Features
+
+- change default configuration
+- add a redis_service option
+- add plugin app directory into lua_package_path
+- delete "blank only" files during bootstrap
+- introduce an empty plugin type
+- provide a better plugin crontab bootstrap
+- better plugin crontab example
+- aiohttp upgrade (now 3.4.4)
+- Add static plugin type and corresponding template
+- filter gunicorn messages in stdout/stderr depending on their level
+- add an internal welcome plugin
+- remove crontab support useless choice
+- publish MFSERV environment variables into nginx environment
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- add a plugin template for Django
+- autorestart feature is configurable
+- Changes in management of layer dependencies and metapackage names
+- we can deactivate the nginx startup
+- provide an easy way for a plugin to listen to an extra route
+- execute integration tests directly from mfserv module
+- nginx logs are now in JSON to prepare mfadmin#16 (#123)
+- add an option to send nginx access log to mfadmin (#124)
+- split multiple node workers output to multiple files
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
+- add nginx timeout configuration
+- send mflog logs to mfadmin
+- add plugin name in logs
+- add X-Request-Id header
+- introduce automatic mflog/nginx correlation for request_id
+- add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
+- remove double access-log messages with gunicorn
+- huge refactoring (sorry about this monster commit)
+- use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
+- introduce $extra_log_format nginx var
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- replace MODULE* environment variables names by MFMODULE* (MODULE_HOME becomes MFMODULE_HOME and so on)
+- add an option to configure the nginx real_ip feature
+- load resty.core in nginx conf
+- add nginx/server_tokens option in config
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
+- add nodejs mflog lib
+- infinite max_retry for circus (#258)
+- add an option for x_forwarded headers
+- add a warning if nginx/port is < 1024
+- better default dependencies
+- little improvment in socket up/down feature
+- add extra nginx configuration keys for empty plugins
+- add a new configuration key for plugins
+- improve empty plugin template and update documentation
+- adaptation to removal of layer misc@mfext (#284)
+- mfserv backends refactoring
+- log refactoring
+- port of mflog changes about syslog to node
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
+- https/ssl support for nginx in mfserv (#323)
+- remove bjoern (moved to mfext and mfextaddon_python2)
+- add a better documented crontab file for plugins
+- new accept_incoming_request_id_header variable and x-forwarded-*
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
+- new plugin system
+- new plugin system
+- allow binary packages by default (for plugins)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- fix details in documentation (including comment lines in config.ini files)
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
+
+### Bug Fixes
+
+- better plugin routing
+- fix lua lib paths
+- fix timeout issues around conf_monitor restarts
+- handle NOTSET logging level value in nginx configuration
+- add missing file for node plugin template
+- don't start plugins during installation or uninstallation
+- fix the node plugin template
+- fix some nginx location conflicts when used with multiple apps
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+- fix makefile target name
+- fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
+- proxy_timeout was bypassed by gunicorn sync configurations
+- fix building issues with proxy
+- fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
+- fix security issue by updating django to latest 2.2 serie
+- fix circus generation test
+- important fix about max_age feature
+- fix signal_wrapper in python2
+- fix a compatibility issue with old static plugins
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
+- fix the nginx syslog configuration
+- fix timeout value when <=0
+- fix timeout value when <=0 (#343)
+- fix graceful timeout
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
+- fix virtualhosting usage (bp #456) (#457)
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+- fix error message in nginx error log (bp #473) (#474)
+
+## v1.0.5 (2020-11-28)
+
+### New Features
+
+- change default configuration
+- add a redis_service option
+- add plugin app directory into lua_package_path
+- delete "blank only" files during bootstrap
+- introduce an empty plugin type
+- provide a better plugin crontab bootstrap
+- better plugin crontab example
+- aiohttp upgrade (now 3.4.4)
+- Add static plugin type and corresponding template
+- filter gunicorn messages in stdout/stderr depending on their level
+- add an internal welcome plugin
+- remove crontab support useless choice
+- publish MFSERV environment variables into nginx environment
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- add a plugin template for Django
+- autorestart feature is configurable
+- Changes in management of layer dependencies and metapackage names
+- we can deactivate the nginx startup
+- provide an easy way for a plugin to listen to an extra route
+- execute integration tests directly from mfserv module
+- nginx logs are now in JSON to prepare mfadmin#16 (#123)
+- add an option to send nginx access log to mfadmin (#124)
+- split multiple node workers output to multiple files
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
+- add nginx timeout configuration
+- send mflog logs to mfadmin
+- add plugin name in logs
+- add X-Request-Id header
+- introduce automatic mflog/nginx correlation for request_id
+- add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
+- remove double access-log messages with gunicorn
+- huge refactoring (sorry about this monster commit)
+- use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
+- introduce $extra_log_format nginx var
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- replace MODULE* environment variables names by MFMODULE* (MODULE_HOME becomes MFMODULE_HOME and so on)
+- add an option to configure the nginx real_ip feature
+- load resty.core in nginx conf
+- add nginx/server_tokens option in config
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
+- add nodejs mflog lib
+- infinite max_retry for circus (#258)
+- add an option for x_forwarded headers
+- add a warning if nginx/port is < 1024
+- better default dependencies
+- little improvment in socket up/down feature
+- add extra nginx configuration keys for empty plugins
+- add a new configuration key for plugins
+- improve empty plugin template and update documentation
+- adaptation to removal of layer misc@mfext (#284)
+- mfserv backends refactoring
+- log refactoring
+- port of mflog changes about syslog to node
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
+- https/ssl support for nginx in mfserv (#323)
+- remove bjoern (moved to mfext and mfextaddon_python2)
+- add a better documented crontab file for plugins
+- new accept_incoming_request_id_header variable and x-forwarded-*
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
+- new plugin system
+- new plugin system
+- allow binary packages by default (for plugins)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- fix details in documentation (including comment lines in config.ini files)
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
+
+### Bug Fixes
+
+- better plugin routing
+- fix lua lib paths
+- fix timeout issues around conf_monitor restarts
+- handle NOTSET logging level value in nginx configuration
+- add missing file for node plugin template
+- don't start plugins during installation or uninstallation
+- fix the node plugin template
+- fix some nginx location conflicts when used with multiple apps
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+- fix makefile target name
+- fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
+- proxy_timeout was bypassed by gunicorn sync configurations
+- fix building issues with proxy
+- fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
+- fix security issue by updating django to latest 2.2 serie
+- fix circus generation test
+- important fix about max_age feature
+- fix signal_wrapper in python2
+- fix a compatibility issue with old static plugins
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
+- fix the nginx syslog configuration
+- fix timeout value when <=0
+- fix timeout value when <=0 (#343)
+- fix graceful timeout
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
+- fix virtualhosting usage (bp #456) (#457)
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+- fix error message in nginx error log (bp #473) (#474)
+
+## v1.0.4 (2020-11-03)
+
+### New Features
+
+- change default configuration
+- add a redis_service option
+- add plugin app directory into lua_package_path
+- delete "blank only" files during bootstrap
+- introduce an empty plugin type
+- provide a better plugin crontab bootstrap
+- better plugin crontab example
+- aiohttp upgrade (now 3.4.4)
+- Add static plugin type and corresponding template
+- filter gunicorn messages in stdout/stderr depending on their level
+- add an internal welcome plugin
+- remove crontab support useless choice
+- publish MFSERV environment variables into nginx environment
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- add a plugin template for Django
+- autorestart feature is configurable
+- Changes in management of layer dependencies and metapackage names
+- we can deactivate the nginx startup
+- provide an easy way for a plugin to listen to an extra route
+- execute integration tests directly from mfserv module
+- nginx logs are now in JSON to prepare mfadmin#16 (#123)
+- add an option to send nginx access log to mfadmin (#124)
+- split multiple node workers output to multiple files
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
+- add nginx timeout configuration
+- send mflog logs to mfadmin
+- add plugin name in logs
+- add X-Request-Id header
+- introduce automatic mflog/nginx correlation for request_id
+- add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
+- remove double access-log messages with gunicorn
+- huge refactoring (sorry about this monster commit)
+- use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
+- introduce $extra_log_format nginx var
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- replace MODULE* environment variables names by MFMODULE* (MODULE_HOME becomes MFMODULE_HOME and so on)
+- add an option to configure the nginx real_ip feature
+- load resty.core in nginx conf
+- add nginx/server_tokens option in config
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
+- add nodejs mflog lib
+- infinite max_retry for circus (#258)
+- add an option for x_forwarded headers
+- add a warning if nginx/port is < 1024
+- better default dependencies
+- little improvment in socket up/down feature
+- add extra nginx configuration keys for empty plugins
+- add a new configuration key for plugins
+- improve empty plugin template and update documentation
+- adaptation to removal of layer misc@mfext (#284)
+- mfserv backends refactoring
+- log refactoring
+- port of mflog changes about syslog to node
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
+- https/ssl support for nginx in mfserv (#323)
+- remove bjoern (moved to mfext and mfextaddon_python2)
+- add a better documented crontab file for plugins
+- new accept_incoming_request_id_header variable and x-forwarded-*
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
+- new plugin system
+- new plugin system
+- allow binary packages by default (for plugins)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- fix details in documentation (including comment lines in config.ini files)
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
+
+### Bug Fixes
+
+- better plugin routing
+- fix lua lib paths
+- fix timeout issues around conf_monitor restarts
+- handle NOTSET logging level value in nginx configuration
+- add missing file for node plugin template
+- don't start plugins during installation or uninstallation
+- fix the node plugin template
+- fix some nginx location conflicts when used with multiple apps
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+- fix makefile target name
+- fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
+- proxy_timeout was bypassed by gunicorn sync configurations
+- fix building issues with proxy
+- fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
+- fix security issue by updating django to latest 2.2 serie
+- fix circus generation test
+- important fix about max_age feature
+- fix signal_wrapper in python2
+- fix a compatibility issue with old static plugins
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
+- fix the nginx syslog configuration
+- fix timeout value when <=0
+- fix timeout value when <=0 (#343)
+- fix graceful timeout
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
+- fix virtualhosting usage (bp #456) (#457)
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+- fix error message in nginx error log (bp #473) (#474)
+
+## v1.0.3 (2020-10-28)
+
+### New Features
+
+- change default configuration
+- add a redis_service option
+- add plugin app directory into lua_package_path
+- delete "blank only" files during bootstrap
+- introduce an empty plugin type
+- provide a better plugin crontab bootstrap
+- better plugin crontab example
+- aiohttp upgrade (now 3.4.4)
+- Add static plugin type and corresponding template
+- filter gunicorn messages in stdout/stderr depending on their level
+- add an internal welcome plugin
+- remove crontab support useless choice
+- publish MFSERV environment variables into nginx environment
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- add a plugin template for Django
+- autorestart feature is configurable
+- Changes in management of layer dependencies and metapackage names
+- we can deactivate the nginx startup
+- provide an easy way for a plugin to listen to an extra route
+- execute integration tests directly from mfserv module
+- nginx logs are now in JSON to prepare mfadmin#16 (#123)
+- add an option to send nginx access log to mfadmin (#124)
+- split multiple node workers output to multiple files
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
+- add nginx timeout configuration
+- send mflog logs to mfadmin
+- add plugin name in logs
+- add X-Request-Id header
+- introduce automatic mflog/nginx correlation for request_id
+- add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
+- remove double access-log messages with gunicorn
+- huge refactoring (sorry about this monster commit)
+- use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
+- introduce $extra_log_format nginx var
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- replace MODULE* environment variables names by MFMODULE* (MODULE_HOME becomes MFMODULE_HOME and so on)
+- add an option to configure the nginx real_ip feature
+- load resty.core in nginx conf
+- add nginx/server_tokens option in config
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
+- add nodejs mflog lib
+- infinite max_retry for circus (#258)
+- add an option for x_forwarded headers
+- add a warning if nginx/port is < 1024
+- better default dependencies
+- little improvment in socket up/down feature
+- add extra nginx configuration keys for empty plugins
+- add a new configuration key for plugins
+- improve empty plugin template and update documentation
+- adaptation to removal of layer misc@mfext (#284)
+- mfserv backends refactoring
+- log refactoring
+- port of mflog changes about syslog to node
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
+- https/ssl support for nginx in mfserv (#323)
+- remove bjoern (moved to mfext and mfextaddon_python2)
+- add a better documented crontab file for plugins
+- new accept_incoming_request_id_header variable and x-forwarded-*
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
+- new plugin system
+- new plugin system
+- allow binary packages by default (for plugins)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- fix details in documentation (including comment lines in config.ini files)
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
+
+### Bug Fixes
+
+- better plugin routing
+- fix lua lib paths
+- fix timeout issues around conf_monitor restarts
+- handle NOTSET logging level value in nginx configuration
+- add missing file for node plugin template
+- don't start plugins during installation or uninstallation
+- fix the node plugin template
+- fix some nginx location conflicts when used with multiple apps
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+- fix makefile target name
+- fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
+- proxy_timeout was bypassed by gunicorn sync configurations
+- fix building issues with proxy
+- fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
+- fix security issue by updating django to latest 2.2 serie
+- fix circus generation test
+- important fix about max_age feature
+- fix signal_wrapper in python2
+- fix a compatibility issue with old static plugins
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
+- fix the nginx syslog configuration
+- fix timeout value when <=0
+- fix timeout value when <=0 (#343)
+- fix graceful timeout
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
+- fix virtualhosting usage (bp #456) (#457)
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+- fix error message in nginx error log (bp #473) (#474)
+
+## v1.0.2 (2020-09-26)
+
+### New Features
+
+- change default configuration
+- add a redis_service option
+- add plugin app directory into lua_package_path
+- delete "blank only" files during bootstrap
+- introduce an empty plugin type
+- provide a better plugin crontab bootstrap
+- better plugin crontab example
+- aiohttp upgrade (now 3.4.4)
+- Add static plugin type and corresponding template
+- filter gunicorn messages in stdout/stderr depending on their level
+- add an internal welcome plugin
+- remove crontab support useless choice
+- publish MFSERV environment variables into nginx environment
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- add a plugin template for Django
+- autorestart feature is configurable
+- Changes in management of layer dependencies and metapackage names
+- we can deactivate the nginx startup
+- provide an easy way for a plugin to listen to an extra route
+- execute integration tests directly from mfserv module
+- nginx logs are now in JSON to prepare mfadmin#16 (#123)
+- add an option to send nginx access log to mfadmin (#124)
+- split multiple node workers output to multiple files
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
+- add nginx timeout configuration
+- send mflog logs to mfadmin
+- add plugin name in logs
+- add X-Request-Id header
+- introduce automatic mflog/nginx correlation for request_id
+- add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
+- remove double access-log messages with gunicorn
+- huge refactoring (sorry about this monster commit)
+- use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
+- introduce $extra_log_format nginx var
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- replace MODULE* environment variables names by MFMODULE* (MODULE_HOME becomes MFMODULE_HOME and so on)
+- add an option to configure the nginx real_ip feature
+- load resty.core in nginx conf
+- add nginx/server_tokens option in config
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
+- add nodejs mflog lib
+- infinite max_retry for circus (#258)
+- add an option for x_forwarded headers
+- add a warning if nginx/port is < 1024
+- better default dependencies
+- little improvment in socket up/down feature
+- add extra nginx configuration keys for empty plugins
+- add a new configuration key for plugins
+- improve empty plugin template and update documentation
+- adaptation to removal of layer misc@mfext (#284)
+- mfserv backends refactoring
+- log refactoring
+- port of mflog changes about syslog to node
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
+- https/ssl support for nginx in mfserv (#323)
+- remove bjoern (moved to mfext and mfextaddon_python2)
+- add a better documented crontab file for plugins
+- new accept_incoming_request_id_header variable and x-forwarded-*
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
+- new plugin system
+- new plugin system
+- allow binary packages by default (for plugins)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- fix details in documentation (including comment lines in config.ini files)
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
+
+### Bug Fixes
+
+- better plugin routing
+- fix lua lib paths
+- fix timeout issues around conf_monitor restarts
+- handle NOTSET logging level value in nginx configuration
+- add missing file for node plugin template
+- don't start plugins during installation or uninstallation
+- fix the node plugin template
+- fix some nginx location conflicts when used with multiple apps
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+- fix makefile target name
+- fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
+- proxy_timeout was bypassed by gunicorn sync configurations
+- fix building issues with proxy
+- fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
+- fix security issue by updating django to latest 2.2 serie
+- fix circus generation test
+- important fix about max_age feature
+- fix signal_wrapper in python2
+- fix a compatibility issue with old static plugins
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
+- fix the nginx syslog configuration
+- fix timeout value when <=0
+- fix timeout value when <=0 (#343)
+- fix graceful timeout
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
+- fix virtualhosting usage (bp #456) (#457)
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+- fix error message in nginx error log (bp #473) (#474)
+
+## v1.0.0 (2020-09-19)
+
+### New Features
+
+- change default configuration
+- add a redis_service option
+- add plugin app directory into lua_package_path
+- delete "blank only" files during bootstrap
+- introduce an empty plugin type
+- provide a better plugin crontab bootstrap
+- better plugin crontab example
+- aiohttp upgrade (now 3.4.4)
+- Add static plugin type and corresponding template
+- filter gunicorn messages in stdout/stderr depending on their level
+- add an internal welcome plugin
+- remove crontab support useless choice
+- publish MFSERV environment variables into nginx environment
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- add a plugin template for Django
+- autorestart feature is configurable
+- Changes in management of layer dependencies and metapackage names
+- we can deactivate the nginx startup
+- provide an easy way for a plugin to listen to an extra route
+- execute integration tests directly from mfserv module
+- nginx logs are now in JSON to prepare mfadmin#16 (#123)
+- add an option to send nginx access log to mfadmin (#124)
+- split multiple node workers output to multiple files
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
+- add nginx timeout configuration
+- send mflog logs to mfadmin
+- add plugin name in logs
+- add X-Request-Id header
+- introduce automatic mflog/nginx correlation for request_id
+- add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
+- remove double access-log messages with gunicorn
+- huge refactoring (sorry about this monster commit)
+- use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
+- introduce $extra_log_format nginx var
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- replace MODULE* environment variables names by MFMODULE* (MODULE_HOME becomes MFMODULE_HOME and so on)
+- add an option to configure the nginx real_ip feature
+- load resty.core in nginx conf
+- add nginx/server_tokens option in config
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
+- add nodejs mflog lib
+- infinite max_retry for circus (#258)
+- add an option for x_forwarded headers
+- add a warning if nginx/port is < 1024
+- better default dependencies
+- little improvment in socket up/down feature
+- add extra nginx configuration keys for empty plugins
+- add a new configuration key for plugins
+- improve empty plugin template and update documentation
+- adaptation to removal of layer misc@mfext (#284)
+- mfserv backends refactoring
+- log refactoring
+- port of mflog changes about syslog to node
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
+- https/ssl support for nginx in mfserv (#323)
+- remove bjoern (moved to mfext and mfextaddon_python2)
+- add a better documented crontab file for plugins
+- new accept_incoming_request_id_header variable and x-forwarded-*
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
+- new plugin system
+- new plugin system
+- allow binary packages by default (for plugins)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- fix details in documentation (including comment lines in config.ini files)
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
+
+### Bug Fixes
+
+- better plugin routing
+- fix lua lib paths
+- fix timeout issues around conf_monitor restarts
+- handle NOTSET logging level value in nginx configuration
+- add missing file for node plugin template
+- don't start plugins during installation or uninstallation
+- fix the node plugin template
+- fix some nginx location conflicts when used with multiple apps
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+- fix makefile target name
+- fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
+- proxy_timeout was bypassed by gunicorn sync configurations
+- fix building issues with proxy
+- fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
+- fix security issue by updating django to latest 2.2 serie
+- fix circus generation test
+- important fix about max_age feature
+- fix signal_wrapper in python2
+- fix a compatibility issue with old static plugins
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
+- fix the nginx syslog configuration
+- fix timeout value when <=0
+- fix timeout value when <=0 (#343)
+- fix graceful timeout
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
+- fix virtualhosting usage (bp #456) (#457)
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+- fix error message in nginx error log (bp #473) (#474)
 
 ## v1.0.1 (2020-09-19)
 
-- No interesting change
+### New Features
+
+- change default configuration
+- add a redis_service option
+- add plugin app directory into lua_package_path
+- delete "blank only" files during bootstrap
+- introduce an empty plugin type
+- provide a better plugin crontab bootstrap
+- better plugin crontab example
+- aiohttp upgrade (now 3.4.4)
+- Add static plugin type and corresponding template
+- filter gunicorn messages in stdout/stderr depending on their level
+- add an internal welcome plugin
+- remove crontab support useless choice
+- publish MFSERV environment variables into nginx environment
+- first version of inotify powered conf_monitor
+- provide a way for plugins to launch their own daemons
+- add a plugin template for Django
+- autorestart feature is configurable
+- Changes in management of layer dependencies and metapackage names
+- we can deactivate the nginx startup
+- provide an easy way for a plugin to listen to an extra route
+- execute integration tests directly from mfserv module
+- nginx logs are now in JSON to prepare mfadmin#16 (#123)
+- add an option to send nginx access log to mfadmin (#124)
+- split multiple node workers output to multiple files
+- remove "name" from the list of questions during plugin bootstrap
+- remove plugins names from config.ini
+- add nginx timeout configuration
+- send mflog logs to mfadmin
+- add plugin name in logs
+- add X-Request-Id header
+- introduce automatic mflog/nginx correlation for request_id
+- add a mediation template
+- introduce template inheritance
+- introduce template inheritance for mfserv plugins
+- add a .gitignore file in plugin templates
+- remove double access-log messages with gunicorn
+- huge refactoring (sorry about this monster commit)
+- use envtpl new option --reduce-multi-blank-lines (#183)
+- move plugin extra_nginx_general_conf to server section.
+- allow / to be used as extra_route
+- add a new configuration key (for extending nginx conf)
+- add template "flask"
+- rename circus watcher names (step => app)
+- debug circus and nginx configuration generation
+- add a healthcheck endpoint
+- add some smart start/stop options and features
+- add proxy_ignore_client_abort option
+- plugins.hotswap feature!
+- add plugin dir as valid path for lua files (for openresty)
+- introduce $extra_log_format nginx var
+- introduce MFSERV_CURRENT_PLUGIN_* variables
+- replace MODULE* environment variables names by MFMODULE* (MODULE_HOME becomes MFMODULE_HOME and so on)
+- add an option to configure the nginx real_ip feature
+- load resty.core in nginx conf
+- add nginx/server_tokens option in config
+- build mfserv without mfcom (mfcom layers are now included in mfext) (#254)
+- add nodejs mflog lib
+- infinite max_retry for circus (#258)
+- add an option for x_forwarded headers
+- add a warning if nginx/port is < 1024
+- better default dependencies
+- little improvment in socket up/down feature
+- add extra nginx configuration keys for empty plugins
+- add a new configuration key for plugins
+- improve empty plugin template and update documentation
+- adaptation to removal of layer misc@mfext (#284)
+- mfserv backends refactoring
+- log refactoring
+- port of mflog changes about syslog to node
+- remove absolute log paths from log_proxy usages (LOGPROXY_LOG_DIRECTORY env variable is used by default)
+- https/ssl support for nginx in mfserv (#323)
+- remove bjoern (moved to mfext and mfextaddon_python2)
+- add a better documented crontab file for plugins
+- new accept_incoming_request_id_header variable and x-forwarded-*
+- remove all references to MFCOM or mfcom, including backward compatibility stuff
+- new plugin system
+- new plugin system
+- allow binary packages by default (for plugins)
+- remove aiohttp_metwork_middlewares (now in a dedicated repository)
+- add psycopg2 usability (by loading of optional layer python3_scientific_core@mfext)
+- fix details in documentation (including comment lines in config.ini files)
+- load the pythonX_scientific_core layer by default in plugins (if the layer is installed) (bp #389) (#390)
+- add a configuration option to open the endpoint /uuid to other … (bp #393) (#395)
+
+### Bug Fixes
+
+- better plugin routing
+- fix lua lib paths
+- fix timeout issues around conf_monitor restarts
+- handle NOTSET logging level value in nginx configuration
+- add missing file for node plugin template
+- don't start plugins during installation or uninstallation
+- fix the node plugin template
+- fix some nginx location conflicts when used with multiple apps
+- more reliable nginx reload in conf_monitor
+- upgrade django to version 2.1.5 to fix security vulnerability
+- fix makefile target name
+- fix some nasty reload bugs in some corner cases
+- django template regression when bootstrapping
+- proxy_timeout was bypassed by gunicorn sync configurations
+- fix building issues with proxy
+- fix extra daemon feature and add test
+- remove debug message in nginx conf
+- add the missing line for numprocesses
+- issues in flask plugin.
+- typo with virtualdomain based routing
+- more precise condition to delete python-requirement
+- fix security issue by updating django to latest 2.2 serie
+- fix circus generation test
+- important fix about max_age feature
+- fix signal_wrapper in python2
+- fix a compatibility issue with old static plugins
+- remove rlimit_core (because of `ulimit -c 0` in mfext)
+- fix the nginx syslog configuration
+- fix timeout value when <=0
+- fix timeout value when <=0 (#343)
+- fix graceful timeout
+- don't prevent nginx to bind <1024 port (with setcap) (bp #411) (#413)
+- bug with static files when extra_route is set to / (bp #424) (#428)
+- fix bad comment in boostrapped config.ini for plugins (bp #435) (#437)
+- avoid lua collisions with multiple openresty plugins (bp #447) (#448)
+- fix static files routing with virtualhost (bp #452) (#453)
+- fix virtualhosting usage (bp #456) (#457)
+- fix potential lua collisions between mutiple openresty plugins (bp #451) (#458)
+- fix error message in nginx error log (bp #473) (#474)
 
 
