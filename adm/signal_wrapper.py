@@ -2,6 +2,7 @@
 
 import argparse
 import signal
+import filelock
 import six
 import functools
 import base64
@@ -147,10 +148,27 @@ def main():
         sys.exit(1)
     if remaining_args[0] == "--":
         remaining_args.pop(0)
+    lock = args.unix_socket + ".lock"
     try:
-        os.remove(args.unix_socket)
-    except Exception:
-        pass
+        t = -1
+        if args.timeout != 0:
+            t = args.timeout + args.timeout_after_signal + 2
+        with filelock.FileLock(lock, timeout=t):
+            try:
+                os.remove(args.unix_socket)
+            except Exception:
+                pass
+            _main(args, remaining_args)
+            try:
+                os.remove(args.unix_socket)
+            except Exception:
+                pass
+    except filelock.Timeout:
+        print("ERROR: can't acquire lock on %s" % lock)
+        sys.exit(1)
+
+
+def _main(args, remaining_args):
     p = subprocess.Popen(remaining_args)
     pid = p.pid
     for signum in (signal.SIGTERM, signal.SIGINT):
