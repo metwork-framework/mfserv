@@ -1,5 +1,9 @@
 # release_1.0 CHANGELOG
 
+## v1.0.10 (2021-01-26)
+
+- No interesting change
+
 ## v1.0.9 (2021-01-08)
 
 ### Bug Fixes
