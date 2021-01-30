@@ -1,5 +1,11 @@
 # release_1.0 CHANGELOG
 
+## v1.0.11 (2021-01-29)
+
+### Bug Fixes
+
+- fix concurrency issue about max_age (and max_age=0 now by default) (bp #477) (#478)
+
 ## v1.0.10 (2021-01-26)
 
 - No interesting change
