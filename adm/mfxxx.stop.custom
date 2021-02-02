@@ -10,8 +10,10 @@ if test "${MFSERV_NGINX_SMART_STOP_DELAY}" -gt 0; then
 fi
 
 _circus_schedule_stop_watcher.sh conf_monitor
+_circus_schedule_stop_watcher.sh plugin:autorestart
 if test "${MFSERV_AUTORESTART_FLAG}" = "1"; then
-    _circus_schedule_stop_watcher.sh plugin:autorestart
+    _circus_wait_watcher_stopped.sh conf_monitor  || RES=1
+    _circus_wait_watcher_stopped.sh plugin:autorestart || RES=1
 fi
 if test "${MFSERV_NGINX_FLAG}" = "1"; then
     _circus_schedule_stop_watcher.sh nginx
