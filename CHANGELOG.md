@@ -17,5 +17,6 @@
 - fix virtualhosting usage (#456)
 - fix potential lua collisions between mutiple openresty plugins (#451)
 - fix error message in nginx error log (#473)
+- fix concurrency issue about max_age (and max_age=0 now by default) (#477)
 
 
