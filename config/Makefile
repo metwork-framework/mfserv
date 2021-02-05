@@ -7,7 +7,7 @@ include $(MFEXT_HOME)/share/config_subdir.mk
 test:
 	layer_wrapper --layers=devtools@mfext noutf8.sh
 
-all:: $(MFMODULE_HOME)/config/circus.ini $(MFMODULE_HOME)/config/telegraf.conf $(MFMODULE_HOME)/lib/mfserv/stats.lua $(MFMODULE_HOME)/lib/mfserv/upstream_status.lua $(MFMODULE_HOME)/lib/mfserv/init_worker_by_lua.lua $(MFMODULE_HOME)/lib/mfserv/socket_updown.lua $(MFMODULE_HOME)/lib/mfserv/health.lua
+all:: $(MFMODULE_HOME)/config/circus.ini $(MFMODULE_HOME)/config/telegraf.conf $(MFMODULE_HOME)/lib/mfserv/stats.lua $(MFMODULE_HOME)/lib/mfserv/upstream_status.lua $(MFMODULE_HOME)/lib/mfserv/init_worker_by_lua.lua $(MFMODULE_HOME)/lib/mfserv/socket_updown.lua $(MFMODULE_HOME)/lib/mfserv/health.lua $(MFMODULE_HOME)/config/vector.toml
 
 $(MFMODULE_HOME)/lib/mfserv/stats.lua: stats.lua
 	@mkdir -p $(MFMODULE_HOME)/lib/mfserv
