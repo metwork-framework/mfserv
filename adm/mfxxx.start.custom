@@ -11,6 +11,21 @@
 
 if test "${MFSERV_NGINX_FLAG}" = "1" -a "${RES}" = "0"; then
     _check_nginx_conf || RES=1
+    if test "${RES}" = "0"; then
+        _circus_schedule_start_watcher.sh nginx || RES=1
+    fi
+    if test "${RES}" = "0"; then
+        _circus_wait_watcher_started.sh nginx || RES=1
+    fi
+fi
+if test "${MFSERV_AUTORESTART_FLAG}" = "1"; then 
+    _circus_schedule_start_watcher.sh conf_monitor || RES=1
+fi
+if test "${RES}" = "0"; then
+    _circus_wait_watcher_started.sh conf_monitor  || RES=1
+fi
+if test "${RES}" = "0"; then
+    _circus_wait_watcher_started.sh plugin:autorestart || RES=1
 fi
 
 {% endblock %}
