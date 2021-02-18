@@ -419,6 +419,8 @@ The previous version of the plugin (identified by it's name) will be uninstalled
 !!! note
     A plugin hash is used to compare the released plugin with the installed plugin with the same name. If the hash is the same, then nothing happen. If the hash is different the already installed plugin is uninstalled then the released plugin is installed, whatever the version.
 
+!!! The plugin will not be updated if a plugin **with the same name** (and even if plugin hash is different) is already installed in *development mode* (or *devlink mode*). The dev-linked plugin is kept and nothing happen.
+
 !!! tip
     Don't use the `--clean` option during `plugins.uninstall` to keep your configuration
     overrides.
