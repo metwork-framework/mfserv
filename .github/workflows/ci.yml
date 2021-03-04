@@ -57,19 +57,9 @@ jobs:
           DEP_BRANCH=${{ steps.SetVariables.outputs.dep_branch }}
           BUILDIMAGE=${{ steps.SetVariables.outputs.buildimage }}
           docker run ${DOCKER_RUN_OPTIONS} -e TARGET_DIR=${TARGET_DIR} -e BRANCH=${BRANCH} -e DEP_BRANCH=${DEP_BRANCH} -e TAG=${TAG} --rm ${BUILDIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/build.sh"
-      - name: check ssh connect as ssh-scp-ssh-pipelines does not do it
-        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.METWORKPUB_HOST }}
-          username: ${{ secrets.METWORKPUB_USERNAME }}
-          password: ${{ secrets.METWORKPUB_PASSWORD }}
-          port: 22
-          script: |
-            pwd
       - name: publish buildlogs
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
         env:
           REMOTE: ${{ steps.SetVariables.outputs.buildlog_dir }}
           LOCAL: ${{ github.workspace }}/buildlogs
@@ -90,7 +80,7 @@ jobs:
           docker run ${DOCKER_RUN_OPTIONS} -e DEP_BRANCH=${DEP_BRANCH} --rm ${TESTIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/integration_tests.sh"
       - name: publish rpms
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
         env:
           REMOTE: ${{ steps.SetVariables.outputs.rpm_dir }}
           LOCAL: ${{ github.workspace }}/rpms
@@ -107,7 +97,7 @@ jobs:
             createrepo --update ${REMOTE} 
       - name: publish doc
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
         env:
           REMOTE: ${{ steps.SetVariables.outputs.doc_dir }}
           LOCAL: ${{ github.workspace }}/html_doc

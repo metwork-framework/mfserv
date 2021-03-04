@@ -7,7 +7,7 @@
 
 
 
-[![Drone CI](http://metwork-framework.org:8000/api/badges/metwork-framework/mfserv/status.svg)](http://metwork-framework.org:8000/metwork-framework/mfserv)
+[![GitHub CI](https://github.com/metwork-framework/mfserv/workflows/CI/badge.svg?branch=master)](https://github.com/metwork-framework/mfserv/actions?query=workflow%3ACI&branch=master)
 [![Maintenance](https://raw.githubusercontent.com/metwork-framework/resources/master/badges/maintained.svg)](https://github.com/metwork-framework/resources/blob/master/badges/maintained.svg)
 [![License](https://github.com/metwork-framework/resources/blob/master/badges/bsd.svg)]()
 [![Gitter](https://github.com/metwork-framework/resources/blob/master/badges/community-en.svg)](https://gitter.im/metwork-framework/community-en?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
