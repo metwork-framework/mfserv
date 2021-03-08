@@ -93,8 +93,24 @@ jobs:
             mkdir -p ${REMOTE}
           scp: |
             '${LOCAL}/metwork-*.rpm' => ${REMOTE}
+      - name: createrepo
+        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
+        uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
+        env:
+          REMOTE: ${{ steps.SetVariables.outputs.rpm_dir }}
+          LOCAL: ${{ github.workspace }}/.github/workflows
+        with:
+          host: ${{ secrets.METWORKPUB_HOST }}
+          user: ${{ secrets.METWORKPUB_USERNAME }}
+          pass: ${{ secrets.METWORKPUB_PASSWORD }}
+          port: 22
+          scp: |
+            '${LOCAL}/createrepo.sh' => ${REMOTE}
           last_ssh: |
-            createrepo --update ${REMOTE} 
+            cd ${REMOTE}
+            chmod +x createrepo.sh
+            ./createrepo.sh .
+            rm -f createrepo.sh
       - name: publish doc
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
         uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
