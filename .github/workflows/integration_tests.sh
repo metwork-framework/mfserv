@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#set -eu
+set -eu
 set -x
 
 cd /src
