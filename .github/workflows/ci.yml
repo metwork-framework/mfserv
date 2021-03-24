@@ -13,7 +13,8 @@ on:
       - v*
   pull_request:
   repository_dispatch:
-    types: metwork-trigger
+    types:
+      - metwork-trigger*
 
 env:
     OS_VERSION: centos6
@@ -134,7 +135,7 @@ jobs:
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
           repository: metwork-framework/docker-mfservplugins-centos7-buildimage
-          event-type: metwork-trigger
+          event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
           client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}"}'
       - name: dispatch plugins buildimage centos8
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
@@ -142,5 +143,5 @@ jobs:
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
           repository: metwork-framework/docker-mfservplugins-centos8-buildimage
-          event-type: metwork-trigger
+          event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
           client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}"}'
