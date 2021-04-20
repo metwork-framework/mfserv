@@ -19,5 +19,6 @@
 - fix error message in nginx error log (#473)
 - fix concurrency issue about max_age (and max_age=0 now by default) (#477)
 - fix some stop/start issues (#475)
+- fix nginx root usage in some CI corner cases (#484)
 
 
