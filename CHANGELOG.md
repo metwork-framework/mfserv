@@ -1,5 +1,11 @@
 # release_1.0 CHANGELOG
 
+## [Unreleased]
+
+### Bug Fixes
+
+- fix nginx root usage in some CI corner cases (backport #484) (#486)
+
 ## v1.0.12 (2021-02-11)
 
 ### Bug Fixes
