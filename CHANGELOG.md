@@ -5,6 +5,7 @@
 ### Bug Fixes
 
 - fix nginx root usage in some CI corner cases (backport #484) (#485)
+- fix a complex issue about nginx var caching (#487)
 
 ## v0.9.13 (2020-11-02)
 
