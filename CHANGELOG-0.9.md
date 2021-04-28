@@ -1,5 +1,12 @@
 # release_0.9 CHANGELOG
 
+## v0.9.14 (2021-04-27)
+
+### Bug Fixes
+
+- fix nginx root usage in some CI corner cases (backport #484) (#485)
+- fix a complex issue about nginx var caching (#487)
+
 ## v0.9.13 (2020-11-02)
 
 ### Bug Fixes
