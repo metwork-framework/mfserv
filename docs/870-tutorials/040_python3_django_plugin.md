@@ -1,6 +1,6 @@
 # Python3_django plugin tutorial
 
-Let's create a plugin based on the [python3_django plugin template](../../850-reference/plugin_templates/python3_django/100-intro/). We will called it **foo_nodejs**.
+Let's create a plugin based on the [python3_django plugin template](../../850-reference/plugin_templates/python3_django/100-intro/). We will called it **foo_django**.
 
 First, **bootstrap** the plugin with the command:
 ```bash
