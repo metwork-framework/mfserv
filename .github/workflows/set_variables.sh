@@ -68,8 +68,8 @@ else
     case "${B}" in
         master | experimental* | release_*)
             DEP_BRANCH=${B}
-            DEP_DIR=${B}
-            TARGET_DIR=${B};;
+            DEP_DIR=${B##release_}
+            TARGET_DIR=${B##release_};;
         integration | ci* | pci*)
             DEP_BRANCH=integration
             DEP_DIR=master
