@@ -74,8 +74,7 @@ with the new version.**
 Let's say you have a `mfext-0.8.3` version and you want to update to `mfext-0.8.5`
 (patch update) even if another major/minor (for example: `mfext-0.9.Z`) version is available.
 
-To do that, you have first to check (and change if necessary) your packages repository configuration (see "Installation Guide"). As `/stable/` `BaseUrls` point to the latest stable
-versions, you have to change them to explicitly points to `/release_0.8/`.
+To do that, you have first to check (and change if necessary) your packages repository configuration (see "Installation Guide"). Be sure to explicitly point to identified release like: `.../release_0.8/...` (for example).
 
 Then you can use the standard procedure described at the beginning of this document.
 

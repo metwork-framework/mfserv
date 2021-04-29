@@ -53,13 +53,13 @@ For each version, you will find the `BaseURL` in the following table:
 
 Version | BaseURL
 ------- | -------
-released stable | http://metwork-framework.org/pub/metwork/releases/rpms/stable/portable/
-continuous stable | http://metwork-framework.org/pub/metwork/continuous_integration/rpms/stable/portable/
+released stable | http://metwork-framework.org/pub/metwork/releases/rpms/release_1.0/portable/
+continuous stable | http://metwork-framework.org/pub/metwork/continuous_integration/rpms/release_1.0/portable/
 continuous master | http://metwork-framework.org/pub/metwork/continuous_integration/rpms/master/portable/
 continuous integration | http://metwork-framework.org/pub/metwork/continuous_integration/rpms/integration/portable/
 
 ??? question "Want to install a released old version ?"
-    You have to change the `BaseURL` and replace `/stable/` by `/release_X.Y/`. For example, use
+    You have to change the `BaseURL` and replace `/release_1.0/` by `/release_X.Y/`. For example, use
     http://metwork-framework.org/pub/metwork/releases/rpms/release_0.9/portable/
     as `BaseURL` for installing a `0.9.Z` released old version.
 
@@ -75,9 +75,9 @@ you just have to create a new `/etc/yum.repos.d/metwork.repo` with the following
 content (example for a **released stable** version):
 
 ```cfg
-[metwork_stable]
+[metwork_1_0]
 name=MetWork Repository Stable
-baseurl=http://metwork-framework.org/pub/metwork/releases/rpms/stable/portable/
+baseurl=http://metwork-framework.org/pub/metwork/releases/rpms/release_1.0/portable/
 gpgcheck=0
 enabled=1
 metadata_expire=0
@@ -90,7 +90,7 @@ If you prefer to copy/paste something, you can do that with following root comma
 cat >/etc/yum.repos.d/metwork.repo <<EOF
 [metwork]
 name=MetWork Repository
-baseurl=http://metwork-framework.org/pub/metwork/releases/rpms/stable/portable/
+baseurl=http://metwork-framework.org/pub/metwork/releases/rpms/release_1.0/portable/
 gpgcheck=0
 enabled=1
 metadata_expire=0
@@ -100,13 +100,13 @@ EOF
 ??? question "For Mageia distributions?"
     To configure the metwork RPM repository for Mageia distributions, use the following `root` command:
     ```console
-    urpmi.addmedia metwork http://metwork-framework.org/pub/metwork/releases/rpms/stable/portable/
+    urpmi.addmedia metwork http://metwork-framework.org/pub/metwork/releases/rpms/release_1.0/portable/
     ```
 
 ??? question "For SUSE distributions?"
     To configure the metwork RPM repository for SUSE distributions, use the following `root` command:
     ```console
-    zypper ar -G http://metwork-framework.org/pub/metwork/releases/rpms/stable/portable/ metwork
+    zypper ar -G http://metwork-framework.org/pub/metwork/releases/rpms/release_1.0/portable/ metwork
     ```
 
 !!! warning
