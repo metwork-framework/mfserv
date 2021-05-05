@@ -117,7 +117,6 @@ jobs:
             cd ${REMOTE}
             chmod +x createrepo.sh
             ./createrepo.sh .
-            rm -f createrepo.sh
       - name: publish doc
         if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
         uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
