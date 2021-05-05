@@ -53,4 +53,3 @@ mv /opt/metwork-mfserv-${TARGET_DIR}/*.rpm rpms
  
 
 echo "::set-output name=bypass::false"
-echo "::set-output name=buildcache::${hash_file}"
