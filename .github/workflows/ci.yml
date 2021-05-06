@@ -18,14 +18,20 @@ on:
 
 env:
     OS_VERSION: centos6
+
+
     DOCKER_RUN_OPTIONS: "-v ${{ github.workspace }}:/src -e GITHUB_REF -e GITHUB_RUN_NUMBER -e GITHUB_SHA -e GITHUB_REPOSITORY -e OS_VERSION"
+
     WORKFLOW_SCRIPTS_DIR: .github/workflows
     DOCKER_WORKFLOW_SCRIPTS_DIR: /src/.github/workflows
     PAYLOAD_BRANCH: ${{ github.event.client_payload.branch}}
 
 jobs:
   ci_build:
+
+
     runs-on: ubuntu-latest
+
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -74,13 +80,13 @@ jobs:
           scp: |
             '${LOCAL}/*' => ${REMOTE}
       - name: integration tests
-        if: ${{ steps.SetVariables.outputs.branch != 'null' }}
+        if: ${{ steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' }}
         run: |
           TESTIMAGE=${{ steps.SetVariables.outputs.testimage }}
           DEP_BRANCH=${{ steps.SetVariables.outputs.dep_branch }}
           docker run ${DOCKER_RUN_OPTIONS} -e DEP_BRANCH=${DEP_BRANCH} --rm ${TESTIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/integration_tests.sh"
       - name: publish rpms
-        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
+        if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
         uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
         env:
           REMOTE: ${{ steps.SetVariables.outputs.rpm_dir }}
@@ -95,7 +101,7 @@ jobs:
           scp: |
             '${LOCAL}/metwork-*.rpm' => ${REMOTE}
       - name: createrepo
-        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
+        if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
         uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
         env:
           REMOTE: ${{ steps.SetVariables.outputs.rpm_dir }}
@@ -111,9 +117,8 @@ jobs:
             cd ${REMOTE}
             chmod +x createrepo.sh
             ./createrepo.sh .
-            rm -f createrepo.sh
       - name: publish doc
-        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
+        if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
         uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
         env:
           REMOTE: ${{ steps.SetVariables.outputs.doc_dir }}
@@ -129,8 +134,9 @@ jobs:
           scp: |
             '${LOCAL}/*' => ${REMOTE}
 
+
       - name: dispatch plugins buildimage centos7
-        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'tags' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' }}
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
@@ -138,10 +144,12 @@ jobs:
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
           client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}"}'
       - name: dispatch plugins buildimage centos8
-        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'tags' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' }}
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
           repository: metwork-framework/docker-mfservplugins-centos8-buildimage
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
           client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}"}'
+
+
