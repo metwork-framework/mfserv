@@ -160,8 +160,10 @@ class MfservConfiguration(Configuration):
         sections = ["general"]
         sections = sections + [x for x in self._doc.keys()
                                if x.startswith('app_')]
-        context = self.get_configuration_env_dict(
-            ignore_keys_starting_with='_')
+        context = {x: y for x, y in os.environ.items() if x.startswith("MF")}
+        context.update(
+            self.get_configuration_env_dict(ignore_keys_starting_with='_')
+        )
         context.update(get_current_envs(self.plugin_name, self.plugin_home))
         for section in sections:
             for option in ('_extra_nginx_http_conf_string',
