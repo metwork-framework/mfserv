@@ -1,5 +1,11 @@
 # release_1.1 CHANGELOG
 
+## v1.1.1 (2021-05-10)
+
+### Bug Fixes
+
+- fix a plugin context issue (backport #495) (#497)
+
 ## v1.1.0 (2021-05-01)
 
 ### New Features
