@@ -1,5 +1,11 @@
 # release_1.0 CHANGELOG
 
+## v1.0.15 (2021-05-11)
+
+### Bug Fixes
+
+- we can use from_json jinja2 extension in nginx configuration files (backport #499) (#500)
+
 ## v1.0.14 (2021-05-10)
 
 ### Bug Fixes
