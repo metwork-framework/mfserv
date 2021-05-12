@@ -146,6 +146,7 @@ class MfservConfiguration(Configuration):
                 "jinja2_shell_extension.ShellExtension",
                 "jinja2_getenv_extension.GetenvExtension",
                 "jinja2_fnmatch_extension.FnMatchExtension",
+                "jinja2_from_json_extension.FromJsonExtension"
             ],
             undefined=jinja2.StrictUndefined,
         )
