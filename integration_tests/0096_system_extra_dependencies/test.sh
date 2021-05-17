@@ -22,18 +22,26 @@ for layer in `ls`; do
     echo
     current_layer=`cat .layerapi2_label`
     DEPS1=$(layer_wrapper --layers=${current_layer} -- external_dependencies.sh |awk -F '/' '{print $NF}' |xargs)
-    echo "--- external dependencies ---" ${DEPS1}
-    DEPS2=$(layer_wrapper --layers=${current_layer} -- external_dependencies_not_found.sh |xargs)
     # We don t consider libraries available in the layer (they should not be here, probably a LD_LIBRARY_PATH issue)
-    DEPS3=""
-    for lib in ${DEPS2}; do
+    DEPS2=""
+    for lib in ${DEPS1}; do
         found=$(find . -name ${lib} -print)
         if test "${found}" == ""; then
-            DEPS3="${DEPS3} ${lib}"
+            DEPS2="${DEPS2} ${lib}"
         fi
     done
-    echo "--- dependencies not found ---" ${DEPS3}
-    DEPS=$(echo $DEPS1 $DEPS3)
+    echo "--- external dependencies ---" ${DEPS2}
+    DEPS3=$(layer_wrapper --layers=${current_layer} -- external_dependencies_not_found.sh |xargs)
+    # We don t consider libraries available in the layer (they should not be here, probably a LD_LIBRARY_PATH issue)
+    DEPS4=""
+    for lib in ${DEPS3}; do
+        found=$(find . -name ${lib} -print)
+        if test "${found}" == ""; then
+            DEPS4="${DEPS4} ${lib}"
+        fi
+    done
+    echo "--- dependencies not found ---" ${DEPS4}
+    DEPS=$(echo $DEPS3 $DEPS4)
     for DEP in ${DEPS}; do
         FOUND=0
         for OK_DEP in ${OK_DEPS}; do
