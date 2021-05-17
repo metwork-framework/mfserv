@@ -127,7 +127,10 @@ jobs:
           password: ${{ secrets.METWORKPUB_PASSWORD }}
           port: 22
           script: |
+
             docker run -v /pub:/pub --rm mageia:6 /bin/bash -c "genhdlist2 --allow-empty-media ${{ steps.SetVariables.outputs.rpm_dir }}"
+
+
       - name: publish doc
         if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
         uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
