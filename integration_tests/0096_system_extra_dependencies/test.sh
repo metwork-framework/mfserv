@@ -41,7 +41,7 @@ for layer in `ls`; do
         fi
     done
     echo "--- dependencies not found ---" ${DEPS4}
-    DEPS=$(echo $DEPS3 $DEPS4)
+    DEPS=$(echo $DEPS2 $DEPS4)
     for DEP in ${DEPS}; do
         FOUND=0
         for OK_DEP in ${OK_DEPS}; do
