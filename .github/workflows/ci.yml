@@ -166,6 +166,16 @@ jobs:
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
           client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}"}'
 
+      - name: dispatch python2 tests
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'tags' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' }}
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.METWORK_ACCESS_TOKEN }}
+          repository: metwork-framework/mfserv_python2_tests
+          event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}"}'
+
+
 
 
 
