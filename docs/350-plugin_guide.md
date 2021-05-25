@@ -77,7 +77,7 @@ are completely self-contained (even for `virtualenv` or `node_modules`).
 
 #### Bootstrapping
 
-The *developer* can **boostrap** a *plugin* from a *plugin template*.
+The *developer* can **bootstrap** a *plugin* from a *plugin template*.
 
 Use the command:
 
@@ -87,7 +87,7 @@ to see available *plugin templates*.
 
 To create a plugin directory from a template, use the command:
 
-`boostrap_plugin.py create --template={template_name} {your_plugin_name}`
+`bootstrap_plugin.py create --template={template_name} {your_plugin_name}`
 
 !!! info
     If you don't set the `--template=` option in the previous command, you will

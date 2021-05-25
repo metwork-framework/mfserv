@@ -53,6 +53,7 @@ jobs:
           TAG=${{ steps.SetVariables.outputs.tag }}
           DEP_DIR=${{ steps.SetVariables.outputs.dep_dir }}
           BUILDIMAGE=${{ steps.SetVariables.outputs.buildimage }}
+          docker pull ${BUILDIMAGE}
           docker run ${DOCKER_RUN_OPTIONS} -e TARGET_DIR=${TARGET_DIR} -e BRANCH=${BRANCH} -e TAG=${TAG} -e DEP_DIR=${DEP_DIR} --rm ${BUILDIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/bootstrap_ci.sh"
       - name: build
         if: ${{ steps.SetVariables.outputs.branch != 'null' }}
@@ -63,6 +64,7 @@ jobs:
           TAG=${{ steps.SetVariables.outputs.tag }}
           DEP_BRANCH=${{ steps.SetVariables.outputs.dep_branch }}
           BUILDIMAGE=${{ steps.SetVariables.outputs.buildimage }}
+          docker pull ${BUILDIMAGE}
           docker run ${DOCKER_RUN_OPTIONS} -e TARGET_DIR=${TARGET_DIR} -e BRANCH=${BRANCH} -e DEP_BRANCH=${DEP_BRANCH} -e TAG=${TAG} --rm ${BUILDIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/build.sh"
       - name: publish buildlogs
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
@@ -85,6 +87,7 @@ jobs:
           TESTIMAGE=${{ steps.SetVariables.outputs.testimage }}
           DEP_BRANCH=${{ steps.SetVariables.outputs.dep_branch }}
           BRANCH=${{ steps.SetVariables.outputs.branch }}
+          docker pull ${TESTIMAGE}
           docker run ${DOCKER_RUN_OPTIONS} -e DEP_BRANCH=${DEP_BRANCH} -e BRANCH=${BRANCH} --rm ${TESTIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/integration_tests.sh"
       - name: publish rpms
         if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
