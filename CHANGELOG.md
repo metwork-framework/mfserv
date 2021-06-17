@@ -1,5 +1,11 @@
 # release_0.9 CHANGELOG
 
+## v0.9.15 (2021-06-16)
+
+### Bug Fixes
+
+- fix location if using plugin type static with prefix_based_routi… (#504)
+
 ## v0.9.14 (2021-04-27)
 
 ### Bug Fixes
