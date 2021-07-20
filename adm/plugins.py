@@ -13,6 +13,7 @@ from mfplugin.utils import NON_REQUIRED_BOOLEAN, NON_REQUIRED_INTEGER, \
     NON_REQUIRED_BOOLEAN_DEFAULT_TRUE
 
 HOT_SWAP_PREFIX = "__hs_"
+MFSERV_HOME = os.environ.get("MFSERV_HOME", "/unknown")
 MFMODULE_RUNTIME_HOME = os.environ.get("MFMODULE_RUNTIME_HOME", "/unknown")
 HOSTNAME = os.environ.get('MFHOSTNAME', 'unknown')
 HOSTNAME_FULL = os.environ.get('MFHOSTNAME_FULL', 'unknown')
@@ -148,6 +149,13 @@ class MfservConfiguration(Configuration):
                 "jinja2_fnmatch_extension.FnMatchExtension",
                 "jinja2_from_json_extension.FromJsonExtension"
             ],
+            loader=jinja2.FileSystemLoader(
+                [
+                    self.plugin_home,
+                    MFSERV_HOME + "/config",
+                    MFSERV_HOME + "/share"
+                ]
+            ),
             undefined=jinja2.StrictUndefined,
         )
 
