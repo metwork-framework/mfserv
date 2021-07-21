@@ -1,4 +1,4 @@
-CONFIGS=config.ini nginx.conf mflog_override.conf
+CONFIGS=config.ini nginx.conf mflog_override.conf nginx.macros
 
 include ../adm/root.mk
 include $(MFEXT_HOME)/share/subdir_root.mk

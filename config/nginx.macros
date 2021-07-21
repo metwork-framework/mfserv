@@ -1,0 +1,68 @@
+{% macro common_server(port="null", ssl_port="null", server_name="null", backlog=40000, extra_listen="", plugin_name="") %}
+    {% if port != "0" and port != "null" %}
+        listen {{port}} backlog={{backlog}} {{extra_listen}};
+    {% endif %}
+    {% if server_name != "null" %}
+        server_name {{server_name}};
+    {% endif %}
+    {% if ssl_port != "null" and ssl_port != "0" %}
+        # ssl block
+        listen {{ssl_port}} backlog={{backlog}} ssl {{extra_listen}};
+        ssl_certificate {{MFSERV_NGINX_SSL_CERTIFICATE}};
+        ssl_certificate_key {{MFSERV_NGINX_SSL_CERTIFICATE_KEY}};
+        ssl_ciphers {{MFSERV_NGINX_SSL_CIPHERS}};
+        ssl_protocols {{MFSERV_NGINX_SSL_PROTOCOLS}};
+    {% endif %}
+
+    {% if plugin_name == "" %}
+        # Should be overriden by plugins
+        set $plugin "#unknown#";
+    {% else %}
+        set $plugin "{{plugin_name}}";
+        error_page 599 /invalid; # this http code (599) does not exist but we need this line to avoid HTTP/404 capture by welcome plugin (see nginx docs)
+    {% endif %}
+
+    # Can be overriden by plugins
+    set $extra_log_format "";
+
+    {% if MFSERV_NGINX_ADD_X_FORWARDED_HEADERS == "1" %}
+        # If we receive X-Forwarded-Host, pass it through; otherwise, pass along the
+        # $host variable
+        # (we use lua here because we want to be sure not to have port in $host value)
+        set_by_lua_block $proxy_x_forwarded_host {
+            local host_without_port, port, host_without_port
+            if ngx.var.http_x_forwarded_host ~= nil then
+                return ngx.var.http_x_forwarded_host
+            end
+            if ngx.var.host ~= nil then
+                host_without_port, port = string.match(ngx.var.host, "^(.*):([0-9]+)$")
+                if host_without_port ~= nil then
+                    return host_without_port
+                else
+                    return ngx.var.host
+                end
+            end
+            return ""
+        }
+
+        # If we receive X-Forwarded-Port, pass it through; otherwise, pass along the
+        # port part of $host variable
+        set_by_lua_block $proxy_x_forwarded_port {
+            local host_without_port, port, host_without_port
+            if ngx.var.http_x_forwarded_port ~= nil then
+                return ngx.var.http_x_forwarded_port
+            end
+            if ngx.var.http_x_forwarded_host ~= nil then
+                return ""
+            end
+            if ngx.var.host ~= nil then
+                host_without_port, port = string.match(ngx.var.host, "^(.*):([0-9]+)$")
+                if port ~= nil then
+                    return port
+                end
+            end
+            return ""
+        }
+    {% endif %}
+
+{% endmacro %}
