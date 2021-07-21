@@ -1,5 +1,11 @@
 # release_1.0 CHANGELOG
 
+## v1.0.16 (2021-07-20)
+
+### Bug Fixes
+
+- allow jinja2 include tag in plugin extra nginx conf (backport #505) (#506)
+
 ## v1.0.15 (2021-05-11)
 
 ### Bug Fixes
