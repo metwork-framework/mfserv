@@ -92,7 +92,11 @@ with open(nginx_conf_file, "r") as f:
         "LUA_PACKAGE_PATH": ";".join(lua_package_paths) + ";;",
         "MFMODULE_ENVIRONMENT": mfmodule_env
     }
-    content = envtpl.render_string(f.read(), extra_variables=extra_variables,
-                                   keep_multi_blank_lines=False)
+    content = envtpl.render_string(
+        f.read(), extra_variables=extra_variables,
+        keep_multi_blank_lines=False,
+        extra_search_paths=[os.path.join(os.environ['MFMODULE_HOME'],
+                                         'config')]
+    )
 
 print(content)
