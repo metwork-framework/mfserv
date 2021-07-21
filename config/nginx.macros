@@ -1,13 +1,13 @@
-{% macro common_server(port="null", ssl_port="null", server_name="null", backlog=40000, extra_listen="", plugin_name="") %}
+{% macro common_server(port="null", ssl_port="null", server_name="null", backlog=40000, extra_listen="", plugin_name="", add_backlog=True) %}
     {% if port != "0" and port != "null" %}
-        listen {{port}} backlog={{backlog}} {{extra_listen}};
+        listen {{port}} {% if add_backlog %}backlog={{backlog}}{% endif %} {{extra_listen}};
     {% endif %}
     {% if server_name != "null" %}
         server_name {{server_name}};
     {% endif %}
     {% if ssl_port != "null" and ssl_port != "0" %}
         # ssl block
-        listen {{ssl_port}} backlog={{backlog}} ssl {{extra_listen}};
+        listen {{ssl_port}} {% if add_backlog %}backlog={{backlog}}{% endif %} ssl {{extra_listen}};
         ssl_certificate {{MFSERV_NGINX_SSL_CERTIFICATE}};
         ssl_certificate_key {{MFSERV_NGINX_SSL_CERTIFICATE_KEY}};
         ssl_ciphers {{MFSERV_NGINX_SSL_CIPHERS}};
