@@ -1,5 +1,11 @@
 # release_1.1 CHANGELOG
 
+## [Unreleased]
+
+### Bug Fixes
+
+- fix ssl with virtualhost (backport #508) (#510)
+
 ## v1.1.3 (2021-07-20)
 
 ### Bug Fixes
