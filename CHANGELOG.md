@@ -1,6 +1,6 @@
 # release_1.0 CHANGELOG
 
-## [Unreleased]
+## v1.0.17 (2021-07-22)
 
 ### Bug Fixes
 
