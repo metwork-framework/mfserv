@@ -1,5 +1,11 @@
 # release_1.0 CHANGELOG
 
+## [Unreleased]
+
+### Bug Fixes
+
+- fix missing http_host and via in logs and a minor issue with / as custom route (backport #517) (#518)
+
 ## v1.0.17 (2021-07-22)
 
 ### Bug Fixes
