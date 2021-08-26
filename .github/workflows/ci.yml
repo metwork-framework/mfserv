@@ -17,7 +17,7 @@ on:
       - metwork-trigger*
 
 env:
-    OS_VERSION: centos6
+    OS_VERSION: centos8
 
 
     DOCKER_RUN_OPTIONS: "-v ${{ github.workspace }}:/src -e GITHUB_REF -e GITHUB_RUN_NUMBER -e GITHUB_SHA -e GITHUB_REPOSITORY -e OS_VERSION"
