@@ -3,11 +3,6 @@
 #set -eu
 set -x
 
-if test "${OS_VERSION:-}" = ""; then
-    echo "ERROR: OS_VERSION env is empty"
-    exit 1
-fi
-
 TAG=
 DEP_BRANCH=
 TARGET_DIR=
@@ -15,8 +10,10 @@ DEP_DIR=
 
 case "${GITHUB_EVENT_NAME}" in
     repository_dispatch)
-        B=${PAYLOAD_BRANCH};;
+        B=${PAYLOAD_BRANCH}
+        OS_VERSION=${PAYLOAD_OS};;
     pull_request)
+        OS_VERSION=centos6
         case "${GITHUB_BASE_REF}" in
             master | integration | experimental* | release_* | ci* | pci*)
                 B=${GITHUB_BASE_REF};;
@@ -24,6 +21,7 @@ case "${GITHUB_EVENT_NAME}" in
                 B=null;
         esac;;
     push)
+        OS_VERSION=centos6
         case "${GITHUB_REF}" in
             refs/tags/v*)
                 B=`git branch -a --contains "${GITHUB_REF}" | grep remotes | grep release_ | cut -d"/" -f3`;;
@@ -91,6 +89,7 @@ fi
 
 
 echo "::set-output name=branch::${B}"
+echo "::set-output name=os::${OS_VERSION}"
 echo "::set-output name=tag::${TAG}"
 echo "::set-output name=dep_branch::${DEP_BRANCH}"
 echo "::set-output name=target_dir::${TARGET_DIR}"
