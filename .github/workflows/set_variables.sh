@@ -30,7 +30,6 @@ case "${GITHUB_EVENT_NAME}" in
                 B=null;
         esac;;
     push)
-        ls -l
         if [ -f .build_os ]; then
             OS_VERSION=`cat .build_os`
         else
