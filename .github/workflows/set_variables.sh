@@ -8,12 +8,21 @@ DEP_BRANCH=
 TARGET_DIR=
 DEP_DIR=
 
+    
 case "${GITHUB_EVENT_NAME}" in
     repository_dispatch)
         B=${PAYLOAD_BRANCH}
-        OS_VERSION=${PAYLOAD_OS};;
+        if [ -f .build_os ]; then
+            OS_VERSION=`cat .build_os`
+        else
+            OS_VERSION=${PAYLOAD_OS}
+        fi;;
     pull_request)
-        OS_VERSION=centos6
+        if [ -f .build_os ]; then
+            OS_VERSION=`cat .build_os`
+        else
+            OS_VERSION=centos6
+        fi
         case "${GITHUB_BASE_REF}" in
             master | integration | experimental* | release_* | ci* | pci*)
                 B=${GITHUB_BASE_REF};;
@@ -21,7 +30,12 @@ case "${GITHUB_EVENT_NAME}" in
                 B=null;
         esac;;
     push)
-        OS_VERSION=centos6
+        ls -l
+        if [ -f .build_os ]; then
+            OS_VERSION=`cat .build_os`
+        else
+            OS_VERSION=centos6
+        fi
         case "${GITHUB_REF}" in
             refs/tags/v*)
                 B=`git branch -a --contains "${GITHUB_REF}" | grep remotes | grep release_ | cut -d"/" -f3`;;
