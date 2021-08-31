@@ -10,7 +10,10 @@ export DRONE_BRANCH=${BRANCH}
 export DRONE_TAG=${TAG}
 export DRONE=true
 
-    if test "${OS_VERSION}" = "centos6"; then export METWORK_BUILD_OS=generic; else export METWORK_BUILD_OS=${OS_VERSION}; fi
+
+
+
+    if test "${OS_VERSION}" = "centos8"; then export METWORK_BUILD_OS=generic; else export METWORK_BUILD_OS=${OS_VERSION}; fi
 
 
 

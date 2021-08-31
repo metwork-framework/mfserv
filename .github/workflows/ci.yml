@@ -17,14 +17,14 @@ on:
       - metwork-trigger*
 
 env:
-    OS_VERSION: centos8
 
 
-    DOCKER_RUN_OPTIONS: "-v ${{ github.workspace }}:/src -e GITHUB_REF -e GITHUB_RUN_NUMBER -e GITHUB_SHA -e GITHUB_REPOSITORY -e OS_VERSION"
+    DOCKER_RUN_OPTIONS: "-v ${{ github.workspace }}:/src -e GITHUB_REF -e GITHUB_RUN_NUMBER -e GITHUB_SHA -e GITHUB_REPOSITORY"
 
     WORKFLOW_SCRIPTS_DIR: .github/workflows
     DOCKER_WORKFLOW_SCRIPTS_DIR: /src/.github/workflows
     PAYLOAD_BRANCH: ${{ github.event.client_payload.branch}}
+    PAYLOAD_OS: ${{ github.event.client_payload.os}}
 
 jobs:
   ci_build:
@@ -50,22 +50,24 @@ jobs:
         run: |
           TARGET_DIR=${{ steps.SetVariables.outputs.target_dir }}
           BRANCH=${{ steps.SetVariables.outputs.branch }}
+          OS_VERSION=${{ steps.SetVariables.outputs.os }}
           TAG=${{ steps.SetVariables.outputs.tag }}
           DEP_DIR=${{ steps.SetVariables.outputs.dep_dir }}
           BUILDIMAGE=${{ steps.SetVariables.outputs.buildimage }}
           docker pull ${BUILDIMAGE}
-          docker run ${DOCKER_RUN_OPTIONS} -e TARGET_DIR=${TARGET_DIR} -e BRANCH=${BRANCH} -e TAG=${TAG} -e DEP_DIR=${DEP_DIR} --rm ${BUILDIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/bootstrap_ci.sh"
+          docker run ${DOCKER_RUN_OPTIONS} -e TARGET_DIR=${TARGET_DIR} -e BRANCH=${BRANCH} -e TAG=${TAG} -e DEP_DIR=${DEP_DIR} -e OS_VERSION=${OS_VERSION} --rm ${BUILDIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/bootstrap_ci.sh"
       - name: build
         if: ${{ steps.SetVariables.outputs.branch != 'null' }}
         id: BuildStep
         run: |
           TARGET_DIR=${{ steps.SetVariables.outputs.target_dir }}
           BRANCH=${{ steps.SetVariables.outputs.branch }}
+          OS_VERSION=${{ steps.SetVariables.outputs.os }}
           TAG=${{ steps.SetVariables.outputs.tag }}
           DEP_BRANCH=${{ steps.SetVariables.outputs.dep_branch }}
           BUILDIMAGE=${{ steps.SetVariables.outputs.buildimage }}
           docker pull ${BUILDIMAGE}
-          docker run ${DOCKER_RUN_OPTIONS} -e TARGET_DIR=${TARGET_DIR} -e BRANCH=${BRANCH} -e DEP_BRANCH=${DEP_BRANCH} -e TAG=${TAG} --rm ${BUILDIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/build.sh"
+          docker run ${DOCKER_RUN_OPTIONS} -e TARGET_DIR=${TARGET_DIR} -e BRANCH=${BRANCH} -e DEP_BRANCH=${DEP_BRANCH} -e TAG=${TAG} -e OS_VERSION=${OS_VERSION} --rm ${BUILDIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/build.sh"
       - name: publish buildlogs
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
         uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
@@ -87,8 +89,9 @@ jobs:
           TESTIMAGE=${{ steps.SetVariables.outputs.testimage }}
           DEP_BRANCH=${{ steps.SetVariables.outputs.dep_branch }}
           BRANCH=${{ steps.SetVariables.outputs.branch }}
+          OS_VERSION=${{ steps.SetVariables.outputs.os }}
           docker pull ${TESTIMAGE}
-          docker run ${DOCKER_RUN_OPTIONS} -e DEP_BRANCH=${DEP_BRANCH} -e BRANCH=${BRANCH} --rm ${TESTIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/integration_tests.sh"
+          docker run ${DOCKER_RUN_OPTIONS} -e DEP_BRANCH=${DEP_BRANCH} -e BRANCH=${BRANCH} -e OS_VERSION=${OS_VERSION} --rm ${TESTIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/integration_tests.sh"
       - name: publish rpms
         if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
         uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
@@ -152,22 +155,14 @@ jobs:
             '${LOCAL}/*' => ${REMOTE}
 
 
-      - name: dispatch plugins buildimage centos7
-        if: ${{ github.event_name != 'pull_request' && github.event_name != 'tags' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' }}
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.METWORK_ACCESS_TOKEN }}
-          repository: metwork-framework/docker-mfservplugins-centos7-buildimage
-          event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
-          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}"}'
       - name: dispatch plugins buildimage centos8
-        if: ${{ github.event_name != 'pull_request' && github.event_name != 'tags' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' }}
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'tags' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
           repository: metwork-framework/docker-mfservplugins-centos8-buildimage
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
-          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}"}'
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
 
       - name: dispatch python2 tests
         if: ${{ github.event_name != 'pull_request' && github.event_name != 'tags' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' }}
@@ -176,7 +171,7 @@ jobs:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
           repository: metwork-framework/mfserv_python2_tests
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
-          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}"}'
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
 
 
 
