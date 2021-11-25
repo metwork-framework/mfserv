@@ -66,8 +66,8 @@ if [ "${GITHUB_EVENT_NAME}" != "repository_dispatch" ]; then
             TAG=${GITHUB_REF#refs/tags/}
             DEP_BRANCH=${B}
             DEP_DIR=${B##release_}
-            TARGET_DIR=${B##release_};;
-            SKIP_DISPATCH=false
+            TARGET_DIR=${B##release_}
+            SKIP_DISPATCH=false;;
         refs/pull/*)
 case "${B}" in
                 integration | ci* | pci*)
