@@ -51,7 +51,7 @@ esac
 if [ -z ${B} ]; then
   B=null
 fi
-SKIP_DISPATCH=true
+SKIP_DISPATCH=false
 if [ "${GITHUB_EVENT_NAME}" != "repository_dispatch" ]; then
     case "${GITHUB_REF}" in
         refs/heads/experimental* | refs/heads/master | refs/heads/release_*)
