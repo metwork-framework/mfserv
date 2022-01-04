@@ -74,6 +74,14 @@ pull_request_rules:
       backport:
         branches:
           - release_1.2
+  - name: backport to 1.3
+    conditions:
+      - base=integration
+      - label=backport-to-1.3
+    actions:
+      backport:
+        branches:
+          - release_1.3
 
   - name: approved merges
     actions:
