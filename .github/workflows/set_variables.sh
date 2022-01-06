@@ -47,6 +47,7 @@ esac
 if [ -z ${B} ]; then
   B=null
 fi
+SKIP_DISPATCH=false
 if [ "${GITHUB_EVENT_NAME}" != "repository_dispatch" ]; then
     case "${GITHUB_REF}" in
         refs/heads/experimental* | refs/heads/master | refs/heads/release_*)
@@ -61,7 +62,8 @@ if [ "${GITHUB_EVENT_NAME}" != "repository_dispatch" ]; then
             TAG=${GITHUB_REF#refs/tags/}
             DEP_BRANCH=${B}
             DEP_DIR=${B##release_}
-            TARGET_DIR=${B##release_};;
+            TARGET_DIR=${B##release_}
+            SKIP_DISPATCH=true;;
         refs/pull/*)
 case "${B}" in
                 integration | ci* | pci*)
@@ -108,6 +110,7 @@ echo "::set-output name=dep_dir::${DEP_DIR}"
 echo "::set-output name=buildimage::metwork/mfxxx-${OS_VERSION}-buildimage:${DEP_BRANCH}"
 echo "::set-output name=testimage::metwork/mfxxx-${OS_VERSION}-testimage:${DEP_BRANCH}"
 echo "::set-output name=buildlog_dir::/pub/metwork/${CI}/buildlogs/${B}/mfserv/${OS_VERSION}/${GITHUB_RUN_NUMBER}"
+echo "::set-output name=skip_dispatch::${SKIP_DISPATCH}"
 
 echo "::set-output name=rpm_dir::/pub/metwork/${CI}/rpms/${B}/${OS_VERSION}"
 echo "::set-output name=doc_dir::/pub/metwork/${CI}/docs/${B}/mfserv"
