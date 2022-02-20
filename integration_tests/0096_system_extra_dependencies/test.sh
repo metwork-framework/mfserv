@@ -3,11 +3,11 @@
 
 OK_DEPS=$(cat list.txt list_ok_not_found.txt |xargs)
 
-N=$(cat /etc/redhat-release 2>/dev/null |grep -c "^CentOS release 6")
-if test "${N}" -eq 0; then
-    echo "We test this only on centos6"
-    exit 0
-fi
+#N=$(cat /etc/redhat-release 2>/dev/null |grep -c "^CentOS release 6")
+#if test "${N}" -eq 0; then
+#    echo "We test this only on centos6"
+#    exit 0
+#fi
 
 export PATH=${PATH}:${PWD}/..
 RET=0
