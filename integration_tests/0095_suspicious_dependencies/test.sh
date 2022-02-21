@@ -26,6 +26,6 @@ done
 
 rm -f ${FIC_DEPS}
 if test "${RET}" = "1"; then
-    echo "suspicious dependencies found"
+    echo "suspicious dependencies found but not exiting 1"
     #exit 1
 fi
