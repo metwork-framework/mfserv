@@ -6,6 +6,7 @@ include $(MFEXT_HOME)/share/startup_scripts_profiles.mk
 
 TEMPLATES=$(shell find templates ! -type d)
 TARGET_TEMPLATES:=$(addprefix $(PREFIX)/share/,$(TEMPLATES))
+#force build
 
 all:: profiles $(PREFIX)/bin/cronwrap.sh $(PREFIX)/bin/mfserv.status $(PREFIX)/bin/mfserv.start $(PREFIX)/bin/mfserv.stop $(PREFIX)/bin/mfserv.init load_env $(TARGET_TEMPLATES) noutf8_check $(PREFIX)/bin/mfserv.autorestart $(PREFIX)/lib/mfserv/__init__.py $(PREFIX)/lib/mfserv/plugins.py
 
