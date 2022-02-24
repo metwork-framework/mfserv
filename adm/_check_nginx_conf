@@ -12,7 +12,7 @@ RES=0
 echo -n "- Checking nginx conf generation..."
 NGINX="${MFEXT_HOME}/opt/openresty/nginx/sbin/nginx"
 if test "${MFSERV_NGINX_PORT}" -le 1024; then
-    CAPA=$(getcap "${NGINX}" |grep "cap_net_bind_service+ep" 2>/dev/null)
+    CAPA=$(getcap "${NGINX}" |grep -E "cap_net_bind_service[+=]ep" 2>/dev/null)
     if test "${CAPA}" = ""; then
         echo_nok
         set_capa_doc port "${NGINX}"
@@ -21,7 +21,7 @@ if test "${MFSERV_NGINX_PORT}" -le 1024; then
 fi
 if test "${MFSERV_NGINX_HTTPS_PORT}" != "null"; then
     if test "${MFSERV_NGINX_HTTPS_PORT}" -le 1024; then
-        CAPA=$(getcap "${NGINX}" |grep "cap_net_bind_service+ep" 2>/dev/null)
+        CAPA=$(getcap "${NGINX}" |grep -E "cap_net_bind_service[+=]ep" 2>/dev/null)
         if test "${CAPA}" = ""; then
             echo_nok
             set_capa_doc https_port "${NGINX}"
