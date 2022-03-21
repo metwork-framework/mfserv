@@ -135,7 +135,7 @@ jobs:
           port: 22
           script: |
 
-            docker run -v /pub:/pub --rm mageia:6 /bin/bash -c "genhdlist2 --allow-empty-media ${{ steps.SetVariables.outputs.rpm_dir }}"
+            docker run -v /pub:/pub --rm mageia:6 /bin/bash -c "genhdlist2 --nolock --allow-empty-media ${{ steps.SetVariables.outputs.rpm_dir }}"
 
 
       - name: publish doc
