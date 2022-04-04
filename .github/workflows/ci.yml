@@ -85,7 +85,7 @@ jobs:
           scp: |
             '${LOCAL}/*' => ${REMOTE}
       - name: integration tests
-        if: ${{ steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' }}
+        if: ${{ steps.SetVariables.outputs.branch != 'null' }}
         run: |
           TESTIMAGE=${{ steps.SetVariables.outputs.testimage }}
           DEP_BRANCH=${{ steps.SetVariables.outputs.dep_branch }}
