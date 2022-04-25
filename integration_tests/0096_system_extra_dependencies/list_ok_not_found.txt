@@ -1,1 +1,4 @@
-no_extra_lib
+libcroco-0.6.so.3
+libhogweed.so.4
+libjbig.so.2.1
+libnettle.so.6

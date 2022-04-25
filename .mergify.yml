@@ -74,13 +74,25 @@ pull_request_rules:
       backport:
         branches:
           - release_1.2
+  - name: backport to 2.0
+    conditions:
+      - base=integration
+      - label=backport-to-2.0
+    actions:
+      backport:
+        branches:
+          - release_2.0
 
   - name: approved merges
     actions:
       merge:
         method: squash
-        strict: true
-        commit_message: title+body
+        #strict: true
+        #commit_message: title+body
+        commit_message_template: |-
+          {{ title }} (#{{ number }})
+
+          {{ body }}
       delete_head_branch: {}
     conditions:
 
