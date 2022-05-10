@@ -1,5 +1,11 @@
 # release_1.2 CHANGELOG
 
+## [Unreleased]
+
+### Bug Fixes
+
+- fix layerapi2 dependency for plugin nodejs (thanks to ne0t3ric) (backport #542) (#543)
+
 ## v1.2.1 (2022-02-24)
 
 - No interesting change
