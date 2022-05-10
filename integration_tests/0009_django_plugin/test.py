@@ -13,7 +13,7 @@ BashWrapperOrRaise("rm -Rf foobar")
 BashWrapperOrRaise("plugins.uninstall foobar || true")
 
 print(BashWrapperOrRaise("bootstrap_plugin.py create "
-                         "--template=python3_django "
+                         "--template=python3_django3 "
                          "--no-input foobar"))
 print(BashWrapperOrRaise("cd foobar && make release"))
 print(BashWrapperOrRaise('cd foobar && plugins.install "$(ls *.plugin)"'))
@@ -30,7 +30,7 @@ while (now_fn() - before).total_seconds() <= 60:
     except Exception:
         continue
     if x.status_code == 200:
-        if "Hello World" in x.text:
+        if "Hello World from django main app" in x.text:
             code = 0
             break
 
