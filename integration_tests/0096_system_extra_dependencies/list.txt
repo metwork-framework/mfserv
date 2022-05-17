@@ -2,6 +2,8 @@ libacl.so.1
 libasound.so.2
 libattr.so.1
 libblkid.so.1
+libbrotlicommon.so.1
+libbrotlidec.so.1
 libbz2.so.1
 libc.so.6
 libcairo.so.2
@@ -20,7 +22,6 @@ libev.so.4
 libexpat.so.1
 libexslt.so.0
 libfontconfig.so.1
-libform.so.5
 libform.so.6
 libfreebl3.so
 libfreetype.so.6
@@ -55,15 +56,14 @@ libkrb5.so.3
 libkrb5support.so.0
 liblapack.so.3
 liblber-2.4.so.2
+libldap-2.4.so.2
 libldap_r-2.4.so.2
 libltdl.so.7
 liblzma.so.5
 libm.so.6
 libmagic.so.1
 libmount.so.1
-libncurses.so.5
 libncurses.so.6
-libncursesw.so.5
 libncursesw.so.6
 libnghttp2.so.14
 libnsl.so.1
@@ -74,7 +74,6 @@ libonig.so.5
 libopenblas.so.0
 libopenjp2.so.7
 libp11-kit.so.0
-libpanelw.so.5
 libpanelw.so.6
 libpango-1.0.so.0
 libpangocairo-1.0.so.0 
@@ -87,6 +86,7 @@ libplc4.so
 libplds4.so
 libpng16.so.16
 libpopt.so.0
+libpsl.so.5
 libpthread.so.0
 libquadmath.so.0
 libresolv.so.2
@@ -97,6 +97,7 @@ libselinux.so.1
 libsmime3.so
 libSM.so.6
 libsqlite3.so.0
+libssh.so.4
 libssl.so.1.1
 libssl3.so
 libstdc++.so.6
@@ -105,7 +106,6 @@ libtcl8.6.so
 libthai.so.0
 libthread_db.so.1
 libtiff.so.5
-libtinfo.so.5
 libtinfo.so.6
 libtirpc.so.3
 libtk8.6.so
