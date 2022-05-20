@@ -66,7 +66,7 @@ RUN = False
 t.join()
 if RES is False:
     sys.exit(1)
-BashWrapperOrRaise("plugins.uninstall foobar")
+BashWrapperOrRaise("plugins.uninstall foobar || true")
 BashWrapperOrRaise("rm -Rf foobar")
 print("ok")
 sys.exit(0)
