@@ -108,7 +108,6 @@ fi
 if test "${HTTP_PROXY:-}" != ""; then
     echo "export HTTP_PROXY:=${HTTP_PROXY:-}" >>adm/root.mk
 fi
-echo "export PYTHON2_SHORT_VERSION := 2.7" >>adm/root.mk
 echo "export PYTHON3_SHORT_VERSION := 3.9" >>adm/root.mk
 
 echo "BOOTSTRAP DONE !"
