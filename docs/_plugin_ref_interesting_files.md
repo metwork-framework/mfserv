@@ -6,8 +6,8 @@
 | `bin/` | if you put an executable in this directory, it will be available in `PATH` (in your plugin environment) |
 | `lib/` | this library directory will be available in `LD_LIBRARY_PATH` and in `PYTHONPATH` (in your plugin environment), so you can put here shared libraries or python files you want to include easily |
 | `postinstall` | if this executable file is present during plugin installation, it will be automatically executed in the plugin environment just after the installation |
-| `python3_virtualenv_sources/`<br>`requirements-to-freeze.txt` | main requirements file for python3 plugins (you shouldn't freeze versions here), replace `3` by `2` for python2 plugins. |
-| `python3_virtualenv_sources/`<br>`requirements3.txt` | frozen requirements file for python3 plugins (generated from `requirements-to-freeze.txt` file, deleted by `make superclean`, commit this file to your VCS to freeze your dependencies), replace `3` by `2` for python2 plugins. |
+| `python3_virtualenv_sources/`<br>`requirements-to-freeze.txt` | main requirements file for python3 plugins (you shouldn't freeze versions here). |
+| `python3_virtualenv_sources/`<br>`requirements3.txt` | frozen requirements file for python3 plugins (generated from `requirements-to-freeze.txt` file, deleted by `make superclean`, commit this file to your VCS to freeze your dependencies). |
 | `python3_virtualenv_sources/`<br>`allow_binary_packages` | file to delete if you don't want `pip` to use binary packages (it will try to compile them during install) |
 | **`.layerapi2_label`** | layerapi2 file to hold the plugin name as `plugin_{plugin name}@module_in_lowercase` |
 | **`.layerapi2_dependencies`** | layerapi2 file to hold the layers to load when entering the plugin environment (you can also put some plugins with the syntax `plugin_{other plugin name}@module_in_lowercase` to inherit from another plugin |

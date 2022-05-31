@@ -52,8 +52,8 @@ As `mfserv` user:
 | `mfserv.stop` | stop mfserv services |
 | `mfserv.status` | check mfserv services |
 | `layers` | list installed layers (loaded layers are prefixed by `(*)`), `layers --help` for more details |
-| `layer_load {LAYER_NAME}` | load the given layer (which must be installed), example: `layer_load python2_devtools@mfext` |
-| `layer_unload {LAYER_NAME}` | unload the given layer (which must be loaded), example: `layer_unload python2@mfext` |
+| `layer_load {LAYER_NAME}` | load the given layer (which must be installed), example: `layer_load python3_devtools@mfext` |
+| `layer_unload {LAYER_NAME}` | unload the given layer (which must be loaded), example: `layer_unload python3@mfext` |
 | `components` | list installed software components (loaded components are prefixed by `(*)`), `components --help` for more details |
 | `metwork_debug` | debug the current environment (layers, paths, versions...), useful for debugging or bug reporting |
 | `outside {YOUR_COMMAND}`| execute the given command outside the metwork environment without changing anything to the current environment |

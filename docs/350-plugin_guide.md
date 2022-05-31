@@ -42,7 +42,7 @@ But of course, it is not mandatory.
 
 !!! info
     For example, in the `mfserv` MetWork module, you will find *plugin templates* for
-    boostrapping new plugins with `nodejs` or `python3 async with tornado`, `python2 with WSGI`...
+    boostrapping new plugins with `nodejs` or `python3 async with tornado`, `python3 with WSGI`...
 
 The process of starting a new *plugin* from a *plugin template* is called *bootstrapping* (see workflow).
 
@@ -111,7 +111,6 @@ If the *developer* want to add some custom python or node libraries not included
 in MetWork layers, he can add this dependency in:
 
 - `{plugin_dir}/python3_virtualenv_src/requirements-to-freeze.txt` (for `python3` plugins)
-- `{plugin_dir}/python2_virtualenv_src/requirements-to-freeze.txt` (for `python2` plugins)
 - `{plugin_dir}/packages.json` (for `nodejs` plugins)
 
 After that, use `make` in the plugin directory to rebuild the `virtualenv`.
