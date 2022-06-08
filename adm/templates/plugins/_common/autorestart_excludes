@@ -1,6 +1,5 @@
 /local
 /python3_virtualenv_sources
-/python2_virtualenv_sources
 /node_sources
 /node_modules
 __pycache__

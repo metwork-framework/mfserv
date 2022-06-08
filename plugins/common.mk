@@ -19,7 +19,6 @@ precustom:: .layerapi2_label .layerapi2_dependencies .release_ignore .plugin_for
 	echo ".autorestart_includes" >>$@
 	echo ".autorestart_excludes" >>$@
 	echo "python3_virtualenv_sources/src" >>$@
-	echo "python2_virtualenv_sources/src" >>$@
 	echo "local" >>$@
 
 .autorestart_includes: ../../adm/templates/plugins/_common/autorestart_includes
