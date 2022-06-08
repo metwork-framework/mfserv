@@ -17,7 +17,7 @@ clean::
 	cd plugins && $(MAKE) clean
 
 directories:
-	@for DIR in config bin opt/python2/lib/python$(PYTHON2_SHORT_VERSION)/site-packages opt/python3/lib/python$(PYTHON3_SHORT_VERSION)/site-packages; do mkdir -p $(MFSERV_HOME)/$$DIR; done
+	@for DIR in config bin opt/python3/lib/python$(PYTHON3_SHORT_VERSION)/site-packages; do mkdir -p $(MFSERV_HOME)/$$DIR; done
 
 test::
 	cd config && $(MAKE) test

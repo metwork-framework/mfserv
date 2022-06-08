@@ -6,43 +6,13 @@ This is the `root` layer of the MFDATA module.
 This layer mainly includes core libraries and utilities like :
 
 - :doc:`layerapi2 <mfext:layerapi2>` library and utilities which manage the layer system
-- wrappers (`python2`, `python3`, `python`...)
+- wrappers (`python3`, `python`...)
 - (and some other documented below)
 
 The `root` layer is loaded by default and does not depend on another layer. This
 is the layer dependencies root.
 
 ## Special focus on python wrappers
-
-.. _layer_root_python2_wrapper:
-
-### python2 wrapper
-
-The `python2` wrapper is available in `${MFEXT_HOME}/bin`. It executes
-a python2 interpreter with following layers loaded :
-
-- `python2_core@mfext`
-- `python2@mfext` (if installed)
-- `python2@{current_module}` (if installed)
-
-So, if you want to execute a python2 script without any question about currently
-loaded layers, this is the way to go.
-
-For example:
-
-```python
-
-#!/usr/bin/env python2
-
-print "this code will be always executed in python2 environment"
-print "(thanks to the above python2 shebang)"
-```
-
-or
-
-```bash
-python2 /path/to/a/python2/script.py
-```
 
 .. _layer_root_python3_wrapper:
 

@@ -2,8 +2,6 @@ adm/root.mk
 doc/_build
 doc/utilities.md
 layers/layer1_nodejs/0500_extra_packages/node_modules
-layers/layer1_python2/0500_extra_python_packages/src
-layers/layer1_python2/0500_extra_python_packages/tempolayer*
 layers/layer1_python3/0500_extra_python_packages/src
 layers/layer1_python3/0500_extra_python_packages/tempolayer*
 layers/layer1_python3/0600_gunicorn_custom_log/build/
@@ -41,11 +39,9 @@ doc/changelogs.rst
 __pycache__/
 null
 *.egg-info/
-layers/layer1_python2/0550_bjoern/build/
 layers/layer1_python3/0550_bjoern/build/
 layers/layer1_nodejs/0500_metwork_tools/node_modules/
 layers/layer1_nodejs/cache
-layers/layer1_python2/cache
 layers/layer1_python3/cache
 layers/layer9_default/cache
 plugins/*/.plugin_format_version

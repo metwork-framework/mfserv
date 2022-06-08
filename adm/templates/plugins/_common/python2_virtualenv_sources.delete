@@ -1,3 +1,0 @@
-{% if cookiecutter.type|default('unknown') != "python2_sync" and cookiecutter.type|default('unknown') != "python2" %}
-yes
-{% endif %}

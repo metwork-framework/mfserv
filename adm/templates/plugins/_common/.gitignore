@@ -2,11 +2,8 @@
 /*.plugin
 /*.tar.gz
 /python3_virtualenv_sources/src/
-/python2_virtualenv_sources/src/
 /node_modules/
 /python3_virtualenv_sources/tempolayer*
-/python2_virtualenv_sources/tempolayer*
-/python2_virtualenv_sources/freezed_requirements*
 /python3_virtualenv_sources/freezed_requirements*
 *.pyc
 __pycache__/

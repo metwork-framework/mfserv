@@ -1,2 +1,0 @@
-# python2 requirements.txt file
-# see https://pip.readthedocs.io/en/1.1/requirements.html
