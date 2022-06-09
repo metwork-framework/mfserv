@@ -5,6 +5,7 @@
 ### New Features
 
 - replace deprecated template python3_django (django 2) by template python3_django3 (django 3) (#529)
+- remove all references to python2 (#551)
 
 ### Bug Fixes
 
