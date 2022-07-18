@@ -6,6 +6,7 @@
 
 - replace deprecated template python3_django (django 2) by template python3_django3 (django 3) (#529)
 - remove all references to python2 (#551)
+- add override for template plugins and upgrade uvicorn for template python3_raw_asgi (#554)
 
 ### Bug Fixes
 
