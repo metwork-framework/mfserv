@@ -8,6 +8,7 @@
 - remove all references to python2 (#551)
 - add override for template plugins and upgrade uvicorn for template python3_raw_asgi (#554)
 - use flask>2 for plugin template python3_flask (#556)
+- switch from python 3.9 to python 3.10 (#558)
 
 ### Bug Fixes
 
