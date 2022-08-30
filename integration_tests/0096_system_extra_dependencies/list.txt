@@ -21,6 +21,7 @@ libelf.so.1
 libev.so.4
 libexpat.so.1
 libexslt.so.0
+libffi.so.6
 libfontconfig.so.1
 libform.so.6
 libfreebl3.so
