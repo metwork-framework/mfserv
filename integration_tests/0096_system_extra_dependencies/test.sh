@@ -83,6 +83,6 @@ done
 
 
 if test "${RET}" = "1"; then
-    echo "extra dependencies found"
+    echo "Failure of dependencies test"
     exit 1
 fi
