@@ -58,6 +58,7 @@ libICE.so.6
 libidn2.so.0
 libjbig.so.2.1
 libjpeg.so.62
+libjvm.so
 libk5crypto.so.3
 libkeyutils.so.1
 libkrb5.so.3

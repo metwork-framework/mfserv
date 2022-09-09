@@ -21,7 +21,6 @@ for layer in `ls`; do
     echo
     echo "=== System extra dependencies layer ${layer} ==="
     echo
-    echo "--- external dependencies ---" ${DEPS2}
     current_layer=`cat .layerapi2_label`
     DEPS1=$(layer_wrapper --layers=${current_layer} -- external_dependencies.sh |awk -F '/' '{print $NF}' |xargs)
     # We don t consider libraries available in the layer (they should not be here, probably a LD_LIBRARY_PATH issue)
@@ -32,6 +31,7 @@ for layer in `ls`; do
             DEPS2="${DEPS2} ${lib}"
         fi
     done
+    echo "--- external dependencies ---" ${DEPS2}
     for DEP in ${DEPS2}; do
         FOUND=0
         for OK_DEP in ${OK_DEPS}; do
@@ -50,7 +50,6 @@ for layer in `ls`; do
         echo
         RET=1
     done
-    echo "--- dependencies not found ---" ${DEPS4}
     DEPS3=$(layer_wrapper --layers=${current_layer} -- external_dependencies_not_found.sh |xargs)
     # We don t consider libraries available in the layer (they should not be here, probably a LD_LIBRARY_PATH issue)
     DEPS4=""
@@ -60,6 +59,7 @@ for layer in `ls`; do
             DEPS4="${DEPS4} ${lib}"
         fi
     done
+    echo "--- dependencies not found ---" ${DEPS4}
     for DEP in ${DEPS4}; do
         FOUND=0
         for OK_DEP in ${OK_NOT_FOUND}; do
