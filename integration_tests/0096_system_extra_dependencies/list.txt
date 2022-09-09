@@ -23,6 +23,7 @@ libdl.so.2
 libdw.so.1
 libelf.so.1
 libev.so.4
+libevent-2.1.so.7
 libexpat.so.1
 libexslt.so.0
 libffi.so.6
@@ -64,7 +65,9 @@ libkeyutils.so.1
 libkrb5.so.3
 libkrb5support.so.0
 liblapack.so.3
+liblber.so.2
 liblber-2.4.so.2
+libldap.so.2
 libldap-2.4.so.2
 libldap_r-2.4.so.2
 libltdl.so.7
