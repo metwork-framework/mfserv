@@ -123,11 +123,11 @@ After that, use `make` in the plugin directory to rebuild the `virtualenv`.
     that inside the plugin directory.
 
 ??? question "What is the difference between `requirements-to-freeze.txt` and `requirements3.txt` (or `requirements2.txt`) files?"
-    The second one if automatically generated (and overwritten!) from the first one (when it is more recent in terms of *last modification date*)
+    The second one is automatically generated (and overwritten!) from the first one (when it is more recent in terms of *last modification date*)
 
     **=> So don't modify `requirements3.txt` manually unless you know exactly what you're doing!**
 
-    In the first one (`requirements-to-freeze.txt` you should describe your [PyPi](https://pypi.org/) requirements
+    In the first one (`requirements-to-freeze.txt`) you should describe your [PyPi](https://pypi.org/) requirements
     with the [PEP508](https://pip.pypa.io/en/stable/reference/pip_install/#requirement-specifiers) format. The idea
     is to describe only **your requirements** (probably with some flexibility in versions) and not necessary **all exact requirements**.
 
