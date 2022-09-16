@@ -58,6 +58,7 @@ libharfbuzz.so.0
 libhogweed.so.4
 libICE.so.6
 libidn2.so.0
+libjasper.so.4
 libjbig.so.2.1
 libjpeg.so.62
 libjvm.so
