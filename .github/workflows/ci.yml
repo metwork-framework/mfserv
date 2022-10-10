@@ -125,6 +125,7 @@ jobs:
             cd ${REMOTE}
             chmod +x createrepo.sh
             ./createrepo.sh .
+
       - name: mageia_repo
         if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
         uses: appleboy/ssh-action@master
