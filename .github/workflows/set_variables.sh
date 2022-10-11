@@ -114,4 +114,4 @@ echo "::set-output name=skip_dispatch::${SKIP_DISPATCH}"
 
 echo "::set-output name=rpm_dir::/pub/metwork/${CI}/rpms/${B}/${OS_VERSION}"
 echo "::set-output name=doc_dir::/pub/metwork/${CI}/docs/${B}/mfserv"
-echo "::set-output name=nexus_dir::null";;
+echo "::set-output name=nexus_dir::null"
