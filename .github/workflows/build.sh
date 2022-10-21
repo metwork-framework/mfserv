@@ -53,4 +53,4 @@ mv /opt/metwork-mfserv-${TARGET_DIR}/*.rpm rpms
 
  
 
-echo "::set-output name=bypass::false"
+echo "bypass=false" >> github_output

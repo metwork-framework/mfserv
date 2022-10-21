@@ -101,17 +101,17 @@ fi
     
 
 
-echo "::set-output name=branch::${B}"
-echo "::set-output name=os::${OS_VERSION}"
-echo "::set-output name=tag::${TAG}"
-echo "::set-output name=dep_branch::${DEP_BRANCH}"
-echo "::set-output name=target_dir::${TARGET_DIR}"
-echo "::set-output name=dep_dir::${DEP_DIR}"
-echo "::set-output name=buildimage::metwork/mfxxx-${OS_VERSION}-buildimage:${DEP_BRANCH}"
-echo "::set-output name=testimage::metwork/mfxxx-${OS_VERSION}-testimage:${DEP_BRANCH}"
-echo "::set-output name=buildlog_dir::/pub/metwork/${CI}/buildlogs/${B}/mfserv/${OS_VERSION}/${GITHUB_RUN_NUMBER}"
-echo "::set-output name=skip_dispatch::${SKIP_DISPATCH}"
+echo "branch=${B}" >> ${GITHUB_OUTPUT}
+echo "os=${OS_VERSION}" >> ${GITHUB_OUTPUT}
+echo "tag=${TAG}" >> ${GITHUB_OUTPUT}
+echo "dep_branch=${DEP_BRANCH}" >> ${GITHUB_OUTPUT}
+echo "target_dir=${TARGET_DIR}" >> ${GITHUB_OUTPUT}
+echo "dep_dir=${DEP_DIR}" >> ${GITHUB_OUTPUT}
+echo "buildimage=metwork/mfxxx-${OS_VERSION}-buildimage:${DEP_BRANCH}" >> ${GITHUB_OUTPUT}
+echo "testimage=metwork/mfxxx-${OS_VERSION}-testimage:${DEP_BRANCH}" >> ${GITHUB_OUTPUT}
+echo "buildlog_dir=/pub/metwork/${CI}/buildlogs/${B}/mfserv/${OS_VERSION}/${GITHUB_RUN_NUMBER}" >> ${GITHUB_OUTPUT}
+echo "skip_dispatch=${SKIP_DISPATCH}" >> ${GITHUB_OUTPUT}
 
-echo "::set-output name=rpm_dir::/pub/metwork/${CI}/rpms/${B}/${OS_VERSION}"
-echo "::set-output name=doc_dir::/pub/metwork/${CI}/docs/${B}/mfserv"
-echo "::set-output name=nexus_dir::null"
+echo "rpm_dir=/pub/metwork/${CI}/rpms/${B}/${OS_VERSION}" >> ${GITHUB_OUTPUT}
+echo "doc_dir=/pub/metwork/${CI}/docs/${B}/mfserv" >> ${GITHUB_OUTPUT}
+echo "nexus_dir=null" >> ${GITHUB_OUTPUT}
