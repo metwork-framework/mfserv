@@ -9,6 +9,7 @@ plugins:
       glob:
         - "_*.md"
         - "850-reference/_*.md"
+  - awesome-pages
   - macros:
       module_name: mkdocs_main
   - search
@@ -17,7 +18,6 @@ plugins:
       order: 2
       increment_topnav: False
       increment_pages: False
-  - awesome-pages
 
 markdown_extensions:
   - footnotes
@@ -30,6 +30,8 @@ markdown_extensions:
   - pymdownx.magiclink
   - pymdownx.mark
   - pymdownx.smartsymbols
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid

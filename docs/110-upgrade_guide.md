@@ -9,7 +9,8 @@
 
     If your starting version is < 0.9, see next chapter.
 
-```console tab="CentOS/Fedora"
+=== "CentOS/Fedora"
+```console
 # We stop metwork services
 service metwork stop
 
@@ -20,7 +21,8 @@ yum upgrade "metwork-*"
 service metwork start
 ```
 
-```console tab="Mageia"
+=== "Mageia"
+```console
 # We stop metwork services
 service metwork stop
 
@@ -32,7 +34,8 @@ urpmi "metwork-*"
 service metwork start
 ```
 
-```console tab="SUSE"
+=== "SUSE"
+```console
 # We stop metwork services
 service metwork stop
 
