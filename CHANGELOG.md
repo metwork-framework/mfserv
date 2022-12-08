@@ -14,5 +14,6 @@
 
 - fix layerapi2 dependency for plugin nodejs (thanks to ne0t3ric) (#542)
 - fix package-lock.json with nodejs 16 (#553)
+- regex grouping in nginx location / (#560) (backport #561) (#562)
 
 
