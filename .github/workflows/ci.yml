@@ -128,7 +128,7 @@ jobs:
             ./createrepo.sh .
 
       - name: publish doc
-        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
+        if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
         uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
         env:
           REMOTE: ${{ steps.SetVariables.outputs.doc_dir }}
