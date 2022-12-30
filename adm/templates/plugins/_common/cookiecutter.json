@@ -1,5 +1,6 @@
 {
     "version": "0.0.1",
+    "release": "1",
     "one_line_summary": "one line summary",
     "license": ["Proprietary", "BSD", "MIT", "GPL", "Specific"],
     "url": "http://yourpluginhomepage",

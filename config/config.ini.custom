@@ -15,7 +15,7 @@
 #       (and)
 #       => touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service
 #          (for this change survives after a metwork update)
-port=18868
+port=18869
 
 # Max body size for incoming http requests (in MB)
 upload_max_body_size=100
