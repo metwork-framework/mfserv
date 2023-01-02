@@ -40,6 +40,13 @@ echo "urlpatterns = [url(x, include(urlpatterns)) for x in PREFIXES]" >>{{cookie
 
 cat >>{{cookiecutter.name}}/settings.py <<EOF
 # ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE
+# TO PROVIDE GIS LIBRARIES
+import os
+MFEXT_HOME = os.environ.get('MFEXT_HOME')
+GDAL_LIBRARY_PATH = MFEXT_HOME + '/opt/scientific_core/lib/libgdal.so'
+GEOS_LIBRARY_PATH = MFEXT_HOME + '/opt/scientific_core/lib/libgeos_c.so'
+SPATIALITE_LIBRARY_PATH = MFEXT_HOME + '/opt/scientific_core/lib/mod_spatialite.so'
+
 # TO PROVIDE PREFIX BASED ROUTING
 STATIC_URL = '/{{cookiecutter.name}}/static/'
 STATIC_ROOT = Path(BASE_DIR, "main/static")
