@@ -1,6 +1,7 @@
 {
     "name": "{{cookiecutter.name}}",
     "version": "{{cookiecutter.version}}",
+    "release": "{{cookiecutter.release}}",
     "dependencies": {
         "express": "^4.16.4"
     },
