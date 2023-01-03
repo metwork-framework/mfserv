@@ -9,5 +9,6 @@
 ### Bug Fixes
 
 - regex grouping in nginx location / (#560) (#561)
+- template Django 3 - metwork 2.1 - GDAL lib issue ... (#563) (#567)
 
 
