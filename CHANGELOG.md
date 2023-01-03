@@ -1,5 +1,11 @@
 # release_2.1 CHANGELOG
 
+## [Unreleased]
+
+### New Features
+
+- add release in plugins config.ini files (backport #564) (#565)
+
 ## v2.1.0 (2022-12-08)
 
 ### New Features
