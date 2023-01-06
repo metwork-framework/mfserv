@@ -1,5 +1,15 @@
 # release_2.1 CHANGELOG
 
+## v2.1.1 (2023-01-04)
+
+### New Features
+
+- add release in plugins config.ini files (backport #564) (#565)
+
+### Bug Fixes
+
+- template Django 3 - metwork 2.1 - GDAL lib issue ... (#563) (backport #567) (#568)
+
 ## v2.1.0 (2022-12-08)
 
 ### New Features
