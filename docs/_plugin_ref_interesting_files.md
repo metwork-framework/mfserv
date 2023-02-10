@@ -9,6 +9,7 @@
 | `python3_virtualenv_sources/`<br>`requirements-to-freeze.txt` | main requirements file for python3 plugins (you shouldn't freeze versions here). |
 | `python3_virtualenv_sources/`<br>`requirements3.txt` | frozen requirements file for python3 plugins (generated from `requirements-to-freeze.txt` file, deleted by `make superclean`, commit this file to your VCS to freeze your dependencies). |
 | `python3_virtualenv_sources/`<br>`allow_binary_packages` | file to delete if you don't want `pip` to use binary packages (it will try to compile them during install) |
+| `python3_virtualenv_sources/`<br>`override` | file to delete if you don't want `pip` to override packages available in mfext (it will try to use the version of mfext packages) |
 | **`.layerapi2_label`** | layerapi2 file to hold the plugin name as `plugin_{plugin name}@module_in_lowercase` |
 | **`.layerapi2_dependencies`** | layerapi2 file to hold the layers to load when entering the plugin environment (you can also put some plugins with the syntax `plugin_{other plugin name}@module_in_lowercase` to inherit from another plugin |
 | `.layerapi2_extra_env` | can be used to define extra environment variables in your plugin environment (see layerapi2 documentation) |
