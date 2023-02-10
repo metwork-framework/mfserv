@@ -1,5 +1,11 @@
 # release_2.1 CHANGELOG
 
+## [Unreleased]
+
+### Bug Fixes
+
+- force django3>=3.2.17 in template plugin django3 (security fix) (backport #573) (#574)
+
 ## v2.1.1 (2023-01-04)
 
 ### New Features
