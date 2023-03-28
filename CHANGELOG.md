@@ -1,5 +1,11 @@
 # release_2.1 CHANGELOG
 
+## [Unreleased]
+
+### Bug Fixes
+
+- regression on static routing (#576) (backport #577) (#578)
+
 ## v2.1.2 (2023-02-10)
 
 ### Bug Fixes
