@@ -12,5 +12,7 @@
 - template Django 3 - metwork 2.1 - GDAL lib issue ... (#563) (#567)
 - force django3>=3.2.17 in template plugin django3 (security fix) (#573)
 - regression on static routing (#576) (#577)
+- fix .releaseignore to ignore .git folder when releasing plugins (#581)
+- django, duplicated logs (#579) (#580)
 
 
