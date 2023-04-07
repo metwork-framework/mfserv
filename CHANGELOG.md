@@ -5,6 +5,8 @@
 ### Bug Fixes
 
 - regression on static routing (#576) (backport #577) (#578)
+- fix .releaseignore to ignore .git folder when releasing plugins (backport #581) (#582)
+- django, duplicated logs (#579) (backport #580) (#583)
 
 ## v2.1.2 (2023-02-10)
 
