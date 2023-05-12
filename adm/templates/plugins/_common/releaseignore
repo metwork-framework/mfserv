@@ -1,12 +1,11 @@
 # don't add python3_virtualenv_sources here as we need it for installing
-# (it will be removed just after install)
 /local
 /src
 /doc
 /docs
 __pycache__
 *.pyc
-.git
+/.git/
 .svn
 .git*
 *.plugin
