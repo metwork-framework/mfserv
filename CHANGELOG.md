@@ -15,5 +15,6 @@
 - regression on static routing (#576) (#577)
 - fix .releaseignore to ignore .git folder when releasing plugins (#581)
 - django, duplicated logs (#579) (#580)
+- force flask >= 2.2.5 for security reason (#585)
 
 
