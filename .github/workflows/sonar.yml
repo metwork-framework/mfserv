@@ -7,20 +7,14 @@ on:
 
 jobs:
   build:
-    name: sonar_build
+    name: SonarCloud
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: sonarsource/sonarqube-scan-action@master
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_SCANNER_OPTS: "-Dhttp.extraHeader='Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImR1cmV0ZiIsInVpZF9udW1iZXIiOjEwMjE3LCJlbWFpbCI6ImZyZWRlcmljLmR1cmV0QG1ldGVvLmZyIiwiZGlzcGxheV9uYW1lIjoiRFVSRVQgRnJcdTAwZTlkXHUwMGU5cmljIiwiaWF0IjoxNjg1MDg5NTA1LCJleHAiOjQ4Mzg2ODk1MDUsImxpbWl0X3RvX3Zob3N0cyI6WyJzb25hciJdLCJsaW1pdF90b19pcHMiOlsiMTM3LjEyOS4qLioiLCIxMC4qLiouKiJdfQ.d4Iwia_sGxA7AinfVlUYj0VPEHzlqFIdW4H1MBUlP7c'"
-      # If you wish to fail your job when the Quality Gate is red, uncomment the
-      # following lines. This would typically be used to fail a deployment.
-      # - uses: sonarsource/sonarqube-quality-gate-action@master
-      #   timeout-minutes: 5
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
