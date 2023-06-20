@@ -6,6 +6,7 @@
 
 - add release in plugins config.ini files (#564)
 - upgrade jquery from 3.3.1 to 3.5.1 (security update) (#584)
+- use sonarcloud.io for sonarqube checks (#597)
 
 ### Bug Fixes
 
