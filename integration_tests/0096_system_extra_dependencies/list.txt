@@ -109,6 +109,7 @@ librt.so.1
 librsvg-2.so.2
 libsasl2.so.3
 libselinux.so.1
+libsharpyuv.so.0
 libsmime3.so
 libSM.so.6
 libsqlite3.so.0
@@ -128,6 +129,7 @@ libtk8.6.so
 libutil.so.1
 libuuid.so.1
 libunistring.so.2
+libunistring.so.5
 libX11.so.6
 libXau.so.6
 libXaw.so.7
