@@ -16,7 +16,7 @@ export DRONE=true
 
 
 
-
+git config --global --add safe.directory /src
 cd /src
 
 
