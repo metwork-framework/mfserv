@@ -111,7 +111,6 @@ echo "buildimage=metwork/mfxxx-${OS_VERSION}-buildimage:${DEP_BRANCH}" >> ${GITH
 echo "testimage=metwork/mfxxx-${OS_VERSION}-testimage:${DEP_BRANCH}" >> ${GITHUB_OUTPUT}
 echo "buildlog_dir=/pub/metwork/${CI}/buildlogs/${B}/mfserv/${OS_VERSION}/${GITHUB_RUN_NUMBER}" >> ${GITHUB_OUTPUT}
 echo "skip_dispatch=${SKIP_DISPATCH}" >> ${GITHUB_OUTPUT}
-
 echo "rpm_dir=/pub/metwork/${CI}/rpms/${B}/${OS_VERSION}" >> ${GITHUB_OUTPUT}
 echo "doc_dir=/pub/metwork/${CI}/docs/${B}/mfserv" >> ${GITHUB_OUTPUT}
 echo "nexus_dir=null" >> ${GITHUB_OUTPUT}
