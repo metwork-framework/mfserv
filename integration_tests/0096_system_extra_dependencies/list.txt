@@ -72,6 +72,7 @@ liblber-2.4.so.2
 libldap.so.2
 libldap-2.4.so.2
 libldap_r-2.4.so.2
+libLerc.so.4
 libltdl.so.7
 liblzma.so.5
 libm.so.6
