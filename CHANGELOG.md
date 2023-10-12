@@ -17,5 +17,6 @@
 - fix .releaseignore to ignore .git folder when releasing plugins (#581)
 - django, duplicated logs (#579) (#580)
 - force flask >= 2.2.5 for security reason (#585)
+- .release_ignore instead of .releaseignore in common.mk (closes #… (#608)
 
 
