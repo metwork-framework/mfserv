@@ -6,6 +6,10 @@
 
 - fix link to rpms repository in installation guide (#606)
 
+### Bug Fixes
+
+- .release_ignore instead of .releaseignore in common.mk (backport #608) (#609)
+
 ## v2.1.3 (2023-04-07)
 
 ### Bug Fixes
