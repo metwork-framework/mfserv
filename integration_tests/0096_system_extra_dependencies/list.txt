@@ -57,6 +57,9 @@ libgthread-2.0.so.0
 libharfbuzz.so.0
 libhogweed.so.4
 libICE.so.6
+libicudata.so.60
+libicui18n.so.60
+libicuuc.so.60
 libidn2.so.0
 libjasper.so.4
 libjbig.so.2.1
