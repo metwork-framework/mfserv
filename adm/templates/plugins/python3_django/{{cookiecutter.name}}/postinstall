@@ -16,7 +16,7 @@ def index(request):
     return HttpResponse("Hello World from django main app")
 EOF
 cat >main/urls.py <<EOF
-from django.urls import re_path
+from django.urls import path
 
 from . import views
 
