@@ -28,15 +28,16 @@ EOF
 echo "" >>{{cookiecutter.name}}/urls.py
 echo "# ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE" >>{{cookiecutter.name}}/urls.py
 echo "# FOR CONFIGURING main app" >>{{cookiecutter.name}}/urls.py
-echo "from django.conf.urls import include, url" >>{{cookiecutter.name}}/urls.py
-echo "urlpatterns.append(url(r'^main/', include('main.urls')))" >>{{cookiecutter.name}}/urls.py
+echo "from django.urls import path, re_path" >>{{cookiecutter.name}}/urls.py
+echo "from django.conf.urls import include" >>{{cookiecutter.name}}/urls.py
+echo "urlpatterns.append(re_path(r'^main/', include('main.urls')))" >>{{cookiecutter.name}}/urls.py
 echo "urlpatterns.append(path('', include('main.urls')))" >>{{cookiecutter.name}}/urls.py
 
 echo "" >>{{cookiecutter.name}}/urls.py
 echo "# ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE" >>{{cookiecutter.name}}/urls.py
 echo "# TO PROVIDE PREFIX BASED ROUTING" >>{{cookiecutter.name}}/urls.py
 echo 'PREFIXES = [r"^{{cookiecutter.name}}/"]' >>{{cookiecutter.name}}/urls.py
-echo "urlpatterns = [url(x, include(urlpatterns)) for x in PREFIXES]" >>{{cookiecutter.name}}/urls.py
+echo "urlpatterns = [re_path(x, include(urlpatterns)) for x in PREFIXES]" >>{{cookiecutter.name}}/urls.py
 
 cat >>{{cookiecutter.name}}/settings.py <<EOF
 # ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE
