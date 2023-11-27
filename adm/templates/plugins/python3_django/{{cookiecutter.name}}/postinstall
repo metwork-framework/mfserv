@@ -28,7 +28,7 @@ EOF
 echo "" >>{{cookiecutter.name}}/urls.py
 echo "# ADDED BY METWORK/MFSERV/DJANGO PLUGIN TEMPLATE" >>{{cookiecutter.name}}/urls.py
 echo "# FOR CONFIGURING main app" >>{{cookiecutter.name}}/urls.py
-echo "from django.urls import path, re_path" >>{{cookiecutter.name}}/urls.py
+echo "from django.urls import re_path" >>{{cookiecutter.name}}/urls.py
 echo "from django.conf.urls import include" >>{{cookiecutter.name}}/urls.py
 echo "urlpatterns.append(re_path(r'^main/', include('main.urls')))" >>{{cookiecutter.name}}/urls.py
 echo "urlpatterns.append(path('', include('main.urls')))" >>{{cookiecutter.name}}/urls.py
