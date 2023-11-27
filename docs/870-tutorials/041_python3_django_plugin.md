@@ -40,15 +40,15 @@ Once build is done, the `foo_django` plugin directory contains additional files 
     - **settings.py**: Settings/configuration for this Django project. [Django settings](https://docs.djangoproject.com/en/stable/topics/settings/) will tell you all about how settings work.
     - **urls.py**: The URL declarations for this Django project; a “table of contents” of your Django-powered site. You can read more about URLs in [URL dispatcher](https://docs.djangoproject.com/en/stable/topics/http/urls/).
     - **wsgi.py**: An entry-point for WSGI-compatible web servers to serve your project.
-    - **static**: Static files of the applications (read more about [The staticfiles app](https://docs.djangoproject.com/en/stable/ref/contrib/staticfiles/) and [Managing static files](https://docs.djangoproject.com/en/2.2/howto/static-files/)).
-- **hello** directory: the `hello` application directory containing the application template files.
+    - **static**: Static files of the applications (read more about [The staticfiles app](https://docs.djangoproject.com/en/stable/ref/contrib/staticfiles/) and [Managing static files](https://docs.djangoproject.com/en/3.2/howto/static-files/)).
+- **main** directory: the `main` application directory containing the application template files.
 
 
-Now, you can check your application works by invoking the following URL: http://localhost:18868/foo_django/hello (you may replace localhost by your remote host if needed). A HTML page must display `Hello World from django app`.
+Now, you can check your application works by invoking the following URL: http://localhost:18868/foo_django/main (you may replace localhost by your remote host if needed). A HTML page must display `Hello World from django main app`.
 
 Now, let's create a data model.
 
-Go to the `hello` directory of the plugin.
+Go to the `main` directory of the plugin.
 
 Edit the `models.py` as below:
 ```python
@@ -79,7 +79,7 @@ Edit the `admin.py` as below:
 from django.contrib import admin
 
 # Register your models here.
-from hello.models import Article
+from main.models import Article
 
 admin.site.register(Article, admin.ModelAdmin)
 ```
@@ -115,10 +115,10 @@ auth_group                  django_admin_log
 auth_group_permissions      django_content_type
 auth_permission             django_migrations
 auth_user                   django_session
-auth_user_groups            hello_article
+auth_user_groups            main_article
 auth_user_user_permissions
 ```
-You should see the `hello_article` is created
+You should see the `main_article` is created
 
 Create a superuser in order to be able to connect to the Django Administration site. Enter:
 ```
@@ -135,10 +135,10 @@ Then click the **Articles** link in order to manipulate `Article` data (view, ad
 ![mfserv_django_tuto_admin_site](../images/mfserv_django_tuto_admin_site.jpg)
 
 
-In order to check the `hello` application access to the database, edit the **hello/views.py** as below:
+In order to check the `main` application access to the database, edit the **main/views.py** as below:
 ```python
 from django.http import HttpResponse
-from hello.models import Article
+from main.models import Article
 
 def index(request):
     article_list = Article.objects.all()
@@ -147,7 +147,7 @@ def index(request):
 
 Build again the plugin (`make develop` command).
 
-Check your application still works by invoking the following URL: http://localhost:18868/foo_django/hello
+Check your application still works by invoking the following URL: http://localhost:18868/foo_django/main
 
 !!! hint
     Set the `debug` parameter to 1 (instead of 0) in the `[app_...]` section of the plugin `config.ini` file, in order to get an **interactive debugger** in your browser: check [Interactive debugger](../../360-mfserv_debug_plugin/#3-interactive-debugger).
