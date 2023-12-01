@@ -1,12 +1,13 @@
 # release_2.2 CHANGELOG
 
-## [Unreleased]
+## v2.2.0 (2023-12-01)
 
 ### New Features
 
 - add release in plugins config.ini files (#564)
 - upgrade jquery from 3.3.1 to 3.5.1 (security update) (#584)
 - use sonarcloud.io for sonarqube checks (#597)
+- rename template python3_django3 in python3_django with django4 (backport #612) (#613)
 
 ### Bug Fixes
 
