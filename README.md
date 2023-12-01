@@ -5,9 +5,7 @@
 
 **Status (master branch)**
 
-
-
-[![GitHub CI](https://github.com/metwork-framework/mfserv/workflows/CI/badge.svg?branch=master)](https://github.com/metwork-framework/mfserv/actions?query=workflow%3ACI+branch%3Amaster)
+[![GitHub CI](https://github.com/metwork-framework/mfserv/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/metwork-framework/mfserv/actions?query=workflow%3ACI+branch%3Amaster)
 [![Maintenance](https://raw.githubusercontent.com/metwork-framework/resources/master/badges/maintained.svg)](https://github.com/metwork-framework/resources/blob/master/badges/maintained.svg)
 [![License](https://github.com/metwork-framework/resources/blob/master/badges/bsd.svg)]()
 [![Gitter](https://github.com/metwork-framework/resources/blob/master/badges/community-en.svg)](https://gitter.im/metwork-framework/community-en?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
