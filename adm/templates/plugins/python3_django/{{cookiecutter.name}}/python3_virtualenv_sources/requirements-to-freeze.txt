@@ -1,3 +1,4 @@
 # python3 requirements.txt file
 # see https://pip.readthedocs.io/en/1.1/requirements.html
-django>=4.2.7
+#django >= 5 requires sqlite >= 3.27 (not available on rocky 8)
+django>=4.2.7,<5
