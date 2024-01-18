@@ -5,6 +5,7 @@
 ### New Features
 
 - rename template python3_django3 in python3_django with django4 (#612)
+- authorize django >=5 (ok with built-in sqlite 3.45 in layer core) (#616)
 
 ### Bug Fixes
 
