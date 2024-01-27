@@ -1,5 +1,11 @@
 # release_2.2 CHANGELOG
 
+## v2.2.1 (2023-12-09)
+
+### Bug Fixes
+
+- requires django<5 (django 5 requires sqlite >= 3.27 not availabl… (backport #614) (#615)
+
 ## v2.2.0 (2023-12-01)
 
 ### New Features
