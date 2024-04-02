@@ -15,6 +15,11 @@ if test "${MFSERV_AUTORESTART_FLAG}" = "1"; then
     _circus_wait_watcher_stopped.sh conf_monitor  || RES=1
     _circus_wait_watcher_stopped.sh plugin:autorestart || RES=1
 fi
+
+{% endblock %}
+
+{% block custom_after_plugins %}
+
 if test "${MFSERV_NGINX_FLAG}" = "1"; then
     _circus_schedule_stop_watcher.sh nginx
     _circus_wait_watcher_stopped.sh nginx
