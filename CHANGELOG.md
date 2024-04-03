@@ -9,6 +9,7 @@
 ### Bug Fixes
 
 - .release_ignore instead of .releaseignore in common.mk (backport #608) (#609)
+- stop plugins before nginx stop (#621) (#623)
 
 ## v2.1.3 (2023-04-07)
 
