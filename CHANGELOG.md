@@ -1,6 +1,6 @@
 # release_2.1 CHANGELOG
 
-## [Unreleased]
+## v2.1.4 (2024-04-03)
 
 ### New Features
 
