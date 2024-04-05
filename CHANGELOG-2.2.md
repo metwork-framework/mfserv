@@ -1,5 +1,11 @@
 # release_2.2 CHANGELOG
 
+## v2.2.2 (2024-04-03)
+
+### Bug Fixes
+
+- stop plugins before nginx stop (#621) (#624)
+
 ## v2.2.1 (2023-12-09)
 
 ### Bug Fixes
