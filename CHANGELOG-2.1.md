@@ -1,5 +1,16 @@
 # release_2.1 CHANGELOG
 
+## v2.1.4 (2024-04-03)
+
+### New Features
+
+- fix link to rpms repository in installation guide (#606)
+
+### Bug Fixes
+
+- .release_ignore instead of .releaseignore in common.mk (backport #608) (#609)
+- stop plugins before nginx stop (#621) (#623)
+
 ## v2.1.3 (2023-04-07)
 
 ### Bug Fixes
