@@ -5,6 +5,7 @@
 ### New Features
 
 - add initscripts, make and crontab as dependencies (backport #628) (#629)
+- add support of the nginx port_in_redirect directive (#627)
 
 ## v2.2.3 (2024-04-05)
 
