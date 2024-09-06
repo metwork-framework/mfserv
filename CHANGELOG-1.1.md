@@ -1,5 +1,11 @@
 # release_1.1 CHANGELOG
 
+## v1.1.6 (2024-09-06)
+
+### Bug Fixes
+
+- fix plugin python3_raw_asgi (#632)
+
 ## v1.1.5 (2021-08-12)
 
 ### Bug Fixes
