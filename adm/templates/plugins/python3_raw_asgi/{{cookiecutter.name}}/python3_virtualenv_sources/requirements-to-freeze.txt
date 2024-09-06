@@ -1,3 +1,5 @@
 # python3 requirements.txt file
 # see https://pip.readthedocs.io/en/1.1/requirements.html
 uvicorn>=0.11,<0.12
+#uvloop >= 0.18.0 is not ok with centos6
+uvloop<0.17.0
