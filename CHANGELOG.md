@@ -5,6 +5,7 @@
 ### Bug Fixes
 
 - fix layerapi2 dependency for plugin nodejs (thanks to ne0t3ric) (backport #542) (#543)
+- fix plugin python3_raw_asgi (#633)
 
 ## v1.2.1 (2022-02-24)
 
