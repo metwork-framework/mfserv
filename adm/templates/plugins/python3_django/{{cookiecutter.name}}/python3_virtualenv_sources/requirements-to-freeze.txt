@@ -1,3 +1,5 @@
 # python3 requirements.txt file
 # see https://pip.readthedocs.io/en/1.1/requirements.html
-django>=4.2.7
+#django4 should be >= 4.2.16 and django5 should be >= 5.0.9
+#to fix CVE-2024-42005 and CVE-2024-45231
+django>=5.0.9
