@@ -1,5 +1,11 @@
 # release_2.2 CHANGELOG
 
+## [Unreleased]
+
+### Bug Fixes
+
+- fix vulnerabilites in django (CVE-2024-45231 and CVE-2024-45230) (backport #634) (#635)
+
 ## v2.2.4 (2024-04-26)
 
 ### New Features
