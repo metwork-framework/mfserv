@@ -65,6 +65,10 @@ uuid_endpoint_extra_allows=null
 # correctly, else HTTP/503
 health_location = /__health
 
+# Enable access log for the healthcheck endpoint
+# (1 => on, 0 => off)
+health_access_log=0
+
 # Advanced settings, change this only if you are sure what you are doing
 # You can introduce a >0 value here to introduce a delay at the very beginning
 # of mfserv stop process to be sure that a possible loadbalancer before mfserv
