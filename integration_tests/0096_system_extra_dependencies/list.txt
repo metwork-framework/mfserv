@@ -53,6 +53,7 @@ libgssapi_krb5.so.2
 libgthread-2.0.so.0
 libharfbuzz.so.0
 libhogweed.so.4
+libhwloc.so.15
 libICE.so.6
 libidn2.so.0
 libjasper.so.4
@@ -71,6 +72,7 @@ liblzma.so.5
 libm.so.6
 libmagic.so.1
 libmount.so.1
+libmpi.so.12
 libncurses.so.6
 libncursesw.so.6
 libnettle.so.6
