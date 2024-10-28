@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-OK_DEPS=$(cat list.txt|xargs)
-OK_NOT_FOUND=$(cat list_ok_not_found.txt |xargs)
+OK_DEPS=$(cat list.txt|grep -v "#"|xargs)
+OK_NOT_FOUND=$(cat list_ok_not_found.txt|grep -v "#"|xargs)
 
 #N=$(cat /etc/redhat-release 2>/dev/null |grep -c "^CentOS release 6")
 #if test "${N}" -eq 0; then
