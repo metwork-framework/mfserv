@@ -9,6 +9,7 @@ libbz2.so.1
 libc.so.6
 libcairo.so.2
 libcairo-gobject.so.2
+libcap.so.2
 libcares.so.2
 libcdt.so.5
 libcgraph.so.6
@@ -118,6 +119,7 @@ libthread_db.so.1
 libtiff.so.5
 libtinfo.so.6
 libtk8.6.so
+libudev.so.1
 libutil.so.1
 libuuid.so.1
 libunistring.so.2
