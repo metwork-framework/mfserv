@@ -16,6 +16,7 @@ libcom_err.so.2
 libcroco-0.6.so.3
 libcrypt.so.1
 libcrypt.so.2
+libcrypto.so.1.1
 libcrypto.so.3
 libdatrie.so.1
 libdl.so.2
