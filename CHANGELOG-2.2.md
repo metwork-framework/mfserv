@@ -1,5 +1,16 @@
 # release_2.2 CHANGELOG
 
+## v2.2.6 (2024-10-26)
+
+- No interesting change
+
+## v2.2.5 (2024-10-25)
+
+### Bug Fixes
+
+- fix vulnerabilites in django (CVE-2024-45231 and CVE-2024-45230) (backport #634) (#635)
+- enable the access log for the healthcheck endpoint (closes #1958) (#637) (#638)
+
 ## v2.2.4 (2024-04-26)
 
 ### New Features
