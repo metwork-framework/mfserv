@@ -1,5 +1,11 @@
 # release_2.2 CHANGELOG
 
+## [Unreleased]
+
+### New Features
+
+- bump django to 4.2.17 (CVE-2024-53907 and CVE-2024-53908) (#643)
+
 ## v2.2.6 (2024-10-26)
 
 - No interesting change
