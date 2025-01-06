@@ -145,16 +145,3 @@ libXtst.so.6
 libwebp.so.7
 libz.so.1
 libzstd.so.1
-#mpich dependencies on fedora>=38 below
-libcap.so.2
-libudev.so.1
-#mpich dependencies on fedora>=39 below
-libefa.so.1
-libfabric.so.1
-libibverbs.so.1
-libnl-3.so.200
-libnl-route-3.so.200
-libnuma.so.1
-libpsm2.so.2
-librdmacm.so.1
-libyaksa.so.0
