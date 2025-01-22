@@ -13,5 +13,7 @@
 
 - requires django<5 (django 5 requires sqlite >= 3.27 not availabl… (#614)
 - stop plugins before nginx stop (#621)
+- fix vulnerabilites in django (CVE-2024-45231 and CVE-2024-45230) (#634)
+- enable the access log for the healthcheck endpoint (closes #1958) (#637)
 
 
