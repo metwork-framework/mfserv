@@ -15,5 +15,6 @@
 - stop plugins before nginx stop (#621)
 - fix vulnerabilites in django (CVE-2024-45231 and CVE-2024-45230) (#634)
 - enable the access log for the healthcheck endpoint (closes #1958) (#637)
+- bump django5 to 5.0.11 (CVE-2024-56374) (#644)
 
 
