@@ -9,6 +9,7 @@ libbz2.so.1
 libc.so.6
 libcairo.so.2
 libcairo-gobject.so.2
+libcap.so.2
 libcares.so.2
 libcdt.so.5
 libcgraph.so.6
@@ -39,6 +40,9 @@ libgdbm_compat.so.4
 libgdk_pixbuf-2.0.so.0
 libgfortran.so.5
 libglib-2.0.so.0
+libGL.so.1
+libGLdispatch.so.0
+libGLX.so.0
 libgio-2.0.so.0
 libgmodule-2.0.so.0
 libgmp.so.10
@@ -56,6 +60,9 @@ libharfbuzz.so.0
 libhogweed.so.4
 libhwloc.so.15
 libICE.so.6
+libicudata.so.60
+libicui18n.so.60
+libicuuc.so.60
 libidn2.so.0
 libjasper.so.4
 libjbig.so.2.1
@@ -93,6 +100,7 @@ libpangoft2-1.0.so.0
 libpathplan.so.4
 libpcre.so.1
 libpcre2-8.so.0
+libpcre2-16.so.0
 libpixman-1.so.0
 libplc4.so
 libplds4.so
@@ -115,6 +123,7 @@ libssh.so.4
 libssl.so.3
 libssl3.so
 libstdc++.so.6
+libsystemd.so.0
 libtasn1.so.6
 libtcl8.6.so
 libthai.so.0
