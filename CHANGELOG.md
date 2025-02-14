@@ -5,6 +5,7 @@
 ### New Features
 
 - bump django to 4.2.17 (CVE-2024-53907 and CVE-2024-53908) (#643)
+- add plugin php (first version, from repository mfservplugin_php) (backport #645) (#647)
 
 ## v2.2.6 (2024-10-26)
 
