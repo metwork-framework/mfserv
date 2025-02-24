@@ -142,6 +142,7 @@ libsharpyuv.so.0
 libsmime3.so
 libSM.so.6
 libssh.so.4
+libssl.so.1.1
 libssl.so.3
 libssl3.so
 libstdc++.so.6
@@ -178,4 +179,5 @@ libXt.so.6
 libXtst.so.6
 libwebp.so.7
 libz.so.1
+libzip.so.5
 libzstd.so.1
