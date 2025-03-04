@@ -9,6 +9,7 @@
 - add support of the nginx port_in_redirect directive (#626)
 - add initscripts, make and crontab as dependencies (#628)
 - add plugin php (first version, from repository mfservplugin_php) (#645)
+- plugin PHP template (#649)
 
 ### Bug Fixes
 
