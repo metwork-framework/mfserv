@@ -109,6 +109,9 @@ MFSERV_SCHEMA_OVERRIDE = {
                 **NON_REQUIRED_STRING_DEFAULT_EMPTY,
                 "check_with": extra_routes_check
             },
+            "_gateway_interface_mode": {
+                **NON_REQUIRED_STRING_DEFAULT_EMPTY
+            },
             "_extra_nginx_conf_filename": {**EXTRA_NGINX_FRAGMENT},
             "_extra_nginx_conf_static_filename": {**EXTRA_NGINX_FRAGMENT},
             "_http_test_endpoint": {**NON_REQUIRED_STRING_DEFAULT_EMPTY},
@@ -417,6 +420,10 @@ class MfservApp(App):
     @property
     def prefix_based_routing_extra_routes(self):
         return self._doc_fragment['prefix_based_routing_extra_routes']
+
+    @property
+    def gateway_interface_mode(self):
+        return self._doc_fragment['_gateway_interface_mode'].strip()
 
     @property
     def extra_nginx_conf_filename(self):

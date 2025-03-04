@@ -1,4 +1,4 @@
-BINS=_make_circus_conf mfserv_conf_monitor.py _make_nginx_conf __make_nginx_conf _plugins.is_dangerous bjoern_wrapper.py plugins.hotswap _plugins.postinstall _check_circus_conf _check_nginx_conf signal_wrapper.py
+BINS=_make_circus_conf mfserv_conf_monitor.py _make_nginx_conf __make_nginx_conf _plugins.is_dangerous bjoern_wrapper.py plugins.hotswap _plugins.postinstall _check_circus_conf _check_nginx_conf signal_wrapper.py php_wrapper
 
 include root.mk
 include $(MFEXT_HOME)/share/subdir_root.mk

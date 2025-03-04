@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# PHP wrapper : make configuration files for php-fpm and launch main process
+# arguments :
+#   $1 : plugin_name
+#   $2 : app_name
+#   $3 : unix socket path used to tell with php-fpm process
+
+export MFMODULE_RUNTIME_GROUP=metwork
+export PHPFPMCONF=${MFMODULE_RUNTIME_HOME}/tmp/config_auto/php-fpm."$1".conf
+export WWWCONF=${MFMODULE_RUNTIME_HOME}/tmp/config_auto/www."$1".conf
+export PHP_SOCKET_PATH="$3"
+export PHP_LOGFILE_PATH=${MFMODULE_RUNTIME_HOME}/log/app_"$1"_"$2".log
+
+cat ${MFEXT_HOME}/opt/php/etc/php-fpm.conf | envtpl > "${PHPFPMCONF}"
+cat ${MFEXT_HOME}/opt/php/etc/php-fpm.d/www.conf | envtpl > ${WWWCONF}
+
+exec ${MFEXT_HOME}/opt/php/sbin/php-fpm --nodaemonize --force-stderr --fpm-config="${PHPFPMCONF}"
+
