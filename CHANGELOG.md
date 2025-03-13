@@ -9,6 +9,8 @@
 - add support of the nginx port_in_redirect directive (#626)
 - add initscripts, make and crontab as dependencies (#628)
 - add plugin php (first version, from repository mfservplugin_php) (#645)
+- plugin PHP template (#649)
+- bump django to 5.0.13 in template django to fix CVE-2025-26699 (#650)
 
 ### Bug Fixes
 
