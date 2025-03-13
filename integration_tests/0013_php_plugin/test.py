@@ -29,7 +29,7 @@ while (now_fn() - before).total_seconds() <= 30:
     except Exception:
         continue
     if x.status_code == 200:
-        if "Hello World !" in x.text:
+        if "Hello world !" in x.text:
             code = 0
             break
 
