@@ -13,6 +13,9 @@ echo -e "gpgcheck=0\n\enabled=1\n\metadata_expire=0\n" >>/etc/yum.repos.d/metwor
 
     yum -y localinstall ./rpms/metwork-mfserv*.rpm
     yum -y install make
+
+    yum -y install metwork-mfext-layer-php-${DEP_BRANCH}
+
     su --command="mfserv.init" - mfserv
     su --command="mfserv.start" - mfserv
     su --command="mfserv.status" - mfserv
