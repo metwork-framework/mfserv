@@ -6,6 +6,12 @@ import requests
 import os
 import time
 from mfutil import BashWrapperOrRaise
+import subprocess
+
+php_installed = subprocess.getoutput("is_layer_installed php@mfext")
+if php_installed == '0':
+    print("layer php@mfext is missing, we don't run the test")
+    sys.exit(0)
 
 NGINX_PORT = int(os.environ['MFSERV_NGINX_PORT'])
 
@@ -28,10 +34,9 @@ while (now_fn() - before).total_seconds() <= 30:
         x = requests.get(url, timeout=3)
     except Exception:
         continue
-    if x.status_code == 200:
-        if "Hello world !" in x.text:
-            code = 0
-            break
+    if x.status_code == 200 and "Hello world !" in x.text:
+        code = 0
+        break
 
 if code != 0:
     print("ERROR: can't get a valid output")
