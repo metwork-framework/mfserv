@@ -11,6 +11,7 @@
 - add plugin php (first version, from repository mfservplugin_php) (#645)
 - plugin PHP template (#649)
 - bump django to 5.0.13 in template django to fix CVE-2025-26699 (#650)
+- fallback to index.php script on / ended urls (#654)
 
 ### Bug Fixes
 
