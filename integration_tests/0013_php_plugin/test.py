@@ -28,7 +28,7 @@ before = now_fn()
 code = 1
 while (now_fn() - before).total_seconds() <= 30:
     time.sleep(1)
-    url = "http://127.0.0.1:%i/foophp/index.php" % NGINX_PORT
+    url = "http://127.0.0.1:%i/foophp" % NGINX_PORT
     print("trying GET %s..." % url)
     try:
         x = requests.get(url, timeout=3)
