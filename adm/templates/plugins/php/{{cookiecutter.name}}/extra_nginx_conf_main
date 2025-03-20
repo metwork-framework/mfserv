@@ -1,6 +1,0 @@
-set $plugin_script $request_filename/index.php;
-add_header X-debug-message-regexp $1 always;
-add_header X-debug-message-pluginscript $plugin_script always;
-add_header X-debug-message-rqfn $request_filename always;
-add_header X-debug-message-doc $document_root--$fastcgi_script_name always;
-fastcgi_param  SCRIPT_FILENAME    $plugin_script;
