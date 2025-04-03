@@ -9,7 +9,7 @@ plugins:
       glob:
         - "_*.md"
         - "850-reference/_*.md"
-  - awesome-pages
+  - awesome-nav
   - macros:
       module_name: mkdocs_main
   - search
