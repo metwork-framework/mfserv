@@ -1,2 +1,1 @@
 libcuda.so.1
-liblttng-ust.so.0
