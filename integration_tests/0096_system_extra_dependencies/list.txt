@@ -97,8 +97,6 @@ libkrb5support.so.0
 liblapack.so.3
 libLerc.so.4
 libltdl.so.7
-liblttng-ust.so.0
-liblttng-ust-tracepoint.so.0
 liblz4.so.1
 liblzma.so.5
 libm.so.6
@@ -113,7 +111,6 @@ libnsl.so.1
 libnspr4.so
 libnss3.so
 libnssutil3.so
-libnuma.so.1
 libonig.so.5
 libopenblas.so.0
 libopenjp2.so.7
@@ -157,9 +154,6 @@ libthread_db.so.1
 libtiff.so.5
 libtinfo.so.6
 libtk8.6.so
-liburcu-bp.so.6
-liburcu-cds.so.6
-liburcu-common.so.6
 libutil.so.1
 libuuid.so.1
 libunistring.so.2
