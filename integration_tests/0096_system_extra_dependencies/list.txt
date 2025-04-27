@@ -109,6 +109,8 @@ libncurses.so.6
 libncursesw.so.6
 libnettle.so.6
 libnghttp2.so.14
+libnl-3.so.200
+libnl-route-3.so.200
 libnsl.so.1
 libnspr4.so
 libnss3.so
