@@ -61,6 +61,7 @@ libgthread-2.0.so.0
 libharfbuzz.so.0
 libhogweed.so.4
 libhwloc.so.15
+libibverbs.so.1
 libICE.so.6
 libicudata.so.60
 libicudata.so.67
@@ -101,6 +102,7 @@ liblz4.so.1
 liblzma.so.5
 libm.so.6
 libmagic.so.1
+libmlx5.so.1
 libmount.so.1
 libmpi.so.12
 libncurses.so.6
@@ -134,6 +136,7 @@ libQt5Core.so.5
 libQt5Gui.so.5
 libQt5Widgets.so.5
 libquadmath.so.0
+librdmacm.so.1
 libresolv.so.2
 librt.so.1
 librsvg-2.so.2
