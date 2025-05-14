@@ -1,5 +1,16 @@
 # release_2.2 CHANGELOG
 
+## v2.2.7 (2025-03-13)
+
+### New Features
+
+- bump django to 4.2.17 (CVE-2024-53907 and CVE-2024-53908) (#643)
+- add plugin php (first version, from repository mfservplugin_php) (backport #645) (#647)
+
+### Bug Fixes
+
+- bump django to 4.2.20 in template django to fix CVE-2025-26699 (#651)
+
 ## v2.2.6 (2024-10-26)
 
 - No interesting change
