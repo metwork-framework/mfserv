@@ -1,7 +1,8 @@
 # automatically generated from https://github.com/metwork-framework/github_organization_management/blob/master/common_files/mergify.yml)
 
 pull_request_rules:
-- name: backports
+
+  - name: backports
     conditions:
       - "title~=^.*\\(bp #[0-9][0-9]*\\)$"
       - -merged
@@ -106,7 +107,8 @@ pull_request_rules:
       backport:
         branches:
           - release_2.3
-- name: approved merges
+
+  - name: approved merges
     actions:
       merge:
         method: squash
@@ -116,16 +118,20 @@ pull_request_rules:
           {{ body }}
       delete_head_branch: {}
     conditions:
-- base!=master
-- -merged
+
+      - base!=master
+
+      - -merged
       - -closed
       - "#approved-reviews-by>=1"
       - -title~=(WIP|wip)
       - "label!=Status: Blocked"
       - "title~=^(build|chore|ci|docs|style|refactor|perf|test|fix|fea\
         t|fix|feat|feat!|fix!)(\\([a-z]+\\))?: .*$"
-- status-success=license/cla
-- name: change title
+
+      - status-success=license/cla
+
+  - name: change title
     actions:
       comment:
         message: |
@@ -139,23 +145,29 @@ pull_request_rules:
 
           As the title will be used for the commit message (and so for changelog entry if `feat:` or `fix:`).
     conditions:
-- base!=master
-- -merged
+
+      - base!=master
+
+      - -merged
       - -closed
       - "#approved-reviews-by>=1"
       - -title~=(WIP|wip)
       - "label!=Status: Blocked"
       - "-title~=^(build|chore|ci|docs|style|refactor|perf|test|fix|fe\
         at|fix|feat|feat!|fix!)(\\([a-z]+\\))?: .*$"
-- status-success=license/cla
-- name: buildbot auto merges
+
+      - status-success=license/cla
+
+  - name: buildbot auto merges
     actions:
       review:
         type: APPROVE
         message: automatic approve because author=metworkbot
     conditions:
-- base!=master
-- -merged
+
+      - base!=master
+
+      - -merged
       - -closed
       - author=metworkbot
       - -title~=(WIP|wip)
@@ -166,8 +178,10 @@ pull_request_rules:
         type: APPROVE
         message: "automatic approve because label=Status: Merge Now"
     conditions:
-- base!=master
-- -merged
+
+      - base!=master
+
+      - -merged
       - -closed
       - -title~=(WIP|wip)
       - "label=Status: Merge Now"
@@ -186,8 +200,10 @@ pull_request_rules:
           - "Status: Merged"
           - "Status: Merge Now"
     conditions:
-- base!=master
-- -merged
+
+      - base!=master
+
+      - -merged
       - -closed
       - title~=(WIP|wip)
       - "label!=Status: Blocked"
@@ -206,8 +222,10 @@ pull_request_rules:
           - "Status: Merged"
           - "Status: Merge Now"
     conditions:
-- base!=master
-- -merged
+
+      - base!=master
+
+      - -merged
       - -closed
       - -title~=(WIP|wip)
       - "label!=Status: Blocked"
@@ -229,8 +247,10 @@ pull_request_rules:
           - "Status: Merged"
           - "Status: Merge Now"
     conditions:
-- base!=master
-- -merged
+
+      - base!=master
+
+      - -merged
       - -closed
       - "#changes-requested-reviews-by>=1"
       - "label!=Status: Blocked"
@@ -249,25 +269,24 @@ pull_request_rules:
           - "Status: Merged"
           - "Status: Merge Now"
     conditions:
-- base!=master
-- -merged
+
+      - base!=master
+
+      - -merged
       - -closed
       - conflict
       - "label!=Status: Blocked"
-- name: master branch
+
+  - name: master branch
     actions:
       comment:
-        message: >
+        message: |
           Thank you for contributing to this project.
 
-
           But we don't accept pull requests on `master` branch as said in our
-
           contributing guide.
 
-
           => You have to change the base branch of your pull request to
-
           `integration` branch.
 
            It's very easy to do that by following this [github guide](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/changing-the-base-branch-of-a-pull-request).
@@ -288,7 +307,8 @@ pull_request_rules:
     conditions:
       - base=master
       - -closed
-- name: closed
+
+  - name: closed
     actions:
       label:
         add:
