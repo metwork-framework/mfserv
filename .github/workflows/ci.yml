@@ -78,7 +78,7 @@ jobs:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
           repository: metwork-framework/docker-mfservplugins-centos8-buildimage
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
-          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": ${{ github.ref_name }}, "os": "${{ steps.SetVariables.outputs.os }}"}'
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "${{ github.ref_name }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
       - name: dispatch plugins image rocky9 from centos8
         if: ${{ github.ref_type == 'tag' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
@@ -86,7 +86,7 @@ jobs:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
           repository: metwork-framework/docker-mfservplugins-rocky9-image
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
-          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": ${{ github.ref_name }}, "os": "${{ steps.SetVariables.outputs.os }}"}'
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "${{ github.ref_name }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
 
 
 
