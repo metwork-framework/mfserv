@@ -70,23 +70,112 @@ jobs:
           docker run ${DOCKER_RUN_OPTIONS} -e TARGET_DIR=${TARGET_DIR} -e BRANCH=${BRANCH} -e DEP_BRANCH=${DEP_BRANCH} -e TAG=${TAG} -e OS_VERSION=${OS_VERSION} --rm ${BUILDIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/build.sh"
           cat  ${{ github.workspace }}/github_output >> ${GITHUB_OUTPUT}
 
+      - name: publish buildlogs
+        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
+        uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
+        env:
+          REMOTE: ${{ steps.SetVariables.outputs.buildlog_dir }}
+          LOCAL: ${{ github.workspace }}/buildlogs
+        with:
+          host: ${{ secrets.METWORKPUB_HOST }}
+          user: ${{ secrets.METWORKPUB_USERNAME }}
+          pass: ${{ secrets.METWORKPUB_PASSWORD }}
+          port: 22
+          first_ssh: |
+            mkdir -p ${REMOTE}
+          scp: |
+            '${LOCAL}/*' => ${REMOTE}
+      - name: integration tests
+        if: ${{ steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' }}
+        run: |
+          TESTIMAGE=${{ steps.SetVariables.outputs.testimage }}
+          DEP_BRANCH=${{ steps.SetVariables.outputs.dep_branch }}
+          BRANCH=${{ steps.SetVariables.outputs.branch }}
+          OS_VERSION=${{ steps.SetVariables.outputs.os }}
+          docker pull ${TESTIMAGE}
+          docker run ${DOCKER_RUN_OPTIONS} -e DEP_BRANCH=${DEP_BRANCH} -e BRANCH=${BRANCH} -e OS_VERSION=${OS_VERSION} --rm ${TESTIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/integration_tests.sh"
+      - name: publish rpms
+        if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
+        uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
+        env:
+          REMOTE: ${{ steps.SetVariables.outputs.rpm_dir }}
+          LOCAL: ${{ github.workspace }}/rpms
+        with:
+          host: ${{ secrets.METWORKPUB_HOST }}
+          user: ${{ secrets.METWORKPUB_USERNAME }}
+          pass: ${{ secrets.METWORKPUB_PASSWORD }}
+          port: 22
+          first_ssh: |
+            mkdir -p ${REMOTE}
+          scp: |
+            '${LOCAL}/metwork-*.rpm' => ${REMOTE}
+      - name: createrepo
+        if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
+        uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
+        env:
+          REMOTE: ${{ steps.SetVariables.outputs.rpm_dir }}
+          LOCAL: ${{ github.workspace }}/.github/workflows
+        with:
+          host: ${{ secrets.METWORKPUB_HOST }}
+          user: ${{ secrets.METWORKPUB_USERNAME }}
+          pass: ${{ secrets.METWORKPUB_PASSWORD }}
+          port: 22
+          scp: |
+            '${LOCAL}/createrepo.sh' => ${REMOTE}
+          last_ssh: |
+            cd ${REMOTE}
+            chmod +x createrepo.sh
+            ./createrepo.sh .
+      - name: publish doc
+        if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
+        uses: thebaptiste/ssh-scp-ssh-pipelines@metwork
+        env:
+          REMOTE: ${{ steps.SetVariables.outputs.doc_dir }}
+          LOCAL: ${{ github.workspace }}/html_doc
+        with:
+          host: ${{ secrets.METWORKPUB_HOST }}
+          user: ${{ secrets.METWORKPUB_USERNAME }}
+          pass: ${{ secrets.METWORKPUB_PASSWORD }}
+          port: 22
+          first_ssh: |
+            rm -rf ${REMOTE}
+            mkdir -p ${REMOTE}
+          scp: |
+            '${LOCAL}/*' => ${REMOTE}
 
-      - name: dispatch plugins image rocky8 from centos8
-        if: ${{ github.ref_type == 'tag' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
+
+      - name: dispatch plugins buildimage centos7 from centos6
+        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos6' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.METWORK_ACCESS_TOKEN }}
+          repository: metwork-framework/docker-mfservplugins-centos7-buildimage
+          event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
+      - name: dispatch plugins buildimage centos8 from centos6
+        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos6' }}
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
           repository: metwork-framework/docker-mfservplugins-centos8-buildimage
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
-          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "${{ github.ref_name }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
+      - name: dispatch plugins buildimage centos8 from centos8
+        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.METWORK_ACCESS_TOKEN }}
+          repository: metwork-framework/docker-mfservplugins-centos8-buildimage
+          event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
       - name: dispatch plugins image rocky9 from centos8
-        if: ${{ github.ref_type == 'tag' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
+        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
           repository: metwork-framework/docker-mfservplugins-rocky9-image
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
-          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "${{ github.ref_name }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
 
 
 
