@@ -72,7 +72,7 @@ jobs:
 
 
       - name: dispatch plugins image rocky8 from centos8
-        if: ${{ startsWith(github.ref, 'refs/tags/') && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
+        if: ${{ github.ref_type == 'tag' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
@@ -80,7 +80,7 @@ jobs:
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
           client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": ${{ github.ref_name }}, "os": "${{ steps.SetVariables.outputs.os }}"}'
       - name: dispatch plugins image rocky9 from centos8
-        if: ${{ startsWith(github.ref, 'refs/tags/') && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
+        if: ${{ github.ref_type == 'tag' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
