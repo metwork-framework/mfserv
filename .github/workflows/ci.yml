@@ -71,7 +71,7 @@ jobs:
           cat  ${{ github.workspace }}/github_output >> ${GITHUB_OUTPUT}
 
 
-      - name: dispatch plugins image rocky8 from centos8
+      - name: dispatch plugins image rocky8 from centos8 tag
         if: ${{ github.ref_type == 'tag' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
         with:
