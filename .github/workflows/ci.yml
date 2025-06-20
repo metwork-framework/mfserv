@@ -144,7 +144,7 @@ jobs:
             '${LOCAL}/*' => ${REMOTE}
 
 
-      - name: dispatch plugins buildimage centos8 from centos8
+      - name: dispatch plugins buildimage rocky8 from rocky8
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
         with:
@@ -152,7 +152,7 @@ jobs:
           repository: metwork-framework/docker-mfservplugins-centos8-buildimage
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
           client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
-      - name: dispatch plugins image rocky9 from centos8
+      - name: dispatch plugins image rocky9 from rocky8
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
         with:
