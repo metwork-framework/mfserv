@@ -160,16 +160,16 @@ jobs:
           repository: metwork-framework/docker-mfservplugins-rocky9-image
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
           client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "${{ github.ref_name }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
-      - name: dispatch plugins buildimage rocky8 from rocky8 integration
-        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch == 'integration' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
+      - name: dispatch plugins buildimage rocky8 from rocky8 
+        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
           repository: metwork-framework/docker-mfservplugins-centos8-buildimage
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
           client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "null", "os": "${{ steps.SetVariables.outputs.os }}"}'
-      - name: dispatch plugins buildimage rocky9 from rocky8 integration
-        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.SetVariables.outputs.branch == 'integration' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
+      - name: dispatch plugins buildimage rocky9 from rocky8
+        if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
