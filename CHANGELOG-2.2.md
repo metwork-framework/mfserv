@@ -1,5 +1,11 @@
 # release_2.2 CHANGELOG
 
+## v2.2.8 (2025-06-11)
+
+### New Features
+
+- bump django to 4.2.22 to fix CVE-2025-48432 (#659)
+
 ## v2.2.7 (2025-03-13)
 
 ### New Features
