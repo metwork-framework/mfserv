@@ -145,22 +145,30 @@ jobs:
             '${LOCAL}/*' => ${REMOTE}
 
 
-      - name: dispatch plugins buildimage rocky8 from rocky8 tag
+      - name: dispatch plugins rocky8 from rocky8 tag
         if: ${{ github.ref_type == 'tag' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
-          repository: metwork-framework/docker-mfservplugins-centos8-buildimage
+          repository: metwork-framework/docker-mfxxx-plugins
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
-          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "${{ github.ref_name }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
-      - name: dispatch plugins image rocky9 from rocky8 tag
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "${{ github.ref_name }}", "repo": "${{ REPO }}, "rocky_version": "8"}'
+      - name: dispatch plugins rocky9 from rocky8 tag
         if: ${{ github.ref_type == 'tag' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.METWORK_ACCESS_TOKEN }}
-          repository: metwork-framework/docker-mfservplugins-rocky9-image
+          repository: metwork-framework/docker-mfxxx-plugins
           event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
-          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "${{ github.ref_name }}", "os": "${{ steps.SetVariables.outputs.os }}"}'
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "${{ github.ref_name }}", "repo": "${{ REPO }}, "rocky_version": "9"}'
+      - name: dispatch plugins rocky10 from rocky8 tag
+        if: ${{ github.ref_type == 'tag' && steps.SetVariables.outputs.branch != 'null' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.METWORK_ACCESS_TOKEN }}
+          repository: metwork-framework/docker-mfxxx-plugins
+          event-type: metwork-trigger-${{ steps.SetVariables.outputs.branch }}
+          client-payload: '{"branch": "${{ steps.SetVariables.outputs.branch }}", "tag": "${{ github.ref_name }}", "repo": "${{ REPO }}, "rocky_version": "10"}'
       - name: dispatch plugins buildimage rocky8 from rocky8 
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.skip_dispatch == 'false' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.os == 'centos8' }}
         uses: peter-evans/repository-dispatch@v3
