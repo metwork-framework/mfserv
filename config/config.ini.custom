@@ -11,10 +11,35 @@
 # IMPORTANT: this is the main port of the mfserv module
 # Note: you can use <1024 value here (80 for example) but ports <1024 need
 #       an extra configuration step as root user:
-#       => setcap cap_net_bind_service=+ep "{{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx"
-#       (and)
-#       => touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service
-#          (for this change survives after a metwork update)
+#
+#       On rocky 8
+#         - with Metwork >= 2.3 :
+#           - ln -s  {{MFEXT_HOME}}/opt/core/lib/libssl.so.3 /usr/lib64 (if libssl.so.3 is not available on /usr/lib64)
+#           - ln -s  {{MFEXT_HOME}}/opt/core/lib/libcrypto.so.3 /usr/lib64 (if libcrypto.so.3 is not available on /usr/lib64)
+#         - setcap cap_net_bind_service=+ep "{{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx"
+#         - touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service
+#           (for this change survives after a metwork update)
+#
+#       On rocky 9
+#         - with Metwork == 2.2 :
+#           - yum install compat-openssl11 (if not installed)
+#         - setcap cap_net_bind_service=+ep "{{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx"
+#         - touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service
+#           (for this change survives after a metwork update)
+#
+#       On rocky >= 10
+#         - ln -s  {{MFEXT_HOME}}/opt/core/lib/libpcre.so.1 /usr/lib64 (if libpcre.so.1 is not available on /usr/lib64)
+#         - with Metwork <= 2.2 :
+#           - ln -s  {{MFEXT_HOME}}/opt/core/lib/libssl.so.1.1 /usr/lib64 (if libssl.so.1.1 is not available on /usr/lib64)
+#           - ln -s  {{MFEXT_HOME}}/opt/core/lib/libcrypto.so.1.1 /usr/lib64 (if libcrypto.so.1.1 is not available on /usr/lib64)
+#         - setcap cap_net_bind_service=+ep "{{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx"
+#         - touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service
+#           (for this change survives after a metwork update)
+#
+# Or use another method than setcap :
+# see https://linuxconfig.org/how-to-bind-a-rootless-container-to-a-privileged-port-on-linux
+#
+# To remove the capability set by setcap, use : setcap -r "{{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx"
 port=18868
 
 # Max body size for incoming http requests (in MB)
