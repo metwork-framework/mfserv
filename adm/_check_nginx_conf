@@ -2,10 +2,37 @@
 
 function set_capa_doc() {
     echo_bold "=> If you use a value < 1024 as [nginx]/$1"
+<<<<<<< HEAD
     echo_bold "=> you have to execute (as root): setcap cap_net_bind_service=+ep \"$2\""
     echo_bold ""
     echo_bold "(this manual setting will be lost after a metwork update unless you do (as root):"
     echo_bold " touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service)"
+=======
+    echo_bold "=> you have to execute (as root):"
+    echo_bold " "
+    echo_bold "=> On rocky 8 :"
+    echo_bold "=> - ln -s ${MFEXT_HOME}/opt/core/lib/libssl.so.3 /usr/lib64 (if libssl.so.3 is not available on /usr/lib64)"
+    echo_bold "=> - ln -s ${MFEXT_HOME}/opt/core/lib/libcrypto.so.3 /usr/lib64 (if libcrypto.so.3 is not available on /usr/lib64)"
+    echo_bold "=> - setcap cap_net_bind_service=+ep \"$2\""
+    echo_bold "=> - touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service"
+    echo_bold "=>   (for this change survives after a metwork update)"
+    echo_bold " "
+    echo_bold "=> On rocky 9 :"
+    echo_bold "=> - setcap cap_net_bind_service=+ep \"$2\""
+    echo_bold "=> - touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service"
+    echo_bold "=>   (for this change survives after a metwork update)"
+    echo_bold " "
+    echo_bold "=> On rocky 10"
+    echo_bold "=> - ln -s ${MFEXT_HOME}/opt/core/lib/libpcre.so.1 /usr/lib64 (if libpcre.so.1 is not available on /usr/lib64)"
+    echo_bold "=> - setcap cap_net_bind_service=+ep \"$2\""
+    echo_bold "=> - touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service"
+    echo_bold "=>   (for this change survives after a metwork update)"
+    echo_bold " "
+    echo_bold "Or use another method than using setcap :"
+    echo_bold "=> https://linuxconfig.org/how-to-bind-a-rootless-container-to-a-privileged-port-on-linux"
+    echo_bold " "
+    echo_bold "To remove the capability set by setcap, use : setcap -r \"$2\""
+>>>>>>> cdf4a20 (build: fix for setcap on Metwork 2.3 (#680))
 }
 
 RES=0
