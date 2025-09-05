@@ -11,12 +11,6 @@
 # IMPORTANT: this is the main port of the mfserv module
 # Note: you can use <1024 value here (80 for example) but ports <1024 need
 #       an extra configuration step as root user:
-<<<<<<< HEAD
-#       => setcap cap_net_bind_service=+ep "{{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx"
-#       (and)
-#       => touch /etc/metwork.config.d/mfserv/set_cap_net_bind_service
-#          (for this change survives after a metwork update)
-=======
 #
 #       On rocky 8
 #         - ln -s  {{MFEXT_HOME}}/opt/core/lib/libssl.so.3 /usr/lib64 (if libssl.so.3 is not available on /usr/lib64)
@@ -40,7 +34,6 @@
 # see https://linuxconfig.org/how-to-bind-a-rootless-container-to-a-privileged-port-on-linux
 #
 # To remove the capability set by setcap, use : setcap -r "{{MFEXT_HOME}}/opt/openresty/nginx/sbin/nginx"
->>>>>>> cdf4a20 (build: fix for setcap on Metwork 2.3 (#680))
 port=18868
 
 # Max body size for incoming http requests (in MB)
