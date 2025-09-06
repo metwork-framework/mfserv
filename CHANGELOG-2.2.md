@@ -1,5 +1,11 @@
 # release_2.2 CHANGELOG
 
+## v2.2.9 (2025-09-05)
+
+### New Features
+
+- add comments to explain how to resolve setcap problems (backport #677) (#678)
+
 ## v2.2.8 (2025-06-11)
 
 ### New Features
