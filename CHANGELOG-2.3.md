@@ -1,5 +1,11 @@
 # release_2.3 CHANGELOG
 
+## v2.3.3 (2025-09-05)
+
+### New Features
+
+- add comments to explain how to resolve setcap problems (#677) (#679)
+
 ## v2.3.2 (2025-07-16)
 
 - No interesting change
