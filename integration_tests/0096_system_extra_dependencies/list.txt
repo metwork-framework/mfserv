@@ -146,6 +146,7 @@ libselinux.so.1
 libsharpyuv.so.0
 libsmime3.so
 libSM.so.6
+libsnappy.so.1
 libssh.so.4
 libssl.so.1.1
 libssl.so.3
