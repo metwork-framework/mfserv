@@ -108,7 +108,7 @@ fi
 if test "${HTTP_PROXY:-}" != ""; then
     echo "export HTTP_PROXY:=${HTTP_PROXY:-}" >>adm/root.mk
 fi
-echo "export PYTHON3_SHORT_VERSION := 3.12" >>adm/root.mk
+echo "export PYTHON3_SHORT_VERSION := 3.13" >>adm/root.mk
 
 echo "BOOTSTRAP DONE !"
 echo "MFEXT_HOME=${MFEXT_HOME}"
