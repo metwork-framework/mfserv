@@ -1,7 +1,7 @@
 # python3 requirements.txt file
 # see https://pip.readthedocs.io/en/1.1/requirements.html
-#django4 should be >= 4.2.22 (LTS) and django5 should be >= 5.1.10 or >= 5.2.2 (LTS)
+#django4 should be >= 4.2.24 (LTS) and django5 should be >= 5.1.12 or >= 5.2.6 (LTS)
 #to fix CVE-2024-53908, CVE-2024-53907, CVE-2024-56374, CVE-2025-26699,
-#CVE-2025-27556 and CVE-2025-48432
+#CVE-2025-27556, CVE-2025-48432 and CVE-2025-57833
 #django 5.0 (5.0.14) has reach its eol
-django>=5.2.2
+django>=5.2.6
