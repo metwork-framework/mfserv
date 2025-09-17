@@ -1,5 +1,11 @@
 # release_2.2 CHANGELOG
 
+## v2.2.10 (2025-09-16)
+
+### New Features
+
+- force django >= 4.2.24 in plugin django (CVE-2025-57833) (#684)
+
 ## v2.2.9 (2025-09-05)
 
 ### New Features
