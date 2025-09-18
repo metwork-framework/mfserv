@@ -1,5 +1,11 @@
 # release_2.3 CHANGELOG
 
+## v2.3.4 (2025-09-17)
+
+### New Features
+
+- force django >= 5.2.6 in plugin python3_django (CVE-2025-57833) (#682) (#683)
+
 ## v2.3.3 (2025-09-05)
 
 ### New Features
