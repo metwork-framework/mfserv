@@ -1,5 +1,11 @@
 # release_2.3 CHANGELOG
 
+## [Unreleased]
+
+### New Features
+
+- bump django >= 5.2.7 (fix CVE-2025-57833) (#685) (#687)
+
 ## v2.3.4 (2025-09-17)
 
 ### New Features
