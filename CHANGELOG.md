@@ -1,10 +1,11 @@
 # release_2.3 CHANGELOG
 
-## [Unreleased]
+## v2.3.5 (2025-10-17)
 
 ### New Features
 
 - bump django >= 5.2.7 (fix CVE-2025-57833) (#685) (#687)
+- add check_delay in circus arbiter config setting (backport #688) (#689)
 
 ## v2.3.4 (2025-09-17)
 
