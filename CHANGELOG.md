@@ -8,5 +8,6 @@
 - add comments to explain how to resolve setcap problems (#677)
 - force django >= 5.2.6 in plugin python3_django (CVE-2025-57833) (#682)
 - bump django >= 5.2.7 (fix CVE-2025-57833) (#685)
+- add check_delay in circus arbiter config setting (#688)
 
 
