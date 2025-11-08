@@ -1,5 +1,11 @@
 # release_2.0 CHANGELOG
 
+## v2.0.5 (2025-11-07)
+
+### Bug Fixes
+
+- fix plugin_raw_asgi (#694)
+
 ## v2.0.4 (2024-04-05)
 
 - No interesting change
