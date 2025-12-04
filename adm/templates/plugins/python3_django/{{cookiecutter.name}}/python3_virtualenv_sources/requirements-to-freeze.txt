@@ -1,7 +1,8 @@
 # python3 requirements.txt file
 # see https://pip.readthedocs.io/en/1.1/requirements.html
 #django >= 5 requires sqlite >= 3.27 (not available on rocky 8)
-#django4 should be >= 4.2.26
+#django4 should be >= 4.2.27
 #to fix CVE-2024-53907, CVE-2024-53908, CVE-2025-26699, CVE-2025-27556
-#CVE-2025-57833, CVE-2025-57833, CVE-2025-64458 and CVE-2025-64459
-django>=4.2.26,<5
+#CVE-2025-57833, CVE-2025-57833, CVE-2025-64458, CVE-2025-64459,
+#CVE-2025-64460 and CVE-2025-13372
+django>=4.2.27,<5
