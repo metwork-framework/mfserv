@@ -46,11 +46,12 @@ libgdbm.so.6
 libgdbm_compat.so.4
 libgdk_pixbuf-2.0.so.0
 libgfortran.so.5
-libglib-2.0.so.0
+libgio-2.0.so.0
 libGL.so.1
 libGLdispatch.so.0
+libglib-2.0.so.0
 libGLX.so.0
-libgio-2.0.so.0
+libglycin-2.so.0
 libgmodule-2.0.so.0
 libgmp.so.10
 libgnutls.so.30
@@ -76,6 +77,7 @@ libicudata.so.72
 libicudata.so.73
 libicudata.so.74
 libicudata.so.76
+libicudata.so.77
 libicui18n.so.60
 libicui18n.so.67
 libicui18n.so.69
@@ -84,6 +86,7 @@ libicui18n.so.72
 libicui18n.so.73
 libicui18n.so.74
 libicui18n.so.76
+libicui18n.so.77
 libicuuc.so.60
 libicuuc.so.67
 libicuuc.so.69
@@ -92,6 +95,7 @@ libicuuc.so.72
 libicuuc.so.73
 libicuuc.so.74
 libicuuc.so.76
+libicuuc.so.77
 libidn2.so.0
 libjbig.so.2.1
 libjpeg.so.62
@@ -101,6 +105,7 @@ libkeyutils.so.1
 libkrb5.so.3
 libkrb5support.so.0
 liblapack.so.3
+liblcms2.so.2
 libLerc.so.4
 libltdl.so.7
 liblz4.so.1
@@ -155,6 +160,7 @@ librdmacm.so.1
 libresolv.so.2
 librt.so.1
 librsvg-2.so.2
+libseccomp.so.2
 libselinux.so.1
 libsharpyuv.so.0
 libsmime3.so
