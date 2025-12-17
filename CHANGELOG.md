@@ -12,4 +12,8 @@
 - bump django >= 5.2.8 (fix CVE-2025-64458 and 64459)  (#691)
 - bump django to 5.2.9 to fix CVE-2025-13372 and CVE-2025-64460  (#696)
 
+### Bug Fixes
+
+- problem initializing php-fpm with multiple apps plugin (#699)
+
 
