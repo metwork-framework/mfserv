@@ -1,5 +1,11 @@
 # release_2.3 CHANGELOG
 
+## v2.3.8 (2025-12-16)
+
+### Bug Fixes
+
+- problem initializing php-fpm with multiple apps plugin (#699) (#700)
+
 ## v2.3.7 (2025-12-04)
 
 ### New Features
