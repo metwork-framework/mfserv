@@ -1,5 +1,11 @@
 # release_2.3 CHANGELOG
 
+## v2.3.9 (2026-02-05)
+
+### New Features
+
+- bump django to 5.2.11 to fix high CVE 2026 1207, 1287 and 1312 (backport #701) (#702)
+
 ## v2.3.8 (2025-12-16)
 
 ### Bug Fixes
