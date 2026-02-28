@@ -1,5 +1,9 @@
 # release_2.3 CHANGELOG
 
+## v2.3.10 (2026-02-06)
+
+- No interesting change
+
 ## v2.3.9 (2026-02-05)
 
 ### New Features
