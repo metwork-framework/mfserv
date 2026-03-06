@@ -1,5 +1,11 @@
 # release_2.3 CHANGELOG
 
+## [Unreleased]
+
+### New Features
+
+- bump django lower limit to 5.2.12 (fix high CVE-2026-25673) (backport #705) (#706)
+
 ## v2.3.10 (2026-02-06)
 
 - No interesting change
