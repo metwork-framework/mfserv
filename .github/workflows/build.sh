@@ -29,6 +29,10 @@ mkdir -p "/opt/metwork-mfserv-${TARGET_DIR}"
 mkdir -p buildlogs
 export BUILDLOGS=buildlogs
 
+set +x
+export TOKEN=${TOKEN}
+set -x
+
 make >${BUILDLOGS}/make.log 2>&1 || ( tail -200 ${BUILDLOGS}/make.log ; exit 1 )
 
 OUTPUT=$(git status --short | grep -v buildlogs | grep -v buildcache)
