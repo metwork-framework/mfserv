@@ -5,6 +5,7 @@
 ### New Features
 
 - bump django lower limit to 4.2.29 (fix high CVE-2026-25673) (#707)
+- bump django lower limit to 4.2.30 (CVEs) (#710)
 
 ## v2.2.15 (2026-02-06)
 
