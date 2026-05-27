@@ -7,6 +7,10 @@
 - bump django lower limit to 5.2.12 (fix high CVE-2026-25673) (backport #705) (#706)
 - bump django minimal version to 5.2.13 in plugin django3 (#708) (#709)
 
+### Bug Fixes
+
+- Django package name from pypi.org (backport #711) (#712)
+
 ## v2.3.10 (2026-02-06)
 
 - No interesting change
