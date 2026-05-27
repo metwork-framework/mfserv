@@ -18,5 +18,6 @@
 ### Bug Fixes
 
 - problem initializing php-fpm with multiple apps plugin (#699)
+- Django package name from pypi.org (#711)
 
 
