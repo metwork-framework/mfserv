@@ -106,6 +106,7 @@ jobs:
       - name: publish buildlogs
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
         uses: yitianyigexiangfa/ssh-scp-ssh-pipelines@v1.1.5
+        continue-on-error: true
         env:
           REMOTE: ${{ steps.SetVariables.outputs.buildlog_dir }}
           LOCAL: ${{ github.workspace }}/buildlogs
