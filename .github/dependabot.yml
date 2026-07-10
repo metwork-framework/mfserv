@@ -2,10 +2,11 @@ version: 2
 updates:
   # Python (pip)
   - package-ecosystem: pip
-    directory: "/"
+    directories:
+      - "/layers/layer*/*/"
+    open-pull-requests-limit: 0
     schedule:
       interval: "daily"
-    target-branch: "integration"
 
   #Github Actions
   - package-ecosystem: "github-actions"
