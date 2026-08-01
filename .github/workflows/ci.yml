@@ -66,7 +66,7 @@ jobs:
 
 
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: ${{ github.event.client_payload.branch || github.ref }}
@@ -105,7 +105,7 @@ jobs:
 
       - name: publish buildlogs
         if: ${{ github.event_name != 'pull_request' && steps.SetVariables.outputs.branch != 'null' }}
-        uses: yitianyigexiangfa/ssh-scp-ssh-pipelines@v1.1.5
+        uses: yitianyigexiangfa/ssh-scp-ssh-pipelines@v1.1.6
         continue-on-error: true
         env:
           REMOTE: ${{ steps.SetVariables.outputs.buildlog_dir }}
@@ -130,7 +130,7 @@ jobs:
           docker run ${DOCKER_RUN_OPTIONS} -e DEP_BRANCH=${DEP_BRANCH} -e BRANCH=${BRANCH} -e OS_VERSION=${OS_VERSION} --rm ${TESTIMAGE} /bin/bash -c "${DOCKER_WORKFLOW_SCRIPTS_DIR}/integration_tests.sh"
       - name: publish rpms
         if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
-        uses: yitianyigexiangfa/ssh-scp-ssh-pipelines@v1.1.5
+        uses: yitianyigexiangfa/ssh-scp-ssh-pipelines@v1.1.6
         env:
           REMOTE: ${{ steps.SetVariables.outputs.rpm_dir }}
           LOCAL: ${{ github.workspace }}/rpms
@@ -145,7 +145,7 @@ jobs:
             '${LOCAL}/metwork-*.rpm' => ${REMOTE}
       - name: createrepo
         if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
-        uses: yitianyigexiangfa/ssh-scp-ssh-pipelines@v1.1.5
+        uses: yitianyigexiangfa/ssh-scp-ssh-pipelines@v1.1.6
         env:
           REMOTE: ${{ steps.SetVariables.outputs.rpm_dir }}
           LOCAL: ${{ github.workspace }}/.github/workflows
