@@ -162,7 +162,7 @@ jobs:
             ./createrepo.sh .
       - name: publish doc
         if: ${{ github.event_name != 'pull_request' && steps.BuildStep.outputs.bypass == 'false' && steps.SetVariables.outputs.branch != 'null' }}
-        uses: yitianyigexiangfa/ssh-scp-ssh-pipelines@v1.1.5
+        uses: yitianyigexiangfa/ssh-scp-ssh-pipelines@v1.1.6
         continue-on-error: true
         env:
           REMOTE: ${{ steps.SetVariables.outputs.doc_dir }}
