@@ -16,6 +16,7 @@
 - bump django minimal version to 5.2.13 in plugin django3 (#708)
 - Django >= 5.2.14 (fix low and moderate CVE) (#713)
 - bump django from 5.2.14 to 5.2.15 (fix low CVE-2026-7666) (#714)
+- bump django from 5.2.15 to 5.2.16 (fix 3 CVE) (#715)
 
 ### Bug Fixes
 
