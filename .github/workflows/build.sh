@@ -14,6 +14,12 @@ export DRONE=true
 
     if test "${OS_VERSION}" = "centos8"; then export METWORK_BUILD_OS=generic; else export METWORK_BUILD_OS=${OS_VERSION}; fi
 
+case "${BRANCH}" in
+    ci* | pci*)
+	export DEP_BRANCH=integration
+    *)
+	export DEP_BRANCH=${BRANCH}
+esac;;
 
 
 
