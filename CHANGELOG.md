@@ -17,6 +17,7 @@
 - Django >= 5.2.14 (fix low and moderate CVE) (#713)
 - bump django from 5.2.14 to 5.2.15 (fix low CVE-2026-7666) (#714)
 - bump django from 5.2.15 to 5.2.16 (fix 3 CVE) (#715)
+- bump Django minimum version to 5.2.17 to fix high CVE-2026-15307 (backport #717) (#719)
 
 ### Bug Fixes
 
