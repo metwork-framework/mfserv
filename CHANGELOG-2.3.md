@@ -1,5 +1,17 @@
 # release_2.3 CHANGELOG
 
+## v2.3.11 (2026-10-21)
+
+### New Features
+
+- bump django lower limit to 5.2.12 (fix high CVE-2026-25673) (backport #705) (#706)
+- bump django minimal version to 5.2.13 in plugin django3 (#708) (#709)
+- bump Django minimum version to 5.2.17 to fix high CVE-2026-15307 (backport #717) (#718)
+
+### Bug Fixes
+
+- Django package name from pypi.org (backport #711) (#712)
+
 ## v2.3.10 (2026-02-06)
 
 - No interesting change
