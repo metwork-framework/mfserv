@@ -1,7 +1,7 @@
 ld-linux-x86-64.so.2
 libacl.so.1
-libfabric.so.1
 libasound.so.2
+libatomic.so.1
 libattr.so.1
 libblkid.so.1
 libbrotlicommon.so.1
@@ -34,6 +34,7 @@ libevent_core-2.1.so.6
 libevent_pthreads-2.1.so.6
 libexpat.so.1
 libexslt.so.0
+libfabric.so.1
 libffi.so.6
 libffi.so.8
 libfontconfig.so.1
