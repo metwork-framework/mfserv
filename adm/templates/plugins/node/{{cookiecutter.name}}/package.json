@@ -3,7 +3,7 @@
     "version": "{{cookiecutter.version}}",
     "release": "{{cookiecutter.release}}",
     "dependencies": {
-        "express": "^4.16.4"
+        "express": "^4.22.3"
     },
     "devDependencies": {},
     "workspaces" :[]
