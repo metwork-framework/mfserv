@@ -23,5 +23,6 @@
 
 - problem initializing php-fpm with multiple apps plugin (#699)
 - Django package name from pypi.org (#711)
+- set rlimit_as to 2Go (for plugin node) (#722) (#723)
 
 
