@@ -1,5 +1,11 @@
 # release_2.3 CHANGELOG
 
+## [Unreleased]
+
+### New Features
+
+- bump express nodejs module to 4.22.3 (fix high CVE-2026-4867) (#724) (#725)
+
 ## v2.3.11 (2026-10-21)
 
 ### New Features
