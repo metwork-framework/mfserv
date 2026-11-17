@@ -1,0 +1,20 @@
+version: 2
+updates:
+  # Python (pip)
+  - package-ecosystem: pip
+    directories:
+      - "/layers/layer*/*/"
+    open-pull-requests-limit: 0
+    schedule:
+      interval: "daily"
+
+  #Github Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    target-branch: "integration"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

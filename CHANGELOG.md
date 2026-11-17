@@ -4,19 +4,11 @@
 
 ### New Features
 
-- bump django to 5.2.2 (to fix CVE-2025-48432) (#658)
-- add comments to explain how to resolve setcap problems (#677)
-- force django >= 5.2.6 in plugin python3_django (CVE-2025-57833) (#682)
-- bump django >= 5.2.7 (fix CVE-2025-57833) (#685)
-- add check_delay in circus arbiter config setting (#688)
-- bump django >= 5.2.8 (fix CVE-2025-64458 and 64459)  (#691)
-- bump django to 5.2.9 to fix CVE-2025-13372 and CVE-2025-64460  (#696)
-- bump django to 5.2.11 to fix high CVE 2026 1207, 1287 and 1312 (#701)
-- bump django lower limit to 5.2.12 (fix high CVE-2026-25673) (#705)
-- bump django minimal version to 5.2.13 in plugin django3 (#708)
+- bump Django minimum version to 5.2.17 to fix high CVE-2026-15307 (#717)
+- bump express nodejs module to 4.22.3 (fix high CVE-2026-4867) (#724)
 
 ### Bug Fixes
 
-- problem initializing php-fpm with multiple apps plugin (#699)
+- set rlimit_as to 2Go (for plugin node) (#722)
 
 

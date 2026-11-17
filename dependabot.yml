@@ -1,0 +1,19 @@
+version: 2
+updates:
+  # Python (pip)
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: "daily"
+    target-branch: "integration"
+
+  #Github Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    target-branch: "integration"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
