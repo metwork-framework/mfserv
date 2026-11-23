@@ -121,6 +121,7 @@ libmlx5.so.1
 libmount.so.1
 libmpi.so.12
 libmpi.so.40
+libmvec.so.1
 libncurses.so.6
 libncursesw.so.6
 libnettle.so.6
