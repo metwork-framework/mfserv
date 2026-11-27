@@ -1,7 +1,7 @@
 ld-linux-x86-64.so.2
 libacl.so.1
-libfabric.so.1
 libasound.so.2
+libatomic.so.1
 libattr.so.1
 libblkid.so.1
 libbrotlicommon.so.1
@@ -34,6 +34,7 @@ libevent_core-2.1.so.6
 libevent_pthreads-2.1.so.6
 libexpat.so.1
 libexslt.so.0
+libfabric.so.1
 libffi.so.6
 libffi.so.8
 libfontconfig.so.1
@@ -120,6 +121,7 @@ libmlx5.so.1
 libmount.so.1
 libmpi.so.12
 libmpi.so.40
+libmvec.so.1
 libncurses.so.6
 libncursesw.so.6
 libnettle.so.6
@@ -205,6 +207,7 @@ libXext.so.6
 libXft.so.2
 libXi.so.6
 libxml2.so.2
+libxml2.so.16
 libXmu.so.6
 libXpm.so.4
 libXrender.so.1
